@@ -50,6 +50,38 @@ culminating in the Report. **It is process evidence, not a second report.**
 
 ## Structure
 
+### Running the expanded experiment
+
+Use a GPU environment with PyTorch, then install `transformers accelerate datasets`.
+From the repository root, run:
+
+```bash
+python code/src/run_gsm8k.py --num-problems 500 --batch-size 1
+```
+
+This runs 500 test problems in both modes (1,000 responses), with token budgets
+of 8,192 for thinking and 2,048 for no-thinking. Increase `--batch-size` if GPU
+memory permits. `--model`, `--seed`, token limits, and `--output` are configurable.
+Rerunning the same command resumes saved records; keep the adjacent config JSON
+with the output. Changed configurations require a new output filename.
+`code/notebooks/milestone1.ipynb` provides the same workflow for Colab.
+
+The parser accepts explicit final answers, boxed numbers, and standalone numeric
+responses, normalizes signs/commas/decimals, and leaves ambiguous answers unresolved.
+It does not use the last number in intermediate working. New runs count tokens
+through EOS before padding and flag truncation in either mode. Summaries include
+all saved rows; unresolved and truncated answers count as incorrect.
+
+Reparse the pilot without modifying raw outputs:
+
+```bash
+python code/src/reparse_results.py outputs/raw/qwen3_1.7b_gsm8k.jsonl outputs/clean/qwen3_1.7b_gsm8k_reparsed.jsonl
+python -m unittest discover -s code/src -p "test_*.py"
+```
+
+Legacy token counts cannot reliably establish truncation; the derived file marks
+that uncertainty. The expanded experiment must still be executed on a suitable runtime.
+
 - `journal/`: one dated Markdown file per entry, named `YYYY-MM-DD.md`. See
   `journal/TEMPLATE.md` for the format. Keep it flat (no subfolders).
 - `readings/`: longer per-paper notes. Journal entries link here rather than
