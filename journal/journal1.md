@@ -1,0 +1,41 @@
+# 2026-10-01: First pilot run (milestone 1)
+
+**Author:** Patrick
+
+## What we did
+Ran Qwen3-1.7B on 20 GSM8K maths problems in Colab, once with thinking mode on
+and once with it off, and saved every output for analysis.
+Code: `code/generate.ipynb`. Data: `outputs/qwen3_1.7b_gsm8k_clean.jsonl`.
+
+## Problems we found and fixed
+The first summary looked complete but was wrong in four ways:
+1. **Token counts:** batching padded every output to the longest in its batch,
+   so every output looked like exactly 2,048 tokens. The too-neat number was the clue.
+2. **Truncation:** a 2,048-token limit cut off 6 of the 20 thinking outputs mid-reasoning.
+   Reran them with an 8,192-token limit.
+3. **Parser:** cut-off outputs were saved as full responses, so they weren't flagged.
+4. **Summary code:** corrected values were only saved for 6 rows, so the analysis
+   silently ignored the other 34.
+
+## Pilot results (20 problems, not yet a real finding)
+| Mode | Accuracy | Avg tokens |
+|---|---|---|
+| Thinking | 85% | ~1,540 |
+| No thinking | 50% | ~340 |
+
+Thinking mode fixed 9 problems but got 2 wrong (ids 11, 17) that no-thinking got right.
+
+## What we learned
+- A clean-looking summary isn't evidence; check numbers that look too neat.
+- Thinking mode needs a generous token limit (8,192), or the data is damaged.
+- Keep raw outputs untouched and write analysis to new files.
+- Starting small paid off: four bugs found on 20 problems, not 500.
+
+## Still open
+- Read ids 11 and 17 by hand: did the reasoning reach the right answer and then
+  move away from it? That would be our first example of the mismatch we're studying.
+- One no-thinking output hit its token limit; it's probably a repetition loop, to check.
+- Next step: build the arithmetic checker (milestone 2).
+
+## Who did what
+- **Patrick:** ran the pipeline, found and fixed the bugs, wrote this entry.
