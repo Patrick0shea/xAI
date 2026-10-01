@@ -54,7 +54,7 @@ culminating in the Report. **It is process evidence, not a second report.**
   `journal/TEMPLATE.md` for the format. Keep it flat (no subfolders).
 - `readings/`: longer per-paper notes. Journal entries link here rather than
   repeating the summary.
-- `code/notebooks/`: Colab notebooks (e.g. `generate.ipynb`).
+- `code/notebooks/`: Colab notebooks (e.g. `milestone1.ipynb`).
 - `code/src/`: Python scripts (e.g. `checker.py`).
   Name notebooks and scripts in lowercase with underscores.
 - `outputs/raw/`: untouched model outputs. **Never edit these.**
