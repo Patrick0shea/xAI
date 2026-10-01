@@ -64,7 +64,9 @@ of 8,192 for thinking and 2,048 for no-thinking. Increase `--batch-size` if GPU
 memory permits. `--model`, `--seed`, token limits, and `--output` are configurable.
 Rerunning the same command resumes saved records; keep the adjacent config JSON
 with the output. Changed configurations require a new output filename.
-`code/notebooks/milestone1.ipynb` provides the same workflow for Colab.
+`code/notebooks/expanded_runs.ipynb` provides the same workflow for Colab.
+The original pilot notebook and its saved outputs are preserved in
+`code/notebooks/milestone1.ipynb` as the milestone 1 experiment record.
 
 The parser accepts explicit final answers, boxed numbers, and standalone numeric
 responses, normalizes signs/commas/decimals, and leaves ambiguous answers unresolved.
