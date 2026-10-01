@@ -111,3 +111,24 @@ that uncertainty. The expanded experiment must still be executed on a suitable r
 
 Where a journal entry leads to a section of the Report, link it
 (e.g. "→ see Report, Section 3: Methodology").
+
+## Arithmetic checker
+
+Milestone 2 starts with a deterministic checker for GSM8K-style arithmetic
+reasoning:
+
+```powershell
+pip install -r requirements.txt
+python code/src/arithmetic_checker.py
+```
+
+By default, it reads `outputs/raw/qwen3_1.7b_gsm8k.jsonl` and writes derived
+analysis to:
+
+- `outputs/clean/qwen3_1.7b_gsm8k_arithmetic_checked.jsonl`
+- `outputs/clean/qwen3_1.7b_gsm8k_arithmetic_summary.json`
+
+The checker extracts equations such as `3 + 4 = 7`, validates them with SymPy,
+flags invalid arithmetic steps, and compares the model's final answer with the
+last valid arithmetic result it can infer. It is conservative: unparseable text is
+skipped rather than treated as wrong.

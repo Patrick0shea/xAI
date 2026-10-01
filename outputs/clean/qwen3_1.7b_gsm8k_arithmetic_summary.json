@@ -1,0 +1,7 @@
+{
+  "rows": 40,
+  "rows_with_checked_steps": 34,
+  "rows_with_invalid_steps": 19,
+  "rows_with_answer_comparison": 28,
+  "rows_where_model_answer_differs_from_implied": 12
+}
