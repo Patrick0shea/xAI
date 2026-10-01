@@ -51,10 +51,16 @@ culminating in the Report. **It is process evidence, not a second report.**
 ## Structure
 
 - `journal/`: one dated Markdown file per entry, named `YYYY-MM-DD.md`. See
-  `journal/TEMPLATE.md` for the format.
-- `code/`: experiment code (generation notebook, formal checker).
-- `outputs/`: saved model outputs.
-- `report/`: paper drafts.
+  `journal/TEMPLATE.md` for the format. Keep it flat (no subfolders).
+- `readings/`: longer per-paper notes. Journal entries link here rather than
+  repeating the summary.
+- `code/notebooks/`: Colab notebooks (e.g. `generate.ipynb`).
+- `code/src/`: Python scripts (e.g. `checker.py`).
+  Name notebooks and scripts in lowercase with underscores.
+- `outputs/raw/`: untouched model outputs. **Never edit these.**
+- `outputs/clean/`: processed, analysis-ready outputs derived from `raw/`.
+- `report/`: IEEE paper drafts and the project proposal.
+- `presentation/`: slides for the Oct 9 talk.
 - `README.md`: stays current with topic, scope, and the latest report draft.
 
 ## Journal conventions
