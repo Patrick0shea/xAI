@@ -1,0 +1,3 @@
+{"id": "logic_001", "description": "If Fido is a dog, then Fido is a mammal; Fido is a dog.", "expected": "entailed", "result": "entailed", "matches_expected": true}
+{"id": "logic_002", "description": "If the switch is on, the lamp is lit; the lamp is not lit.", "expected": "contradicted", "result": "contradicted", "matches_expected": true}
+{"id": "logic_003", "description": "If the alarm rings, the building is evacuated; no alarm fact is given.", "expected": "unknown", "result": "unknown", "matches_expected": true}
