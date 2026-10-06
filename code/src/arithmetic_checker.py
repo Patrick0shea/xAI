@@ -1,8 +1,15 @@
 """Check arithmetic steps in GSM8K-style model outputs.
 
-The checker is intentionally conservative. It only validates arithmetic
-expressions it can parse cleanly, reports skipped candidates, and leaves raw
-model outputs untouched by writing derived rows to ``outputs/clean``.
+For each row the checker:
+1. extracts explicit arithmetic steps ("160 + 80 + 20 = 260", "9 times 2 is 18")
+   from the reasoning text (thinking for thinking mode, response otherwise),
+2. re-computes each step exactly and marks it valid or invalid,
+3. finds the answer the reasoning itself concludes with, and compares it to the
+   model's final answer.
+
+It is deliberately conservative: anything it cannot parse cleanly (variables,
+unit words inside expressions, ambiguous text) is skipped rather than guessed.
+Raw model outputs are never modified; results are written to ``outputs/clean``.
 """
 
 from __future__ import annotations
@@ -16,21 +23,44 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Iterable
 
-try:
-    import sympy as sp
-except ImportError as exc:  # pragma: no cover - exercised by users without deps.
-    raise SystemExit(
-        "Missing dependency: sympy. Install it with `pip install -r requirements.txt`."
-    ) from exc
+# ---------------------------------------------------------------------------
+# Patterns
+# ---------------------------------------------------------------------------
 
+# A number: 57,500 / 1.25 / .5  (thousands commas have no space after them)
+NUM = r"\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?|\.\d+"
+OP = r"[+\-*/]"
+# An operand is a number or a parenthesised group of numbers/operators.
+OPERAND = rf"(?:\((?:\s*(?:{NUM})\s*{OP}?)+\s*\)|{NUM})"
+# One side of an equation: a number or an arithmetic expression, optionally a percent.
+SIDE = rf"{OPERAND}(?:\s*{OP}\s*{OPERAND})*%?"
+# A chain "a = b = c ...": two or more sides joined by "=". Guards stop it from
+# grabbing part of a number (",000"), a variable ("3n", "2/3 x") or a power.
+CHAIN_RE = re.compile(
+    rf"(?<![\w.,^/*])(?:{SIDE})(?:\s*=\s*(?:{SIDE}))+(?![\w(^]|,\d|\.\d|\s*[+\-*/^]\s*[\d(])"
+)
+SPLIT_EQ_RE = re.compile(r"\s*=\s*")
+HAS_OP_RE = re.compile(r"\d\s*[+\-*/]\s*[\d(]|\)\s*[+\-*/]")
 
-NUMBER_RE = re.compile(r"-?\d+(?:,\d{3})*(?:\.\d+)?|-?\.\d+")
-LATEX_FRAC_RE = re.compile(r"\\frac\s*{([^{}]+)}\s*{([^{}]+)}")
-TEXT_COMMAND_RE = re.compile(r"\\(?:text|mathrm)\s*{[^{}]*}")
-BOX_RE = re.compile(r"\\boxed\s*{([^{}]+)}")
-MATH_TAG_RE = re.compile(r"</?think>|<number>", re.IGNORECASE)
-ALLOWED_EXPR_RE = re.compile(r"^[\d\s+\-*/().,%]+$")
-TOKEN_RE = re.compile(r"\d+(?:\.\d+)?|\.\d+|[+\-*/()]")
+WORD_OPS = [
+    (r"\bmultiplied by\b", "*"),
+    (r"\btimes\b", "*"),
+    (r"\bdivided by\b", "/"),
+    (r"\bover\b", "/"),
+    (r"\bplus\b", "+"),
+    (r"\bminus\b", "-"),
+    (r"\b(?:is|equals|gives|makes|which is)\b", "="),
+]
+
+CORRECTION_RE = re.compile(
+    r"\bwait\b|\bno,|\bactually\b|that's (?:not|wrong)|contradict|mistake|"
+    r"doesn't (?:add up|make sense)|can't be|incorrect",
+    re.IGNORECASE,
+)
+
+FINAL_ANSWER_RE = re.compile(r"final\s+answer\s*\**\s*:?\s*\**([^\n]*)", re.IGNORECASE)
+BOXED_RE = re.compile(r"\\boxed\s*{([^{}]*)}")
+LONE_NUM_RE = re.compile(rf"-?(?:{NUM})")
 
 
 @dataclass
@@ -42,6 +72,12 @@ class StepCheck:
     reason: str
     left_value: str | None = None
     right_value: str | None = None
+    followed_by_correction: bool = False  # heuristic: model second-guesses right after
+
+
+# ---------------------------------------------------------------------------
+# IO
+# ---------------------------------------------------------------------------
 
 
 def iter_jsonl(path: Path) -> Iterable[dict]:
@@ -63,290 +99,236 @@ def write_jsonl(path: Path, rows: Iterable[dict]) -> None:
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
+# ---------------------------------------------------------------------------
+# Normalisation and splitting
+# ---------------------------------------------------------------------------
+
+
 def normalize_math_text(text: str) -> str:
-    """Convert common generated-solution notation into parser-friendly text."""
+    """Turn LaTeX / unicode / markdown notation into plain arithmetic text."""
 
-    text = MATH_TAG_RE.sub(" ", text)
+    text = re.sub(r"</?think>|<number>", " ", text, flags=re.IGNORECASE)
     text = text.replace("\u2212", "-").replace("\u2013", "-").replace("\u2014", "-")
-    text = text.replace("\u00d7", "*").replace("\u00f7", "/")
-    text = text.replace("\\times", "*").replace("\\cdot", "*").replace("\\div", "/")
-    text = text.replace("$", " ")
-    text = text.replace("\\(", " ").replace("\\)", " ")
-    text = text.replace("\\[", " ").replace("\\]", " ")
-    text = TEXT_COMMAND_RE.sub(" ", text)
-    text = BOX_RE.sub(r"\1", text)
-
+    text = text.replace("\u00d7", "*").replace("\u00f7", "/").replace("\u22c5", "*")
+    text = re.sub(r"\\(?:times|cdot)", "*", text)
+    text = text.replace("\\div", "/")
+    # \frac{a}{b} -> (a)/(b), repeated for nesting
     previous = None
     while previous != text:
         previous = text
-        text = LATEX_FRAC_RE.sub(r"(\1)/(\2)", text)
-
+        text = re.sub(r"\\[dt]?frac\s*{([^{}]*)}\s*{([^{}]*)}", r"(\1)/(\2)", text)
+    text = re.sub(r"\\boxed\s*{([^{}]*)}", r"\1", text)
+    # \text{...} / \mathrm{...} are units or labels: drop them
+    text = re.sub(r"\\(?:text|mathrm|textbf)\s*{[^{}]*}", " ", text)
+    text = re.sub(r"\\left|\\right", "", text)
+    # LaTeX spacing commands, dollar signs, markdown bold, percent escapes
+    text = re.sub(r"\\[,;:! ]|\\quad|\\qquad", " ", text)
+    text = text.replace("\\$", " ").replace("$", " ").replace("\\%", "%")
+    text = text.replace("**", " ")
+    text = re.sub(r"\\[\[\]()]", " ", text)
+    for pattern, replacement in WORD_OPS:
+        text = re.sub(pattern, f" {replacement} ", text, flags=re.IGNORECASE)
     return text
 
 
-def expression_from_fragment(fragment: str, *, side: str) -> str | None:
-    """Pull a numeric expression from one side of an equals sign."""
+def split_clauses(text: str) -> list[tuple[str, int]]:
+    """Split on lines, sentence ends and ", " so numbers from different
+    clauses never merge (e.g. "60*3 = 180, 8*3" stays two clauses).
 
-    fragment = fragment.replace(",", "")
-    fragment = re.sub(r"\b\d+\s*%", lambda match: f"({match.group()[:-1]}/100)", fragment)
+    Returns (clause, end_offset) pairs so we can look at what follows a step.
+    """
 
-    if side == "left":
-        arithmetic_expr = expression_from_arithmetic_tokens(fragment, side=side)
-        if arithmetic_expr is not None:
-            return arithmetic_expr
-
-    if side == "left":
-        matches = list(re.finditer(r"[\d.(][\d\s+\-*/().,%]*$", fragment))
-        if not matches:
-            return None
-        expr = matches[-1].group()
-    else:
-        match = re.search(r"^[\s\d+\-*/().,%]*[\d.)]", fragment)
-        if not match:
-            return None
-        expr = match.group()
-
-    expr = expr.strip()
-    expr = re.sub(r"\s+", " ", expr)
-    expr = re.sub(r"(?<=\d)\s+(?=\d)", "", expr)
-    expr = expr.strip(" .,:;")
-
-    if not expr or not NUMBER_RE.search(expr) or not ALLOWED_EXPR_RE.match(expr):
-        return None
-
-    if side == "right":
-        return expr
-
-    arithmetic_expr = expression_from_arithmetic_tokens(fragment, side=side)
-    return arithmetic_expr or expr
+    clauses = []
+    for match in re.finditer(r"[^\n]+", text):
+        line, line_start = match.group(), match.start()
+        position = 0
+        for piece in re.split(r"(?<=[.!?;:])\s+|,\s+", line):
+            start = line.find(piece, position)
+            position = start + len(piece)
+            clauses.append((piece, line_start + position))
+    return clauses
 
 
-def expression_from_arithmetic_tokens(fragment: str, *, side: str) -> str | None:
-    """Extract the nearest expression while tolerating unit words between tokens."""
-
-    tokens = list(TOKEN_RE.finditer(fragment))
-    if not tokens:
-        return None
-
-    indices = range(len(tokens) - 1, -1, -1) if side == "left" else range(len(tokens))
-    sequences: list[list[str]] = []
-
-    for start in indices:
-        first_token = tokens[start].group()
-        if first_token in {"+", "-", "*", "/"} and side == "left":
-            continue
-        if first_token in {"+", "*", "/"}:
-            continue
-        sequence = [tokens[start].group()]
-        last_end = tokens[start].end()
-        scan = range(start + 1, len(tokens)) if side == "left" else range(start + 1, len(tokens))
-
-        for next_index in scan:
-            gap = fragment[last_end : tokens[next_index].start()]
-            if not re.fullmatch(r"[\s$A-Za-z/()]*", gap):
-                break
-            sequence.append(tokens[next_index].group())
-            last_end = tokens[next_index].end()
-
-        if side == "left":
-            sequences.append(sequence)
-        else:
-            sequences.append(sequence)
-            break
-
-    for sequence in sequences:
-        expr = " ".join(sequence)
-        if sequence[-1] in {"+", "-", "*", "/"}:
-            continue
-        if any(operator in sequence for operator in ("+", "-", "*", "/")) and NUMBER_RE.search(expr):
-            return expr
-
-    return None
+# ---------------------------------------------------------------------------
+# Checking
+# ---------------------------------------------------------------------------
 
 
-def safe_eval(expr: str) -> sp.Expr:
-    """Evaluate a numeric arithmetic expression with SymPy."""
+def to_fraction(expr: str) -> Fraction:
+    """Evaluate a numeric expression exactly (no eval of arbitrary code)."""
 
-    if not ALLOWED_EXPR_RE.match(expr):
-        raise ValueError("contains unsupported characters")
-    parsed = sp.sympify(expr, evaluate=True)
-    if parsed.free_symbols:
-        raise ValueError("contains variables")
-    return sp.simplify(parsed)
+    cleaned = expr.replace(",", "").strip()
+    percent = cleaned.endswith("%")
+    cleaned = cleaned.rstrip("%")
+    if not re.fullmatch(r"[\d\s+\-*/().]+", cleaned):
+        raise ValueError("unsupported characters")
+    # Wrap every number in Fraction(...) so arithmetic is exact.
+    py = re.sub(r"\d+(?:\.\d+)?|\.\d+", lambda m: f"Fraction('{m.group()}')", cleaned)
+    value = Fraction(eval(py, {"__builtins__": {}}, {"Fraction": Fraction}))  # noqa: S307
+    return value / 100 if percent else value
 
 
-def check_equation(raw: str, left: str, right: str) -> StepCheck:
+def values_match(left: Fraction, right: Fraction, right_text: str) -> bool:
+    """Exact match, or match after rounding to the precision the model wrote."""
+
+    if left == right:
+        return True
+    if right_text.endswith("%") and left == right * 100:
+        return True  # "0.6 * 100 = 60%" style percentages
+    plain = right_text.replace(",", "").rstrip("%")
+    if not re.fullmatch(r"-?[\d.]+", plain) or "." not in plain:
+        return False  # integers and expressions must match exactly
+    decimals = len(plain.split(".")[1]) + (2 if right_text.endswith("%") else 0)
+    return abs(left - right) <= Fraction(1, 2 * 10**decimals)
+
+
+def check_step(raw: str, left: str, right: str) -> StepCheck:
     try:
-        left_value = safe_eval(left)
-        right_value = safe_eval(right)
-    except Exception as exc:  # SymPy raises several parse/value exceptions.
+        left_value = to_fraction(left)
+        right_value = to_fraction(right)
+    except (ValueError, ZeroDivisionError, SyntaxError) as exc:
         return StepCheck(raw, left, right, None, f"skipped: {exc}")
+    valid = values_match(left_value, right_value, right)
 
-    valid = bool(sp.simplify(left_value - right_value) == 0)
+    def show(value: Fraction) -> str:
+        return str(value) if value.denominator == 1 else f"{float(value):g}"
+
     return StepCheck(
         raw=raw,
         left=left,
         right=right,
         valid=valid,
         reason="ok" if valid else "arithmetic mismatch",
-        left_value=str(left_value),
-        right_value=str(right_value),
+        left_value=show(left_value),
+        right_value=show(right_value),
     )
 
 
 def extract_step_checks(text: str) -> list[StepCheck]:
-    checks: list[StepCheck] = []
     normalized = normalize_math_text(text)
-
-    for raw_line in normalized.splitlines():
-        if "=" not in raw_line:
-            continue
-        parts = raw_line.split("=")
-        if len(parts) < 2:
-            continue
-
-        for index in range(len(parts) - 1):
-            left = expression_from_fragment(parts[index], side="left")
-            right = expression_from_fragment(parts[index + 1], side="right")
-            if left is None or right is None:
-                continue
-            raw = f"{parts[index].strip()} = {parts[index + 1].strip()}"
-            checks.append(check_equation(raw, left, right))
-
+    checks: list[StepCheck] = []
+    for clause, end in split_clauses(normalized):
+        for match in CHAIN_RE.finditer(clause):
+            before = clause[: match.start()].rstrip()
+            if before and before[-1] in "0123456789%)":
+                continue  # glued to a neighbouring quantity, e.g. "25% (20 - 4)"
+            sides = [re.sub(r"\s+", " ", side) for side in SPLIT_EQ_RE.split(match.group().strip())]
+            following = normalized[end : end + 200]
+            corrected = bool(CORRECTION_RE.search(following))
+            # Check each adjacent pair where the left side actually computes something,
+            # e.g. "8*5 + 8*3 = 40 + 24 = 64" gives two steps.
+            for left, right in zip(sides, sides[1:]):
+                if not HAS_OP_RE.search(left):
+                    continue
+                step = check_step(clause.strip(), left, right)
+                step.followed_by_correction = corrected
+                checks.append(step)
     return checks
 
 
-def extract_final_number(text: str) -> str | None:
-    """Find the last numeric answer, preferring boxed/final-answer text."""
+def extract_answer(text: str) -> str | None:
+    """The answer a piece of text concludes with: last 'Final answer:' that
+    contains a number, else last \\boxed{}. Never guesses from working."""
 
-    normalized = normalize_math_text(text)
-    candidates: list[str] = []
-
-    for pattern in (
-        r"final answer\s*:?\s*([^\n]+)",
-        r"answer is\s*:?\s*([^\n]+)",
-        r"boxed\s*{([^{}]+)}",
-    ):
-        for match in re.finditer(pattern, normalized, flags=re.IGNORECASE):
-            candidates.extend(NUMBER_RE.findall(match.group(1)))
-
-    if not candidates:
-        candidates = NUMBER_RE.findall(normalized)
-
-    if not candidates:
-        return None
-
-    return candidates[-1].replace(",", "")
+    for match in reversed(list(FINAL_ANSWER_RE.finditer(text))):
+        rest = re.sub(r"<number>|\\boxed|[{}$*\\]", " ", match.group(1))
+        number = LONE_NUM_RE.search(rest)
+        if number:
+            return number.group().replace(",", "")
+    boxes = BOXED_RE.findall(text)
+    for box in reversed(boxes):
+        number = LONE_NUM_RE.search(box.replace("\\$", "").replace("$", ""))
+        if number:
+            return number.group().replace(",", "")
+    return None
 
 
-def equivalent_numbers(left: str | None, right: str | None) -> bool | None:
-    if left is None or right is None:
+def same_number(a: str | None, b: str | None) -> bool | None:
+    if a is None or b is None:
         return None
     try:
-        return Fraction(left) == Fraction(right)
+        return Fraction(a) == Fraction(b)
     except ValueError:
-        try:
-            return bool(sp.simplify(safe_eval(left) - safe_eval(right)) == 0)
-        except Exception:
-            return None
+        return None
 
 
 def check_row(row: dict) -> dict:
-    reasoning_text = "\n".join(
-        str(row.get(field, "")) for field in ("thinking", "response") if row.get(field)
-    )
+    thinking = str(row.get("thinking") or "")
+    response = str(row.get("response") or "")
+    is_thinking = row.get("mode") == "thinking" and thinking.strip()
+    reasoning_text = thinking if is_thinking else response
+
     checks = extract_step_checks(reasoning_text)
-    checked = [check for check in checks if check.valid is not None]
-    invalid = [check for check in checked if check.valid is False]
+    checked = [c for c in checks if c.valid is not None]
+    invalid = [c for c in checked if c.valid is False]
 
-    implied_answer = None
-    for check in reversed(checked):
-        if check.valid and check.right_value is not None:
-            implied_answer = check.right_value
-            break
-
-    final_answer = extract_final_number(str(row.get("response", ""))) or extract_final_number(
-        reasoning_text
+    # What the reasoning itself concludes with.
+    implied_answer = extract_answer(reasoning_text) if is_thinking else None
+    # What the model finally tells the user.
+    model_answer = row.get("model_answer")
+    final_answer = (
+        str(model_answer) if model_answer not in (None, "") else extract_answer(response)
     )
-    model_answer = str(row["model_answer"]) if row.get("model_answer") is not None else final_answer
-    final_matches_implied = equivalent_numbers(model_answer, implied_answer)
 
     checked_row = dict(row)
     checked_row["arithmetic_check"] = {
+        "reasoning_source": "thinking" if is_thinking else "response",
         "num_candidate_steps": len(checks),
         "num_checked_steps": len(checked),
         "num_invalid_steps": len(invalid),
+        "num_invalid_then_corrected": sum(c.followed_by_correction for c in invalid),
         "has_invalid_step": bool(invalid),
         "implied_answer": implied_answer,
         "final_answer": final_answer,
-        "model_answer_matches_implied": final_matches_implied,
-        "steps": [asdict(check) for check in checks],
+        "model_answer_matches_implied": same_number(final_answer, implied_answer),
+        "steps": [asdict(c) for c in checks],
     }
     return checked_row
 
 
 def summarize(rows: list[dict]) -> dict:
-    total = len(rows)
-    with_checked_steps = sum(
-        row["arithmetic_check"]["num_checked_steps"] > 0 for row in rows
-    )
-    with_invalid_steps = sum(row["arithmetic_check"]["has_invalid_step"] for row in rows)
-    answer_compared = [
-        row
-        for row in rows
-        if row["arithmetic_check"]["model_answer_matches_implied"] is not None
-    ]
-    answer_mismatches = sum(
-        row["arithmetic_check"]["model_answer_matches_implied"] is False
-        for row in answer_compared
-    )
-
-    return {
-        "rows": total,
-        "rows_with_checked_steps": with_checked_steps,
-        "rows_with_invalid_steps": with_invalid_steps,
-        "rows_with_answer_comparison": len(answer_compared),
-        "rows_where_model_answer_differs_from_implied": answer_mismatches,
-    }
+    summary = {}
+    for mode in sorted({row.get("mode", "unknown") for row in rows}):
+        subset = [r["arithmetic_check"] for r in rows if r.get("mode", "unknown") == mode]
+        compared = [a for a in subset if a["model_answer_matches_implied"] is not None]
+        summary[mode] = {
+            "rows": len(subset),
+            "steps_checked": sum(a["num_checked_steps"] for a in subset),
+            "steps_invalid": sum(a["num_invalid_steps"] for a in subset),
+            "steps_invalid_then_corrected": sum(a["num_invalid_then_corrected"] for a in subset),
+            "rows_with_invalid_step": sum(a["has_invalid_step"] for a in subset),
+            "rows_with_answer_comparison": len(compared),
+            "rows_where_answer_differs_from_reasoning": sum(
+                a["model_answer_matches_implied"] is False for a in compared
+            ),
+        }
+    return summary
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--input",
-        type=Path,
-        default=Path("outputs/raw/qwen3_1.7b_gsm8k.jsonl"),
-        help="Raw JSONL model outputs to check.",
-    )
+    parser.add_argument("--input", type=Path, default=Path("outputs/raw/qwen3_1.7b_gsm8k.jsonl"))
     parser.add_argument(
         "--output",
         type=Path,
         default=Path("outputs/clean/qwen3_1.7b_gsm8k_arithmetic_checked.jsonl"),
-        help="JSONL file to write checked rows to.",
     )
     parser.add_argument(
         "--summary",
         type=Path,
         default=Path("outputs/clean/qwen3_1.7b_gsm8k_arithmetic_summary.json"),
-        help="JSON summary file to write.",
     )
     return parser.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv or sys.argv[1:])
+    args = parse_args(argv if argv is not None else sys.argv[1:])
     rows = [check_row(row) for row in iter_jsonl(args.input)]
     write_jsonl(args.output, rows)
-
+    summary = summarize(rows)
     args.summary.parent.mkdir(parents=True, exist_ok=True)
-    args.summary.write_text(
-        json.dumps(summarize(rows), indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
-
-    print(f"Checked {len(rows)} rows")
-    print(f"Wrote checked rows to {args.output}")
-    print(f"Wrote summary to {args.summary}")
+    args.summary.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps(summary, indent=2))
     return 0
 
 
