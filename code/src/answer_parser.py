@@ -24,10 +24,20 @@ def extract_answer(text, gold=False):
         else:
             boxes = re.findall(r'\\boxed\{([^{}]*)\}', text)
             if boxes:
+                values = [normalize_number(box.strip().strip('$')) for box in boxes]
+                if None in values or len(set(values)) > 1:
+                    return None
                 text = boxes[-1]
             elif not re.fullmatch(r'\s*\$?\s*(?:' + NUMBER + r')\s*\.?\s*', text):
                 return None
     text = re.sub(r'<number>', '', text, flags=re.I).strip()
+    boxes = re.findall(r'\\boxed\{([^{}]*)\}', text)
+    if text.count(r'\boxed{') != len(boxes):
+        return None
+    if boxes:
+        values = [normalize_number(box.strip().strip('$')) for box in boxes]
+        if None in values or len(set(values)) > 1:
+            return None
     text = re.sub(r'\\boxed\{([^{}]*)\}', r'\1', text)
     text = text.lstrip('*$ \n\t')
     match = re.match(r'(?:' + NUMBER + r')(?![\d,])', text)

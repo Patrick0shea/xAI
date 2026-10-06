@@ -23,6 +23,8 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Iterable
 
+from answer_parser import extract_answer as parse_final_answer
+
 # ---------------------------------------------------------------------------
 # Patterns
 # ---------------------------------------------------------------------------
@@ -31,7 +33,7 @@ from typing import Iterable
 NUM = r"\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?|\.\d+"
 OP = r"[+\-*/]"
 # An operand is a number or a parenthesised group of numbers/operators.
-OPERAND = rf"(?:\((?:\s*(?:{NUM})\s*{OP}?)+\s*\)|{NUM})"
+OPERAND = rf"[+-]?\s*(?:\((?:\s*(?:{NUM})\s*{OP}?)+\s*\)|{NUM})"
 # One side of an equation: a number or an arithmetic expression, optionally a percent.
 SIDE = rf"{OPERAND}(?:\s*{OP}\s*{OPERAND})*%?"
 # A chain "a = b = c ...": two or more sides joined by "=". Guards stop it from
@@ -257,6 +259,9 @@ def check_row(row: dict) -> dict:
     response = str(row.get("response") or "")
     is_thinking = row.get("mode") == "thinking" and thinking.strip()
     reasoning_text = thinking if is_thinking else response
+    final_line = re.search(r"(?im)^\s*[#*\s]*final\s+answer\b", response)
+    if not is_thinking:
+        reasoning_text = response[:final_line.start()] if final_line else response
 
     checks = extract_step_checks(reasoning_text)
     checked = [c for c in checks if c.valid is not None]
@@ -264,11 +269,31 @@ def check_row(row: dict) -> dict:
 
     # What the reasoning itself concludes with.
     implied_answer = extract_answer(reasoning_text) if is_thinking else None
+    implied_source = "explicit" if implied_answer is not None else None
+    if not is_thinking and final_line:
+        boxes = BOXED_RE.findall(reasoning_text)
+        box_answers = [parse_final_answer(r"\boxed{" + b + "}") for b in boxes]
+        if boxes:
+            if None not in box_answers and len(set(box_answers)) == 1:
+                implied_answer, implied_source = box_answers[-1], "boxed"
+        elif checks and checks[-1].valid is not None:
+            # Use the stated result, even when the calculation is wrong.
+            # Never fall back to an earlier step when later algebra is unsupported.
+            tail = normalize_math_text(reasoning_text).rsplit("=", 1)[-1].strip()
+            result = checks[-1].right.strip()
+            if re.match(r"^" + re.escape(result) + r"(?![\w.])", tail):
+                if re.fullmatch(r"[+-]?\s*(?:" + NUM + r")", result):
+                    implied_answer = str(to_fraction(result))
+                    implied_source = "last_step"
     # What the model finally tells the user.
     model_answer = row.get("model_answer")
     final_answer = (
         str(model_answer) if model_answer not in (None, "") else extract_answer(response)
     )
+    if not is_thinking:
+        final_answer = parse_final_answer(response[final_line.start():]) if final_line else None
+    if row.get("is_truncated") or row.get("hit_max_tokens"):
+        implied_answer, implied_source, final_answer = None, None, None
 
     checked_row = dict(row)
     checked_row["arithmetic_check"] = {
@@ -279,6 +304,7 @@ def check_row(row: dict) -> dict:
         "num_invalid_then_corrected": sum(c.followed_by_correction for c in invalid),
         "has_invalid_step": bool(invalid),
         "implied_answer": implied_answer,
+        "implied_source": implied_source,
         "final_answer": final_answer,
         "model_answer_matches_implied": same_number(final_answer, implied_answer),
         "steps": [asdict(c) for c in checks],

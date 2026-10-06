@@ -1,20 +1,20 @@
 {
   "no_thinking": {
     "rows": 20,
-    "steps_checked": 54,
+    "steps_checked": 55,
     "steps_invalid": 0,
     "steps_invalid_then_corrected": 0,
     "rows_with_invalid_step": 0,
-    "rows_with_answer_comparison": 0,
+    "rows_with_answer_comparison": 8,
     "rows_where_answer_differs_from_reasoning": 0
   },
   "thinking": {
     "rows": 20,
-    "steps_checked": 243,
+    "steps_checked": 254,
     "steps_invalid": 1,
     "steps_invalid_then_corrected": 1,
     "rows_with_invalid_step": 1,
-    "rows_with_answer_comparison": 19,
+    "rows_with_answer_comparison": 6,
     "rows_where_answer_differs_from_reasoning": 0
   }
 }
