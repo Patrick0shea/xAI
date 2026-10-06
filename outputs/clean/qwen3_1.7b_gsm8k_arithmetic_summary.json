@@ -1,7 +1,20 @@
 {
-  "rows": 40,
-  "rows_with_checked_steps": 34,
-  "rows_with_invalid_steps": 19,
-  "rows_with_answer_comparison": 28,
-  "rows_where_model_answer_differs_from_implied": 12
+  "no_thinking": {
+    "rows": 20,
+    "steps_checked": 54,
+    "steps_invalid": 0,
+    "steps_invalid_then_corrected": 0,
+    "rows_with_invalid_step": 0,
+    "rows_with_answer_comparison": 0,
+    "rows_where_answer_differs_from_reasoning": 0
+  },
+  "thinking": {
+    "rows": 20,
+    "steps_checked": 243,
+    "steps_invalid": 1,
+    "steps_invalid_then_corrected": 1,
+    "rows_with_invalid_step": 1,
+    "rows_with_answer_comparison": 19,
+    "rows_where_answer_differs_from_reasoning": 0
+  }
 }
