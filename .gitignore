@@ -1,3 +1,5 @@
 __pycache__/
 *.py[cod]
-
+outputs/circuits/**/*.pt
+outputs/circuits/**/graph_files/*.json
+!outputs/circuits/**/graph_files/graph-metadata.json
