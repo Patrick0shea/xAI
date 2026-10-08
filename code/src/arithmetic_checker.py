@@ -60,7 +60,9 @@ CORRECTION_RE = re.compile(
     re.IGNORECASE,
 )
 
-FINAL_ANSWER_RE = re.compile(r"final\s+answer\s*\**\s*:?\s*\**([^\n]*)", re.IGNORECASE)
+# Same line only: "**Final answer**\nThe distance at the end of 4 hours is \boxed{45}"
+# must not read "4" from the next line (it then falls back to the \boxed{}).
+FINAL_ANSWER_RE = re.compile(r"final[ \t]+answer[ \t]*\**[ \t]*:?[ \t]*\**([^\n]*)", re.IGNORECASE)
 BOXED_RE = re.compile(r"\\boxed\s*{([^{}]*)}")
 LONE_NUM_RE = re.compile(rf"-?(?:{NUM})")
 
@@ -110,6 +112,8 @@ def normalize_math_text(text: str) -> str:
     """Turn LaTeX / unicode / markdown notation into plain arithmetic text."""
 
     text = re.sub(r"</?think>|<number>", " ", text, flags=re.IGNORECASE)
+    # Markdown bullets ("- 0.5 * 4 = 2") are not minus signs.
+    text = re.sub(r"(?m)^([ \t>]*)[-*\u2022][ \t]+", r"\1", text)
     text = text.replace("\u2212", "-").replace("\u2013", "-").replace("\u2014", "-")
     text = text.replace("\u00d7", "*").replace("\u00f7", "/").replace("\u22c5", "*")
     text = re.sub(r"\\(?:times|cdot)", "*", text)
@@ -210,6 +214,9 @@ def extract_step_checks(text: str) -> list[StepCheck]:
     normalized = normalize_math_text(text)
     checks: list[StepCheck] = []
     for clause, end in split_clauses(normalized):
+        # "80, minus 0.5 times 4 is 2": an operator left dangling at the start of a
+        # clause belongs to the previous clause, not to this step's first number.
+        clause = re.sub(r"^\s*[+\-*/]\s+", "", clause)
         for match in CHAIN_RE.finditer(clause):
             before = clause[: match.start()].rstrip()
             if before and before[-1] in "0123456789%)":
@@ -281,7 +288,12 @@ def check_row(row: dict) -> dict:
             # Never fall back to an earlier step when later algebra is unsupported.
             tail = normalize_math_text(reasoning_text).rsplit("=", 1)[-1].strip()
             result = checks[-1].right.strip()
-            if re.match(r"^" + re.escape(result) + r"(?![\w.])", tail):
+            # Only trust the last step if nothing numeric follows it, e.g. not when a
+            # later prose step concludes "so he has 0 lego sets left".
+            after = re.sub(r"(?im)\bstep\s*\d+|^\s*\d+\.(?!\d)", " ", tail[len(result):])
+            magnitude = abs(to_fraction(result.lstrip("+-"))) if re.fullmatch(r"[+-]?\s*(?:" + NUM + r")", result) else None
+            later_numbers = {abs(Fraction(n.replace(",", ""))) for n in re.findall(NUM, after)}
+            if re.match(r"^" + re.escape(result) + r"(?![\w.])", tail) and later_numbers <= {magnitude}:
                 if re.fullmatch(r"[+-]?\s*(?:" + NUM + r")", result):
                     implied_answer = str(to_fraction(result))
                     implied_source = "last_step"
@@ -292,7 +304,12 @@ def check_row(row: dict) -> dict:
     )
     if not is_thinking:
         final_answer = parse_final_answer(response[final_line.start():]) if final_line else None
-    if row.get("is_truncated") or row.get("hit_max_tokens"):
+    # A thinking row that closed its thinking and wrote a response was not cut off,
+    # even if an old (padded) token count says it hit the limit.
+    truncated = row.get("is_truncated") or (
+        row.get("hit_max_tokens") and not (is_thinking and response.strip())
+    )
+    if truncated:
         implied_answer, implied_source, final_answer = None, None, None
 
     checked_row = dict(row)
