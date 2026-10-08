@@ -1,0 +1,286 @@
+{
+  "env": {
+    "model_size": "0.6B",
+    "model_name": "Qwen/Qwen3-0.6B",
+    "transcoders": "mwhanna/qwen3-0.6b-transcoders-lowl0",
+    "gpu": "Tesla T4",
+    "vram_gb": 14.6,
+    "compute_capability": "7.5",
+    "dtype": "torch.float16",
+    "lazy_encoder": true,
+    "lazy_decoder": true,
+    "python": "3.13.15",
+    "torch": "2.11.0+cu130",
+    "transformers": "4.57.3",
+    "transformer_lens": "3.2.1",
+    "nnsight": "0.8.0rc1",
+    "circuit_tracer": "0.5.3.dev2+g7f6687668",
+    "disk_free_gb": 69.9,
+    "ram_gb": 12.7
+  },
+  "runs": [
+    {
+      "run": "load_model",
+      "model_name": "Qwen/Qwen3-0.6B",
+      "model_size": "0.6B",
+      "transcoders": "mwhanna/qwen3-0.6b-transcoders-lowl0",
+      "backend": "transformerlens",
+      "dtype": "torch.float16",
+      "lazy_encoder": true,
+      "lazy_decoder": true,
+      "status": "ok",
+      "runtime_s": 380.2,
+      "gpu_mem_after_load_gb": 1.41,
+      "gpu_peak_gb": 1.55
+    },
+    {
+      "run": "sanity_gsm8k0_nothink",
+      "note": "short; reference solution as reasoning",
+      "model_name": "Qwen/Qwen3-0.6B",
+      "model_size": "0.6B",
+      "transcoders": "mwhanna/qwen3-0.6b-transcoders-lowl0",
+      "dtype": "torch.float16",
+      "target_token": "1",
+      "target_id": 16,
+      "answer_for_target": "18",
+      "max_feature_nodes": 4096,
+      "offload": "disk",
+      "attempts": [
+        {
+          "batch_size": 128,
+          "status": "oom",
+          "error": "CUDA out of memory. Tried to allocate 13.51 GiB. GPU 0 has a total capacity of 14.56 GiB of which 5.53 GiB is free. Including non-PyTorch memory, this process has 9.03 GiB memory in use. Of the allocated memory 7.80 GiB is allocated by PyTorch, and 1.10 GiB is reserved by PyTorch but unallocated. If",
+          "runtime_s": 116.0,
+          "gpu_peak_gb": 9.52
+        },
+        {
+          "batch_size": 64,
+          "status": "ok",
+          "runtime_s": 201.1,
+          "gpu_peak_gb": 12.77
+        }
+      ],
+      "n_tokens": 146,
+      "model_top5": [
+        [
+          "1",
+          0.9834
+        ],
+        [
+          "9",
+          0.0136
+        ],
+        [
+          " <",
+          0.0023
+        ],
+        [
+          " $",
+          0.0001
+        ],
+        [
+          "2",
+          0.0001
+        ]
+      ],
+      "p_target": 0.9834,
+      "status": "ok",
+      "batch_size": 64,
+      "runtime_s": 201.1,
+      "gpu_peak_gb": 12.77,
+      "graph_pt_mb": 275.1,
+      "n_active_features": 416428,
+      "adjacency_shape": [
+        8331,
+        8331
+      ],
+      "n_logit_targets": 1,
+      "graph_files": "ok"
+    },
+    {
+      "run": "caseA_id11_thinking",
+      "note": "target = answer the reasoning supports (694 -> '6'); compare model_top5 to see what the model actually predicts here",
+      "model_name": "Qwen/Qwen3-0.6B",
+      "model_size": "0.6B",
+      "transcoders": "mwhanna/qwen3-0.6b-transcoders-lowl0",
+      "dtype": "torch.float16",
+      "target_token": "6",
+      "target_id": 21,
+      "answer_for_target": "694",
+      "max_feature_nodes": 4096,
+      "offload": "disk",
+      "attempts": [
+        {
+          "batch_size": 128,
+          "status": "oom",
+          "error": "CUDA out of memory. Tried to allocate 316.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 109.81 MiB is free. Including non-PyTorch memory, this process has 14.45 GiB memory in use. Of the allocated memory 13.38 GiB is allocated by PyTorch, and 955.65 MiB is reserved by PyTorch but unalloca",
+          "runtime_s": 18.7,
+          "gpu_peak_gb": 13.53
+        },
+        {
+          "batch_size": 64,
+          "status": "oom",
+          "error": "CUDA out of memory. Tried to allocate 316.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 109.81 MiB is free. Including non-PyTorch memory, this process has 14.45 GiB memory in use. Of the allocated memory 13.38 GiB is allocated by PyTorch, and 955.65 MiB is reserved by PyTorch but unalloca",
+          "runtime_s": 3.2,
+          "gpu_peak_gb": 13.53
+        },
+        {
+          "batch_size": 32,
+          "status": "oom",
+          "error": "CUDA out of memory. Tried to allocate 316.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 109.81 MiB is free. Including non-PyTorch memory, this process has 14.45 GiB memory in use. Of the allocated memory 13.38 GiB is allocated by PyTorch, and 955.65 MiB is reserved by PyTorch but unalloca",
+          "runtime_s": 2.4,
+          "gpu_peak_gb": 13.53
+        }
+      ],
+      "n_tokens": 1005,
+      "model_top5": [
+        [
+          "6",
+          1.0
+        ],
+        [
+          "3",
+          0.0
+        ],
+        [
+          "2",
+          0.0
+        ],
+        [
+          "9",
+          0.0
+        ],
+        [
+          "1",
+          0.0
+        ]
+      ],
+      "p_target": 1.0,
+      "status": "oom",
+      "batch_size": 32,
+      "runtime_s": 2.4,
+      "gpu_peak_gb": 13.53
+    },
+    {
+      "run": "caseB_id7_thinking",
+      "note": "wrong answer, reasoning-consistent; longest trace of the three, memory stress test",
+      "model_name": "Qwen/Qwen3-0.6B",
+      "model_size": "0.6B",
+      "transcoders": "mwhanna/qwen3-0.6b-transcoders-lowl0",
+      "dtype": "torch.float16",
+      "target_token": "1",
+      "target_id": 16,
+      "answer_for_target": "120",
+      "max_feature_nodes": 4096,
+      "offload": "disk",
+      "attempts": [
+        {
+          "batch_size": 128,
+          "status": "oom",
+          "error": "CUDA out of memory. Tried to allocate 282.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 249.81 MiB is free. Including non-PyTorch memory, this process has 14.32 GiB memory in use. Of the allocated memory 13.46 GiB is allocated by PyTorch, and 737.49 MiB is reserved by PyTorch but unalloca",
+          "runtime_s": 2.0,
+          "gpu_peak_gb": 13.46
+        },
+        {
+          "batch_size": 64,
+          "status": "oom",
+          "error": "CUDA out of memory. Tried to allocate 282.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 249.81 MiB is free. Including non-PyTorch memory, this process has 14.32 GiB memory in use. Of the allocated memory 13.46 GiB is allocated by PyTorch, and 737.49 MiB is reserved by PyTorch but unalloca",
+          "runtime_s": 2.2,
+          "gpu_peak_gb": 13.46
+        },
+        {
+          "batch_size": 32,
+          "status": "oom",
+          "error": "CUDA out of memory. Tried to allocate 282.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 249.81 MiB is free. Including non-PyTorch memory, this process has 14.32 GiB memory in use. Of the allocated memory 13.46 GiB is allocated by PyTorch, and 737.49 MiB is reserved by PyTorch but unalloca",
+          "runtime_s": 1.8,
+          "gpu_peak_gb": 13.46
+        }
+      ],
+      "n_tokens": 1169,
+      "model_top5": [
+        [
+          "1",
+          0.9999
+        ],
+        [
+          "2",
+          0.0001
+        ],
+        [
+          "3",
+          0.0
+        ],
+        [
+          "9",
+          0.0
+        ],
+        [
+          "4",
+          0.0
+        ]
+      ],
+      "p_target": 0.9999,
+      "status": "oom",
+      "batch_size": 32,
+      "runtime_s": 1.8,
+      "gpu_peak_gb": 13.46
+    },
+    {
+      "run": "hand_12plus7_working21",
+      "note": "hand-made: working says 21 (wrong), question implies 19",
+      "model_name": "Qwen/Qwen3-0.6B",
+      "model_size": "0.6B",
+      "transcoders": "mwhanna/qwen3-0.6b-transcoders-lowl0",
+      "dtype": "torch.float16",
+      "target_token": "2",
+      "target_id": 17,
+      "answer_for_target": "21",
+      "max_feature_nodes": 4096,
+      "offload": "disk",
+      "attempts": [
+        {
+          "batch_size": 128,
+          "status": "ok",
+          "runtime_s": 96.9,
+          "gpu_peak_gb": 13.0
+        }
+      ],
+      "n_tokens": 28,
+      "model_top5": [
+        [
+          "2",
+          0.9847
+        ],
+        [
+          "1",
+          0.0132
+        ],
+        [
+          "3",
+          0.0006
+        ],
+        [
+          "4",
+          0.0004
+        ],
+        [
+          "5",
+          0.0002
+        ]
+      ],
+      "p_target": 0.9847,
+      "status": "ok",
+      "batch_size": 128,
+      "runtime_s": 96.9,
+      "gpu_peak_gb": 13.0,
+      "graph_pt_mb": 94.7,
+      "n_active_features": 110421,
+      "adjacency_shape": [
+        4909,
+        4909
+      ],
+      "n_logit_targets": 1,
+      "graph_files": "ok"
+    }
+  ]
+}
