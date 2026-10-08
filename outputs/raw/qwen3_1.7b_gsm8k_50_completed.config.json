@@ -1,0 +1,8 @@
+{
+  "model": "Qwen/Qwen3-1.7B",
+  "num_problems": 50,
+  "batch_size": 1,
+  "seed": 42,
+  "thinking_tokens": 8192,
+  "no_thinking_tokens": 2048
+}
