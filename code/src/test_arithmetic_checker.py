@@ -118,3 +118,17 @@ def test_final_section_excluded_from_working():
     assert result['num_checked_steps'] == 1
     assert result['implied_answer'] == '7'
     assert result['model_answer_matches_implied'] is False
+
+
+def test_final_answer_heading_does_not_read_next_line():  # 50-run ids 8, 20, 27
+    text = "**Final answer**\nThe distance at the end of 4 hours is \\boxed{45}."
+    assert extract_answer(text) == "45"
+
+
+def test_markdown_bullet_is_not_minus():  # 50-run thinking id 24
+    assert steps("Steps:\n- 0.5 * 4 = 2") == [("0.5 * 4", "2", True)]
+
+
+def test_dangling_minus_after_comma():  # 50-run thinking id 24
+    found = steps("20 times 4 is 80, minus 0.5 times 4 is 2, so 80 - 2 = 78")
+    assert all(valid for _, _, valid in found) and len(found) == 3
