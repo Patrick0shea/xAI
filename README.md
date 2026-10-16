@@ -132,3 +132,46 @@ The checker extracts equations such as `3 + 4 = 7`, validates them with SymPy,
 flags invalid arithmetic steps, and compares the model's final answer with the
 last valid arithmetic result it can infer. It is conservative: unparseable text is
 skipped rather than treated as wrong.
+
+## FOLIO logic checker
+
+Install `requirements.txt`, then download the official annotated validation data
+from [Yale-LILY/FOLIO](https://github.com/Yale-LILY/FOLIO)
+(`data/v0.0/folio-validation.jsonl`, CC BY-SA 4.0). Keep the downloaded input
+separate from derived outputs. From the repository root:
+
+```powershell
+python code/src/logic_checker.py --input data/folio-validation.jsonl --output outputs/clean/folio_checked.jsonl --summary outputs/clean/folio_summary.json
+python -m unittest discover -s code/src -p "test_*.py"
+```
+
+The input uses official `premises-FOL` (list of strings), `conclusion-FOL`
+(string), and optional `label` (`True`, `False`, `Uncertain`) fields. Original
+fields are preserved and a `logic_check` object is added. With no `--input`,
+the original three smoke examples run.
+
+The parser supports quantified predicates and relations, equality, negation,
+conjunction, disjunction, exclusive-or, implication and equivalence. It uses an
+uninterpreted, nonempty domain, with no closed-world or unique-name assumptions.
+Precedence is equivalence, implication (right associative), or/xor, and, negation.
+Quantifiers bind the following unary formula; parenthesize compound bodies.
+Malformed annotations are reported without silently repairing them.
+
+Results distinguish `entailed`, `contradicted`, and logical `unknown` from
+`inconsistent` premises, `parse_error`, and `solver_unknown` (including timeout).
+`--timeout-ms` defaults to 5000 per solver call. Label agreement is a benchmark
+check; it is not a faithfulness measurement.
+
+For model outputs, optionally add `reasoning-FOL`: an ordered list of formal
+reasoning steps. Each step is checked against the premises and previously
+entailed steps; unsupported or invalid steps cannot justify later steps.
+Free-text reasoning is not automatically translated. `reasoning_coverage` is
+`unverified` when no formal steps are provided. Optional `thinking` and `response`
+fields can independently end with `Final answer: True`, `False`, or `Uncertain`;
+their explicit answers are compared, with truncated outputs left unresolved.
+This textual comparison does not establish that unformalized reasoning is valid.
+
+The checked v0.0 validation run in `outputs/clean/folio_validation_*` used a
+500 ms per-call budget: 199/204 parsed, 191/199 matched labels, five malformed
+annotations, no solver timeouts. Eight label disagreements remain available for
+manual audit; these results do not measure model reasoning faithfulness.

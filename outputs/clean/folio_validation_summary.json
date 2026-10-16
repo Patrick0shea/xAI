@@ -1,0 +1,16 @@
+{
+  "rows": 204,
+  "results": {
+    "entailed": 67,
+    "contradicted": 58,
+    "unknown": 74,
+    "inconsistent": 0,
+    "solver_unknown": 0,
+    "parse_error": 5
+  },
+  "label_comparisons": 199,
+  "label_matches": 191,
+  "formal_steps": 0,
+  "answer_comparisons": 0,
+  "answer_mismatches": 0
+}
