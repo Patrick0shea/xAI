@@ -28,6 +28,23 @@ class ParserTests(unittest.TestCase):
                 self.assertEqual(extract_answer(text), expected)
         self.assertEqual(extract_answer('work 1\n#### -1,200', gold=True), '-1200')
 
+    def test_trailing_bold_markers(self):
+        # Bold-answer bug from journal/2026-10-06.md: "**230**" was rejected as "230 *".
+        for text, expected in [
+            ('Final answer: **230**', '230'),
+            ('Final answer: 6** miles per hour', '6'),
+            ('Final answer: 10**', '10'),
+            ('Final answer: **25**.', '25'),
+            ('60 * 3', None),
+            ('2**3', None),
+            ('60*3 = 180', None),
+            ('Final answer: 60 * 3', None),
+            ('Final answer: 2**3', None),
+            ('Final answer: 60*3 = 180', None),
+        ]:
+            with self.subTest(text=text):
+                self.assertEqual(extract_answer(text), expected)
+
     def test_padding_and_eos_at_limit(self):
         row = parse_tokens([1, 2, 3, 0, 0, 0], Tokenizer(), True, 4)
         self.assertEqual(row['num_generated_tokens'], 4)

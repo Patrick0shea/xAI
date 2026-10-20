@@ -1,0 +1,126 @@
+{
+  "source": "outputs/clean/qwen3_1.7b_gsm8k_50_completed_arithmetic_checked.jsonl",
+  "accuracy": {
+    "interval_method": "Wilson score, 95%, two-sided",
+    "thinking": {
+      "count": 46,
+      "n": 50,
+      "proportion": 0.92,
+      "wilson_95ci": [
+        0.811618,
+        0.96845
+      ]
+    },
+    "no_thinking": {
+      "count": 40,
+      "n": 50,
+      "proportion": 0.8,
+      "wilson_95ci": [
+        0.669629,
+        0.887562
+      ]
+    }
+  },
+  "mcnemar_exact": {
+    "test": "exact McNemar (two-sided binomial test on discordant pairs, p = 0.5)",
+    "pairs": 50,
+    "both_correct": 40,
+    "thinking_only_correct": 6,
+    "thinking_only_correct_ids": [
+      "5",
+      "8",
+      "11",
+      "12",
+      "43",
+      "45"
+    ],
+    "no_thinking_only_correct": 0,
+    "no_thinking_only_correct_ids": [],
+    "p_value_two_sided": 0.03125,
+    "expected_discordant": [
+      6,
+      0
+    ],
+    "matches_expected": true
+  },
+  "contradiction_rate": {
+    "definition": "rows where the final answer differs from the answer the reasoning implies, among rows where the checker could compare them",
+    "interval_method": "exact Clopper-Pearson 95% (two-sided interval and one-sided upper bound)",
+    "thinking": {
+      "count": 0,
+      "n": 45,
+      "proportion": 0.0,
+      "clopper_pearson_95ci_two_sided": [
+        0.0,
+        0.078705
+      ],
+      "clopper_pearson_95_upper_one_sided": 0.064404
+    },
+    "no_thinking": {
+      "count": 0,
+      "n": 38,
+      "proportion": 0.0,
+      "clopper_pearson_95ci_two_sided": [
+        0.0,
+        0.092513
+      ],
+      "clopper_pearson_95_upper_one_sided": 0.075808
+    },
+    "pooled": {
+      "count": 0,
+      "n": 83,
+      "proportion": 0.0,
+      "clopper_pearson_95ci_two_sided": [
+        0.0,
+        0.043471
+      ],
+      "clopper_pearson_95_upper_one_sided": 0.03545
+    }
+  },
+  "invalid_step_rate": {
+    "definition": "invalid arithmetic steps / checked arithmetic steps (repeated occurrences count; steps within a response are not independent, so intervals are optimistic)",
+    "interval_method": "Wilson score 95% two-sided and exact Clopper-Pearson 95% two-sided",
+    "thinking": {
+      "count": 3,
+      "n": 762,
+      "proportion": 0.003937,
+      "wilson_95ci": [
+        0.00134,
+        0.011511
+      ],
+      "clopper_pearson_95ci_two_sided": [
+        0.000813,
+        0.011462
+      ],
+      "clopper_pearson_95_upper_one_sided": 0.010144
+    },
+    "no_thinking": {
+      "count": 1,
+      "n": 162,
+      "proportion": 0.006173,
+      "wilson_95ci": [
+        0.00109,
+        0.034133
+      ],
+      "clopper_pearson_95ci_two_sided": [
+        0.000156,
+        0.033911
+      ],
+      "clopper_pearson_95_upper_one_sided": 0.028947
+    },
+    "pooled": {
+      "count": 4,
+      "n": 924,
+      "proportion": 0.004329,
+      "wilson_95ci": [
+        0.001685,
+        0.011078
+      ],
+      "clopper_pearson_95ci_two_sided": [
+        0.001181,
+        0.011047
+      ],
+      "clopper_pearson_95_upper_one_sided": 0.009879
+    }
+  }
+}

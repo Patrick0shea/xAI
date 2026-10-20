@@ -41,7 +41,7 @@ def extract_answer(text, gold=False):
     text = re.sub(r'\\boxed\{([^{}]*)\}', r'\1', text)
     text = text.lstrip('*$ \n\t')
     match = re.match(r'(?:' + NUMBER + r')(?![\d,])', text)
-    if not match or re.match(r'\s*[/=+*^\d]', text[match.end():]):
+    if not match or re.match(r'\s*(?:[/=+^\d]|\*+\s*[\d(])', text[match.end():]):
         return None
     return normalize_number(match.group())
 

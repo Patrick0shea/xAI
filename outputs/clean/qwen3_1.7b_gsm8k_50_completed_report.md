@@ -1,5 +1,14 @@
 # GSM8K final experiment report: n = 50 paired problems
 
+> **Correction (2026-10-20, Patrick):** with the committed checker and the fixed
+> parser (commit 52ad994), the rows with an answer comparison are **45 thinking and
+> 38 no-thinking (83 total)**, not 36 and 38 (74) as below. The 36/38 summary could
+> not be reproduced from any committed code version. Accuracy (46/50, 40/50), step
+> counts and the 0 contradictions are unchanged. The `code/src` unittest suite runs
+> 14 tests (13 before the parser regression test was added), not 24.
+> `code/src/summarize_gsm8k.py` (last reproduce command) does not exist in the
+> repository. The report body is left as written; see `journal/2026-10-20.md`.
+
 Analysis date: 2026-10-08. Completed 50-problem run, 100 responses total. The agreed experiment is now 50 problems in each mode, replacing the earlier 500-problem plan. Generation and automated analysis are complete; independent human sample review remains outstanding.
 
 Qwen/Qwen3-1.7B, seed 42, batch size 1; token limits 8,192 thinking and 2,048 no-thinking. The imported JSONL and downloaded configuration are preserved under outputs/raw/qwen3_1.7b_gsm8k_50_completed*. The earlier incomplete raw file and report remain separate historical artifacts.

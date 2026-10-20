@@ -14,7 +14,7 @@
     "steps_invalid": 3,
     "steps_invalid_then_corrected": 1,
     "rows_with_invalid_step": 2,
-    "rows_with_answer_comparison": 36,
+    "rows_with_answer_comparison": 45,
     "rows_where_answer_differs_from_reasoning": 0
   }
 }
