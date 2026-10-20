@@ -1,34 +1,41 @@
 % =====================================================================
-% I. INTRODUCTION -- OWNER: Patrick
+% I. INTRODUCTION -- OWNER: Patrick (first draft 2026-10-20, written with Claude Code)
+% Sources: journal/2026-09-25.md; readings/jacovi_goldberg_2020.md;
+% readings/lanham_2023.md; journal/2026-10-15.md; journal/2026-10-20.md;
+% outputs/clean/paper_stats.json. Claims about turpin2023, chen2025, wei2022,
+% qwen3 and parcalabescu2024 are taken from their abstracts (no reading notes yet).
 % =====================================================================
 \section{Introduction}\label{sec:intro}
-% OUTLINE (comments only; no finished prose yet). About 0.5 column.
-%
-% 1. Motivation: reasoning models (Qwen3 thinking mode) write out working before
-%    answering, and users treat it as an explanation. Training only rewards the
-%    final answer, so the working need not reflect how the answer was produced.
-%    -> journal/2026-09-25.md; cite wei2022 (CoT), qwen3
-%
-% 2. Faithfulness vs plausibility: an explanation is faithful if it reflects the
-%    model's actual decision process, not just convincing to a reader.
-%    -> readings/jacovi_goldberg_2020.md; cite jacovi2020
-%
-% 3. Gap: existing tests perturb or edit the reasoning (lanham2023, turpin2023,
-%    chen2025). We instead formally check the model's own, unedited steps,
-%    with no gold labels needed.
-%    -> journal/2026-09-25.md "Pivots"; readings/lanham_2023.md
-%
-% 4. Research question: do Qwen3's final answers follow from its written reasoning,
-%    and does thinking mode change that?
-%    -> README.md "Topic & Scope"
-%
-% 5. Contributions (match the 2026-10-15 reframing):
-%    (a) a label-free, exact-arithmetic consistency checker, with a Z3 logic checker
-%        validated on FOLIO annotations;
-%    (b) a null result on GSM8K: 0/83 contradictions, with the bound it implies;
-%    (c) a critique of what consistency can show, plus planted-working and
-%        (if frozen in time) copy-vs-use and hint evidence.
-%    -> journal/2026-10-15.md "What the results mean for the paper";
-%       journal/2026-10-20.md
-%
-% 6. One-line roadmap of Sections II--VI (cut if over the page limit).
+Reasoning models write out their working before they answer. Chain-of-thought
+prompting made step-by-step working standard for arithmetic and other multi-step
+problems~\cite{wei2022}, and Qwen3 builds a thinking mode and a non-thinking mode
+into the same model~\cite{qwen3}. It is tempting to read the working as an
+explanation of how the answer was reached. But an explanation can be plausible to a
+reader without being faithful to the process behind the prediction~\cite{jacovi2020},
+and nothing in training a model to give correct answers requires the working that
+precedes them to be an honest account.
+
+Most tests of chain-of-thought faithfulness intervene. They truncate, corrupt or
+paraphrase the reasoning and check whether the answer changes~\cite{lanham2023}, or
+they add a biasing feature or hint to the prompt and check whether the reasoning
+mentions it~\cite{turpin2023,chen2025}. We ask a simpler question of the model's own,
+unedited output: \emph{does the final answer follow from the written reasoning?} For
+arithmetic this can be checked formally and without gold labels. We extract each
+calculation from the working, re-evaluate it with exact rational arithmetic, and
+compare the final answer with the answer the working itself arrives at.
+
+We apply this test to Qwen3-1.7B on 50 GSM8K problems~\cite{cobbe2021}, with thinking
+mode on and off. Our contributions are:
+\begin{itemize}
+\item a label-free consistency checker for natural-language arithmetic working, and a
+  Z3 logic checker~\cite{demoura2008} validated on FOLIO annotations~\cite{han2024folio};
+\item a null result: no final answer contradicted its own working in 83 comparable
+  responses (95\% upper bound 4.3\%), while thinking mode raised accuracy from 80\%
+  to 92\%;
+\item an analysis of what the null result can and cannot show. A matching answer is
+  \emph{consistent} with the reasoning, not necessarily \emph{faithful} to
+  it~\cite{parcalabescu2024}. We probe the gap with planted working and a
+  copy-vs-use control.
+  % TODO (Patrick, after the Wed 21 Oct freeze): add "and a misleading-hint test" if
+  % Fionn's results are in; otherwise leave the hint test to Future Work.
+\end{itemize}

@@ -1,39 +1,57 @@
 % =====================================================================
-% V. DISCUSSION -- OWNER: Patrick
+% V. DISCUSSION -- OWNER: Patrick (first draft 2026-10-20, written with Claude Code)
+% Sources: journal/2026-10-15.md (point 2, consistency vs faithfulness);
+% journal/2026-10-06.md (53 -> 1 false positives); journal/2026-10-20.md;
+% journal/2026-10-07-circuit-tracing.md; outputs/clean/paper_stats.json;
+% outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md (ID 11);
+% outputs/circuits/hand_made_*.csv (Table II).
 % =====================================================================
 \section{Discussion}\label{sec:discussion}
-% OUTLINE (comments only; no finished prose yet). About 0.5 column.
-%
-% 1. Consistency is not faithfulness. A final answer that matches the working is
-%    consistent with it; the model could reach the answer another way and still
-%    write matching steps. 0/83 cannot rule that out. (parcalabescu2024, jacovi2020)
-%    -> journal/2026-10-15.md, point 2
-%
-% 2. Why the null result? On easy GSM8K problems natural arithmetic errors are rare
-%    (4/924 steps), so an "answer ignores the working" event almost never has a
-%    chance to show up. The test has little power on easy maths; that is a finding
-%    about the method, not evidence of faithfulness.
-%    -> journal/2026-10-06.md "What this means"; outputs/clean/paper_stats.json
-%
-% 3. ID 11 (no-thinking): the working and the final answer agree on a wrong sum
-%    (700). That is consistency at work, not correctness, and a clean example of
-%    point 1. -> 50-problem report, example 1
-%
-% 4. Evidence from the other direction: planted wrong working changes the answer
-%    (Table II), so the model is sensitive to its written reasoning. Copy-vs-use
-%    tells us whether that is use or copying: TBD (Emmett). If it is copying, the
-%    planted-working result says little about faithfulness.
-%    -> journal/2026-10-07-circuit-tracing.md; journal/2026-10-20.md
-%
-% 5. Hint test: provoked unfaithfulness (the answer follows the hint and the thinking
-%    hides it) versus our natural-error null. TBD (Fionn); compare with turpin2023,
-%    chen2025.
-%
-% 6. Thinking vs no thinking: more accurate (McNemar p = 0.031), and no measurable
-%    difference in contradictions (both 0). Do NOT claim thinking is "more
-%    faithful".
-%
-% 7. Process lesson (one sentence, if space allows): the checker's own errors look
-%    like model errors (53 -> 1 false positives), and a stale summary and an
-%    uncommitted parser fix changed reported numbers. Regenerating from raw
-%    outputs caught both. -> journal/2026-10-06.md; journal/2026-10-20.md
+\textbf{Consistency is not faithfulness.} Whenever the checker could compare them,
+Qwen3's final answer matched the answer its working arrived at: 0 of 45 thinking and
+0 of 38 no-thinking responses (Table~\ref{tab:gsm8k}). This is a result about
+consistency. A model could reach its answer some other way and still write working
+that ends on the same number, and output-level tests of this kind measure
+self-consistency rather than faithfulness to the model's inner
+workings~\cite{parcalabescu2024}. Our 0/83 bounds how often the answer visibly
+contradicts the working (at most 4.3\% at 95\% confidence). It cannot show that the
+working caused the answer.
+
+\textbf{Why the null result.} The test only fires when the working and the answer come
+apart, and on GSM8K the written arithmetic is almost always right: 4 of 924 checked
+steps were wrong, and the model corrected one of them itself. With so few natural
+errors, an answer that ignores its working has little chance to show, so the test has
+low power on easy problems. ID~11 shows the opposite case. Without thinking, the model
+summed $204+160+330$ to 700 instead of 694 and answered 700: the answer followed the
+faulty working exactly, so it was consistent and wrong.
+
+\textbf{Sensitivity to the working.} The planted-working test comes from the other
+direction. With a wrong working in the prompt, Qwen3-0.6B's first answer digit follows
+the working with probability 0.94--0.99. Given no working, it gives the true answer's
+first digit with probability 0.68--0.83 (Table~\ref{tab:planted}). The model is
+therefore sensitive to written reasoning, but this test cannot separate \emph{using}
+the working from \emph{copying} its last number. The copy-vs-use control targets
+exactly that: \textbf{TBD} (Table~\ref{tab:copyuse}). Both tests use Qwen3-0.6B, not
+the 1.7B model whose outputs we checked.
+% TODO (Patrick + Emmett, after the freeze): one or two sentences interpreting
+% Table IV. If the model copies, say the planted-working result says little about
+% faithfulness.
+
+\textbf{Provoked unfaithfulness.} Prior work finds that models often use hints in the
+prompt without mentioning them in their reasoning~\cite{turpin2023,chen2025}. Our hint
+test: \textbf{TBD} (Table~\ref{tab:hint}).
+% TODO (Patrick + Fionn, after the freeze): contrast the hint result with the
+% natural-error null. If the hint test missed the freeze, delete this paragraph and
+% keep one sentence in Future Work (Section VI).
+
+\textbf{Thinking versus no thinking.} Thinking mode solved six problems that
+no-thinking mode missed and none the other way (exact McNemar $p = 0.031$). Both
+modes had zero contradictions, so we find no difference in consistency, and we do not
+claim that thinking-mode reasoning is more faithful.
+
+\textbf{Checker errors look like model errors.} Our first arithmetic checker flagged 53
+invalid steps on a 20-problem pilot, and only one of them was a real model error.
+Later, a stale summary and an uncommitted parser fix changed our reported counts until
+we regenerated every number from the raw outputs. A formal checker is only as reliable
+as the extraction in front of it.
+% Cut this paragraph first if over the page limit.
