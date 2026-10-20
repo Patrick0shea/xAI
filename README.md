@@ -15,8 +15,9 @@ from its written reasoning.
 1. **Generate:** run Qwen3 on short maths (GSM8K) and logic (FOLIO) problems, with
    thinking mode on and off.
 2. **Formally check:** verify each reasoning step automatically (exact rational
-   arithmetic with Python's `fractions.Fraction` for arithmetic, Z3 for logic) and test whether the final answer matches what the reasoning implies.
-   No gold labels are needed: we measure faithfulness, not accuracy.
+   arithmetic with Python's `fractions.Fraction` for arithmetic, Z3 for logic) and
+   test whether the final answer matches what the reasoning implies. No gold labels
+   are needed: we measure faithfulness, not accuracy.
 3. **Compare:** does thinking mode produce reasoning the model actually uses?
 4. **Look inside (stretch goal):** use circuit tracing on a few cases where the answer
    ignores the reasoning, to see where the answer actually came from.
@@ -27,7 +28,41 @@ from its written reasoning.
 network itself (infeasible at LLM scale; we check the reasoning *text*).
 
 
-**Latest report draft:**
+**Latest report draft:** [`report/paper/`](report/paper/) (IEEE conference
+skeleton; open `main.tex` on Overleaf). Project proposal: [`report/proposal.md`](report/proposal.md).
+
+## Team
+
+| Member | Main work |
+|---|---|
+| Patrick O'Shea | Arithmetic checker rewrite, statistics, paper skeleton, leads the writing |
+| Fionn Ó Murchú | GSM8K runs and answer parsing; hint experiment |
+| Conor Lydon | Z3 logic checker and FOLIO validation; human checker audit |
+| Emmett Macken | Circuit tracing and planted working; copy-vs-use experiment |
+
+## Current results
+
+Qwen3-1.7B, first 50 GSM8K test problems, thinking on and off (100 responses).
+Intervals are from [`outputs/clean/paper_stats.json`](outputs/clean/paper_stats.json).
+
+| | Thinking | No thinking |
+|---|---:|---:|
+| Accuracy (Wilson 95% CI) | 46/50, 92% [81.2, 96.8] | 40/50, 80% [67.0, 88.8] |
+| Invalid arithmetic steps / checked | 3/762 | 1/162 |
+| Answer contradicts its own working | 0/45 | 0/38 |
+
+- Thinking is more accurate: 6 problems only thinking solves, none the other way
+  (exact McNemar p = 0.031).
+- No answer–reasoning contradictions in 83 comparable responses (exact
+  Clopper–Pearson 95% upper bound 4.3%). This shows consistency, not faithfulness.
+- With planted wrong working (Qwen3-0.6B, 8 prompts), the answer's first digit
+  follows the working with p = 0.94–0.99 ([`journal/2026-10-07-circuit-tracing.md`](journal/2026-10-07-circuit-tracing.md)).
+- Z3 checker validation on FOLIO: 191/199 parsed rows match their labels (checker
+  validation, not a faithfulness result).
+- Copy-vs-use and hint experiments: **TBD** (experiments freeze Wed 21 Oct, 9pm).
+
+Details: [`outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md`](outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md)
+and [`journal/2026-10-20.md`](journal/2026-10-20.md).
 
 ## Timeline
 
@@ -56,10 +91,12 @@ Use a GPU environment with PyTorch, then install `transformers accelerate datase
 From the repository root, run:
 
 ```bash
-python code/src/run_gsm8k.py --num-problems 500 --batch-size 1
+python code/src/run_gsm8k.py --num-problems 50 --batch-size 1 --output outputs/raw/qwen3_1.7b_gsm8k_50_completed.jsonl
 ```
 
-This runs 500 test problems in both modes (1,000 responses), with token budgets
+The agreed experiment is 50 problems per mode, not 500 (the script's default is
+still 500, so pass `--num-problems 50`). This runs 50 test problems in both modes
+(100 responses), with token budgets
 of 8,192 for thinking and 2,048 for no-thinking. Increase `--batch-size` if GPU
 memory permits. `--model`, `--seed`, token limits, and `--output` are configurable.
 Rerunning the same command resumes saved records; keep the adjacent config JSON
@@ -93,7 +130,8 @@ that uncertainty. The expanded experiment must still be executed on a suitable r
   Name notebooks and scripts in lowercase with underscores.
 - `outputs/raw/`: untouched model outputs. **Never edit these.**
 - `outputs/clean/`: processed, analysis-ready outputs derived from `raw/`.
-- `report/`: IEEE paper drafts and the project proposal.
+- `report/`: the project proposal; `report/paper/` holds the IEEE paper (one
+  `.tex` file per section in `report/paper/sections/`, references in `refs.bib`).
 - `presentation/`: slides for the Oct 9 talk.
 - `README.md`: stays current with topic, scope, and the latest report draft.
 

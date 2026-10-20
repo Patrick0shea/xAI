@@ -1,7 +1,7 @@
 # GSM8K final experiment report: n = 50 paired problems
 
 > **Correction (2026-10-20, Patrick):** with the committed checker and the fixed
-> parser (commit 52ad994), the rows with an answer comparison are **45 thinking and
+> parser (2026-10-20 bold-answer fix), the rows with an answer comparison are **45 thinking and
 > 38 no-thinking (83 total)**, not 36 and 38 (74) as below. The 36/38 summary could
 > not be reproduced from any committed code version. Accuracy (46/50, 40/50), step
 > counts and the 0 contradictions are unchanged. The `code/src` unittest suite runs
