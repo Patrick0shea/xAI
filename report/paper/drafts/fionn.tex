@@ -1,0 +1,64 @@
+% STARTER DRAFT for Fionn -- written with Claude Code on 2026-10-20 at Patrick's
+% request. Not included in main.tex. Use, rewrite or ignore; see drafts/README.md.
+
+% ---------------------------------------------------------------------
+% -> sections/method.tex, subsection "Generation and answer parsing"
+% Sources: outputs/raw/qwen3_1.7b_gsm8k_50_completed.config.json; README.md;
+% journal/2026-10-01.md; journal/2026-10-06.md; journal/2026-10-20.md;
+% outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md
+% ---------------------------------------------------------------------
+We ran Qwen3-1.7B~\cite{qwen3} on the first 50 GSM8K test problems~\cite{cobbe2021}
+in both modes of the same model, giving 100 responses (seed 42, batch size 1). Token
+limits were 8,192 with thinking and 2,048 without. Our pilot showed that a 2,048-token
+limit cut off 6 of 20 thinking outputs. We count generated tokens up to the
+end-of-sequence token rather than up to the batch padding, and flag truncation in both
+modes.
+
+Final answers are parsed conservatively: an explicit ``Final answer:'', a
+\verb|\boxed{}| value, or a response that is just a number. The parser never takes
+the last number in the working. Unresolved and truncated answers count as incorrect.
+Raw outputs are never edited; every derived file is regenerated from them.
+% Optional, if space: a bug that rejected bold answers ("**230**") was fixed and
+% the run re-parsed before analysis (journal/2026-10-20.md).
+
+% ---------------------------------------------------------------------
+% -> sections/method.tex, subsection "Hint test"
+% Sources: journal/2026-10-15.md (decision 5); journal/2026-10-20.md
+% ---------------------------------------------------------------------
+To provoke unfaithfulness rather than wait for it, we add a misleading hint to
+\textbf{TBD} GSM8K problems (``a maths teacher says the answer is $X$'', with $X$
+wrong) and run both modes. A response is flagged when its final answer follows the
+hint but its reasoning never mentions the hint, as in~\cite{turpin2023,chen2025}.
+% TODO (Fionn): actual n, how X was chosen, how "mentions the hint" was decided.
+
+% ---------------------------------------------------------------------
+% -> sections/results.tex, subsection "GSM8K: accuracy and answer--reasoning
+%    consistency" (Table I is already in place)
+% Sources: outputs/clean/paper_stats.json;
+% outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md ("Five examples");
+% outputs/clean/qwen3_1.7b_gsm8k_50_completed_arithmetic_checked.jsonl
+% ---------------------------------------------------------------------
+Thinking mode answered 46 of 50 problems correctly and no-thinking mode 40
+(Table~\ref{tab:gsm8k}). All six discordant pairs favour thinking (IDs 5, 8, 11, 12,
+43 and 45), with none the other way (exact McNemar $p = 0.031$).
+
+The checker extracted 762 arithmetic steps from the thinking traces and 162 from the
+no-thinking responses. Four were wrong: three in thinking (two repeats of one error in
+ID~21, and one in ID~26 that the model corrected itself) and one in no-thinking
+(ID~11). An implied answer could be extracted for 45 thinking and 38 no-thinking
+responses. In every one of these 83, the final answer matched it, so the pooled
+contradiction rate is 0 (Clopper--Pearson 95\% upper bound 4.3\%). The other 17
+responses had no implied answer, or were truncated (thinking ID~21, which looped until
+the token limit).
+
+Two cases show what the check can and cannot see. In ID~26 (thinking), the model wrote
+$49.50+67.50+126.00=243.50$, noticed the error and corrected it to 243, and its final
+answer was right. In ID~7 (thinking), every step was valid, but the model misread the
+problem and answered 120 instead of 160: valid arithmetic cannot catch an
+interpretation error.
+% Human audit result (Conor): TBD -- one sentence once checker_audit_sheet.md is done.
+
+% ---------------------------------------------------------------------
+% -> sections/results.tex, subsection "Hint test" (fill Table V)
+% ---------------------------------------------------------------------
+\textbf{TBD} -- write once the hint results are committed (freeze: Wed 21 Oct, 9pm).
