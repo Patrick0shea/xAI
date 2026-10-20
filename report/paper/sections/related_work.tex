@@ -2,42 +2,48 @@
 % II. RELATED WORK -- OWNERS: Conor and Emmett
 % =====================================================================
 \section{Related Work}\label{sec:related}
-% OUTLINE (comments only; no finished prose yet). About 0.5 column.
-% Rule from journal/2026-10-15.md "Reading gaps": only cite a paper someone in the
-% group has read; each claim must be supported by the source.
-%
-% 1. Defining faithfulness: jacovi2020 (faithfulness vs plausibility; graded,
-%    not binary). -> readings/jacovi_goldberg_2020.md
-%
-% 2. Intervention tests on CoT: lanham2023 (truncation, adding mistakes,
-%    paraphrasing). -> readings/lanham_2023.md
-%
-% 3. Unverbalised influences / hints: turpin2023 (biasing features not mentioned
-%    in the CoT); chen2025 (reasoning models rarely verbalise hints they use).
-%    This motivates Fionn's hint test.
-%    -> NO READING NOTES YET (journal/2026-10-15.md "Reading gaps"): someone must
-%       read both before citing.
-%
-% 4. Unfaithfulness without prompting: arcuschin2025 (natural, unprompted
-%    unfaithful CoT). -> readings/arcuschin_2025.md
-%
-% 5. Formal / symbolic verification of CoT: pramanik2026 (NSF-CoT), lyu2023
-%    (Faithful CoT: translate to a symbolic program and execute it).
-%    How we differ: we check the model's own natural-language steps, not a
-%    generated formal program. -> readings/pramanik_2026_nsf_cot.md;
-%    lyu2023 has NO READING NOTES YET.
-%
-% 6. Consistency vs faithfulness: parcalabescu2024 (most "faithfulness" tests
-%    measure self-consistency). Sets up Section V.
-%    -> NO READING NOTES YET.
-%
-% 7. Closest prior work: xiong2025 (faithfulness of thinking drafts in reasoning
-%    models). Overlap check still to do; confirm this is the intended paper (see
-%    the CHECK note in refs.bib). -> journal/2026-10-15.md "Reading gaps"
-%
-% 8. Interpretability: ameisen2025 (circuit tracing, transcoders), lindsey2025
-%    (case studies incl. arithmetic and unfaithful CoT). -> Emmett;
-%    journal/2026-10-07-circuit-tracing.md "Still open"
-%
-% 9. Datasets and tools (cite in passing): cobbe2021 (GSM8K), han2024folio (FOLIO),
-%    demoura2008 (Z3), qwen3. -> readings/han_2024_folio.md
+% OWNERS: Conor and Emmett. STARTER DRAFT (written with Claude Code, 2026-10-20): they
+% check every sentence against its source, rewrite, and commit as their own.
+% Sources: readings/jacovi_goldberg_2020.md, lanham_2023.md, arcuschin_2025.md,
+% pramanik_2026_nsf_cot.md; arXiv abstracts for turpin2023, chen2025, lyu2023,
+% parcalabescu2024, xiong2025 (NO READING NOTES YET for these five -- read before citing).
+\textbf{Faithfulness.} Jacovi and Goldberg separate faithfulness, which asks whether
+an explanation reflects the model's actual reasoning, from plausibility, which asks
+whether it convinces a reader. They argue faithfulness should be graded rather than
+binary~\cite{jacovi2020}.
+
+\textbf{Testing chain-of-thought faithfulness.} Lanham et al.\ intervene on the
+reasoning, by truncating it, adding mistakes or paraphrasing it, and find that models
+vary widely in how much their answers depend on it~\cite{lanham2023}. Turpin et al.\
+show that biasing features added to the prompt change answers without being mentioned
+in the explanation~\cite{turpin2023}. Chen et al.\ find that reasoning models reveal
+their use of prompt hints in at least 1\% of cases where they use them, but often in
+fewer than 20\%~\cite{chen2025}. Arcuschin et al.\ show that unfaithful reasoning also
+occurs on natural, non-adversarial prompts~\cite{arcuschin2025}. Xiong et al.\ perturb
+the thinking drafts of reasoning models and find that final answers often fail to
+align with the draft's conclusion~\cite{xiong2025}.
+% CHECK: confirm xiong2025 is the paper the group meant (see refs.bib).
+
+\textbf{Formal and symbolic checking.} Faithful CoT translates a question into a
+symbolic program and runs it with a deterministic solver, so the reasoning chain
+explains the answer by construction~\cite{lyu2023}. NSF-CoT checks each reasoning step
+for groundedness, validity and utility, using SMT-style verification combined with
+LLM-based entailment~\cite{pramanik2026}. Unlike both, we leave the model's own
+natural-language working unchanged and check it.
+
+\textbf{Consistency versus faithfulness.} Parcalabescu and Frank argue that most
+faithfulness tests measure self-consistency at the output level, not faithfulness to
+the model's inner workings~\cite{parcalabescu2024}. We return to this in
+Section~\ref{sec:discussion}.
+
+% Emmett's paragraph (STARTER DRAFT). Sources: journal/2026-10-07-circuit-tracing.md;
+% the two Transformer Circuits pages
+% (section list checked on 2026-10-20).
+\textbf{Looking inside the model.} Circuit tracing replaces a model's MLPs with
+transcoders and builds attribution graphs that show which features drive a
+prediction~\cite{ameisen2025}. Lindsey et al.\ apply it to case studies that include
+addition and chain-of-thought faithfulness, where they contrast a faithful
+computation with cases where the reasoning is made up or worked backwards from a
+suggested answer~\cite{lindsey2025}.
+% CHECK (Emmett): you were going to read these sections ("Still open" in your
+% 2026-10-07 entry) -- confirm the description before citing.

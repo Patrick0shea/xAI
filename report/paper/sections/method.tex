@@ -6,20 +6,24 @@
 \section{Method}\label{sec:method}
 
 \subsection{Generation and answer parsing}\label{sec:method-gen}
-% OWNER: Fionn. OUTLINE:
-% - Qwen3-1.7B, first 50 GSM8K test problems, thinking on and off, same weights
-%   (100 responses); seed 42, batch size 1; token limits 8,192 (thinking) and
-%   2,048 (no thinking). -> outputs/raw/qwen3_1.7b_gsm8k_50_completed.config.json
-% - Why 50, not 500: a larger run only tightens the estimate around zero.
-%   -> journal/2026-10-15.md, decision 2
-% - Token counts through EOS (not batch padding); truncation flagged in both modes.
-%   -> journal/2026-10-01.md (the four pilot bugs)
-% - Conservative parser: explicit "Final answer:", \boxed{}, or a lone number;
-%   never the last number in the working; unresolved answers count as incorrect.
-%   Bold answers ("**230**") were wrongly rejected until 2026-10-20.
-%   -> README.md; journal/2026-10-06.md; journal/2026-10-20.md
-% - Raw outputs are never edited; derived files are regenerated from them
-%   (raw SHA-256 recorded). -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md
+% OWNER: Fionn. STARTER DRAFT (written with Claude Code, 2026-10-20): Fionn to
+% check every sentence against its source, rewrite, and commit as his own.
+% Sources: outputs/raw/qwen3_1.7b_gsm8k_50_completed.config.json; README.md;
+% journal/2026-10-01.md; journal/2026-10-06.md; journal/2026-10-20.md;
+% outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md
+We ran Qwen3-1.7B~\cite{qwen3} on the first 50 GSM8K test problems~\cite{cobbe2021}
+in both modes of the same model, giving 100 responses (seed 42, batch size 1). Token
+limits were 8,192 with thinking and 2,048 without. Our pilot showed that a 2,048-token
+limit cut off 6 of 20 thinking outputs. We count generated tokens up to the
+end-of-sequence token rather than up to the batch padding, and flag truncation in both
+modes.
+
+Final answers are parsed conservatively: an explicit ``Final answer:'', a
+\verb|\boxed{}| value, or a response that is just a number. The parser never takes
+the last number in the working. Unresolved and truncated answers count as incorrect.
+Raw outputs are never edited; every derived file is regenerated from them.
+% Optional, if space: a bug that rejected bold answers ("**230**") was fixed and
+% the run re-parsed before analysis (journal/2026-10-20.md).
 
 \subsection{Arithmetic consistency checker}\label{sec:method-arith}
 % OWNER: Patrick (first draft 2026-10-20, written with Claude Code). Describes
@@ -56,35 +60,46 @@ regression test. A team member who did not write the checker is auditing it by h
 \textbf{TBD}.
 
 \subsection{Logic checker and FOLIO validation}\label{sec:method-logic}
-% OWNER: Conor. OUTLINE:
-% - Z3 (demoura2008) checks whether a conclusion is entailed, contradicted or
-%   unknown from first-order premises; inconsistent premises, parse errors and solver
-%   timeouts are reported separately from logical "unknown".
-%   -> README.md "FOLIO logic checker"; code/src/logic_checker.py
-% - Validated on official FOLIO v0.0 validation annotations (han2024folio):
-%   Table III. This is CHECKER VALIDATION, NOT A FAITHFULNESS RESULT. No Qwen3
-%   FOLIO outputs were checked, because free-text reasoning would first have to be
-%   translated into FOL.
-%   -> journal/2026-10-16.md; journal/2026-10-20.md, decision 1
+% OWNER: Conor. STARTER DRAFT (written with Claude Code, 2026-10-20): Conor to
+% check every sentence against its source, rewrite, and commit as his own.
+% Sources: README.md "FOLIO logic checker"; journal/2026-10-16.md; journal/2026-10-20.md
+For first-order logic we use Z3~\cite{demoura2008}. The checker parses premises and a
+conclusion written in first-order logic (quantifiers, predicates and relations,
+equality, and the usual connectives) and reports whether the conclusion is entailed,
+contradicted or unknown. Inconsistent premises, parse errors and solver timeouts are
+reported separately from logical uncertainty, so checker failures are never counted
+as model errors. Optional formal reasoning steps are checked in order, and only proved
+steps can support later ones. We validate the checker on the official FOLIO
+annotations~\cite{han2024folio} (Table~\ref{tab:folio}). This is a check of the
+checker, not a faithfulness result: we did not check any model's logic reasoning,
+because free-text reasoning would first have to be translated into first-order logic.
 
 \subsection{Planted working and copy-vs-use}\label{sec:method-planted}
-% OWNER: Emmett. OUTLINE:
-% - Qwen3-0.6B (1.7B transcoders do not load on free Colab), short prompts
-%   "Question / Working / Final answer:", first-digit probabilities.
-%   -> journal/2026-10-07-circuit-tracing.md
-% - Planted wrong working vs no working vs correct working (8 prompts): Table II.
-% - Copy-vs-use: the answer needs one more step after the working, so following the
-%   working, copying it, and the true path give different first digits.
-%   Design and n: TBD (Emmett). -> journal/2026-10-15.md decision 4; journal/2026-10-20.md
-% - Circuit tracing (ameisen2025) on the 28-token hand-made prompt: an illustration,
-%   not evidence of dependence (edges not inspected).
+% OWNER: Emmett. STARTER DRAFT (written with Claude Code, 2026-10-20): Emmett to
+% check every sentence against its source, rewrite, and commit as his own.
+% Sources: journal/2026-10-07-circuit-tracing.md; journal/2026-10-15.md (decision 4)
+Circuit-tracing transcoders for Qwen3-1.7B did not fit in free Colab memory, so these
+tests use Qwen3-0.6B with short prompts of the form ``Question: $a+b=?$ / Working:
+\dots / Final answer:''. We record the probability of the first answer digit (digits
+are single tokens in Qwen), comparing a wrong working, a correct working and no
+working, on 8 hand-made addition prompts.
+
+A wrong working that the model follows could be used or simply copied. The copy-vs-use
+control separates the two with prompts whose answer needs one more step after the
+working. For example, $(12+7)\times 2$ with working $12+7=21$: using the working gives
+42, copying it gives 21, and the true answer is 38, so the first digits differ.
+Prompts: \textbf{TBD}.
+% TODO (Emmett): n, how prompts were built, any change from the 2026-10-15 design.
 
 \subsection{Hint test}\label{sec:method-hint}
-% OWNER: Fionn. OUTLINE:
-% - GSM8K problems with a misleading hint ("a maths teacher says the answer is X");
-%   flag answers that follow the hint when the thinking never mentions it
-%   (turpin2023, chen2025). Design and n: TBD (Fionn).
-%   -> journal/2026-10-15.md decision 5; journal/2026-10-20.md
+% OWNER: Fionn. STARTER DRAFT (written with Claude Code, 2026-10-20): Fionn to
+% check every sentence against its source, rewrite, and commit as his own.
+% Sources: journal/2026-10-15.md (decision 5); journal/2026-10-20.md
+To provoke unfaithfulness rather than wait for it, we add a misleading hint to
+\textbf{TBD} GSM8K problems (``a maths teacher says the answer is $X$'', with $X$
+wrong) and run both modes. A response is flagged when its final answer follows the
+hint but its reasoning never mentions the hint, as in~\cite{turpin2023,chen2025}.
+% TODO (Fionn): actual n, how X was chosen, how "mentions the hint" was decided.
 
 \subsection{Statistics}\label{sec:method-stats}
 % OWNER: Patrick (first draft 2026-10-20, written with Claude Code).

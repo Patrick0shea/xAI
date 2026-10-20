@@ -8,20 +8,32 @@
 % committed output file and cite it in the comment.
 
 \subsection{GSM8K: accuracy and answer--reasoning consistency}\label{sec:res-gsm8k}
-% OWNER: Fionn. OUTLINE:
-% - Table I. Thinking is more accurate: 6 problems only thinking solves (IDs 5, 8,
-%   11, 12, 43, 45), none the other way; exact McNemar p = 0.031.
-% - No contradictions: 0/45 thinking, 0/38 no-thinking, 0/83 pooled. The
-%   Clopper--Pearson 95% upper bound (pooled 4.3%) is the strongest claim the data
-%   supports. It does NOT cover the 17 responses with no comparison.
-% - Natural arithmetic errors are rare: 4 invalid of 924 checked steps (3 in
-%   thinking, one of them corrected; 1 in no-thinking).
-% - Examples (pick 2 at most for space): ID 11 no-thinking (204+160+330=700, and the
-%   final answer agrees with the wrong sum); ID 26 thinking (error, then
-%   self-correction); ID 7 (valid arithmetic, wrong interpretation); ID 21
-%   (repetition loop, truncated).
-%   -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md "Five examples"
-% - Human audit result (Conor): TBD. -> outputs/clean/checker_audit_sheet.md
+% OWNER: Fionn. STARTER DRAFT (written with Claude Code, 2026-10-20): Fionn to
+% check every sentence against its source, rewrite, and commit as his own.
+%    consistency" (Table I is already in place)
+% Sources: outputs/clean/paper_stats.json;
+% outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md ("Five examples");
+% outputs/clean/qwen3_1.7b_gsm8k_50_completed_arithmetic_checked.jsonl
+Thinking mode answered 46 of 50 problems correctly and no-thinking mode 40
+(Table~\ref{tab:gsm8k}). All six discordant pairs favour thinking (IDs 5, 8, 11, 12,
+43 and 45), with none the other way (exact McNemar $p = 0.031$).
+
+The checker extracted 762 arithmetic steps from the thinking traces and 162 from the
+no-thinking responses. Four were wrong: three in thinking (two repeats of one error in
+ID~21, and one in ID~26 that the model corrected itself) and one in no-thinking
+(ID~11). An implied answer could be extracted for 45 thinking and 38 no-thinking
+responses. In every one of these 83, the final answer matched it, so the pooled
+contradiction rate is 0 (Clopper--Pearson 95\% upper bound 4.3\%). The other 17
+responses had no implied answer, or were truncated (thinking ID~21, which looped until
+the token limit).
+
+Two cases show what the check can and cannot see. In ID~26 (thinking), the model wrote
+$49.50+67.50+126.00=243.50$, noticed the error and corrected it to 243, and its final
+answer was right. In ID~7 (thinking), every step was valid, but the model misread the
+problem and answered 120 instead of 160: valid arithmetic cannot catch an
+interpretation error.
+% Human audit result (Conor): TBD -- one sentence once checker_audit_sheet.md is done.
+
 \begin{table}[t]
 \centering
 \caption{Qwen3-1.7B on 50 paired GSM8K problems. Intervals: accuracy and invalid-step
@@ -52,12 +64,21 @@ Contradictions & 0 & 0 & 0 \\
 \end{table}
 
 \subsection{Planted working and copy-vs-use}\label{sec:res-planted}
-% OWNER: Emmett. OUTLINE:
-% - Table II: a planted wrong working overrides the model's own default answer.
-%   8 hand-picked prompts, first digit only, Qwen3-0.6B: it demonstrates the effect
-%   and is not a rate. -> journal/2026-10-07-circuit-tracing.md
-% - Table IV: copy-vs-use. Does the model use the working or copy it? TBD.
-% - Optional figure: outputs/circuits/hand_12plus7_working21.png (illustration only).
+% OWNER: Emmett. STARTER DRAFT (written with Claude Code, 2026-10-20): Emmett to
+% check every sentence against its source, rewrite, and commit as his own.
+% Sources: outputs/circuits/hand_made_behavioural.csv, hand_made_baseline.csv
+% (Table II already summarises them -- check it); journal/2026-10-07-circuit-tracing.md
+With no working, Qwen3-0.6B gives the true answer's first digit with probability
+0.68--0.83 (mean 0.75), and with a correct working 0.99 on all 8 prompts
+(Table~\ref{tab:planted}). With a wrong working, the first digit follows the working
+with probability 0.94--0.99, and the true digit falls to at most 0.013. A wrong working
+therefore overrides the model's own default answer. These are 8 hand-picked prompts
+on a small model, so they demonstrate the effect rather than measure a rate.
+
+Copy-vs-use: \textbf{TBD} (Table~\ref{tab:copyuse}).
+% Optional figure: outputs/circuits/hand_12plus7_working21.png, as an illustration
+% only -- the graph's edges have not been inspected, so it is not evidence of dependence.
+
 \begin{table}[t]
 \centering
 \caption{Planted working on Qwen3-0.6B (8 hand-made addition prompts): probability of
@@ -96,11 +117,12 @@ Prompts ($n$) & \textbf{TBD} \\
 \end{table}
 
 \subsection{Hint test}\label{sec:res-hint}
-% OWNER: Fionn. OUTLINE:
-% - Table V: how often the answer follows a misleading hint, and how often the
-%   thinking mentions the hint when it does. TBD.
-% - If it misses the Wed 21 Oct 9pm freeze: delete this subsection and Table V,
-%   and move the design to Future Work (Section VI). -> journal/2026-10-20.md
+% OWNER: Fionn. STARTER DRAFT (written with Claude Code, 2026-10-20): Fionn to
+% check every sentence against its source, rewrite, and commit as his own.
+\textbf{TBD} -- write once the hint results are committed (freeze: Wed 21 Oct, 9pm).
+% If the hint test misses the Wed 21 Oct 9pm freeze: delete this subsection and
+% Table V, and move the design to Future Work (Section VI).
+
 \begin{table}[t]
 \centering
 \caption{Misleading-hint test (Fionn). Placeholder until the results are committed.}
@@ -118,9 +140,15 @@ Answer follows hint & \textbf{TBD} & \textbf{TBD} \\
 \end{table}
 
 \subsection{Logic checker validation on FOLIO}\label{sec:res-folio}
-% OWNER: Conor (table), placed here or in Section III-C to save space.
-% State it clearly: this validates the checker against dataset labels. It is not a
-% faithfulness result. -> journal/2026-10-16.md; journal/2026-10-20.md
+% OWNER: Conor. STARTER DRAFT (written with Claude Code, 2026-10-20): Conor to
+% check every sentence against its source, rewrite, and commit as his own.
+% Source: outputs/clean/folio_validation_summary.json
+With a 500\,ms limit per solver call, 199 of the 204 validation rows parsed, and the
+checker's verdict matched the dataset label for 191 of them (Table~\ref{tab:folio}).
+Five rows had malformed annotations, and no call timed out or found inconsistent
+premises. The eight disagreements have not yet been audited against the
+natural-language text.
+
 \begin{table}[t]
 \centering
 \caption{Z3 checker on FOLIO v0.0 validation annotations (500\,ms per solver call).
