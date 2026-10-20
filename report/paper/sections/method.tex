@@ -1,0 +1,91 @@
+% =====================================================================
+% III. METHOD -- OWNERS: Fionn (A, generation and parsing), Patrick (B, arithmetic
+% checker and statistics), Conor (C, logic checker and FOLIO validation).
+% Emmett supplies D (planted working and copy-vs-use); Fionn supplies E (hint test).
+% =====================================================================
+\section{Method}\label{sec:method}
+
+\subsection{Generation and answer parsing}\label{sec:method-gen}
+% OWNER: Fionn. OUTLINE:
+% - Qwen3-1.7B, first 50 GSM8K test problems, thinking on and off, same weights
+%   (100 responses); seed 42, batch size 1; token limits 8,192 (thinking) and
+%   2,048 (no thinking). -> outputs/raw/qwen3_1.7b_gsm8k_50_completed.config.json
+% - Why 50, not 500: a larger run only tightens the estimate around zero.
+%   -> journal/2026-10-15.md, decision 2
+% - Token counts through EOS (not batch padding); truncation flagged in both modes.
+%   -> journal/2026-10-01.md (the four pilot bugs)
+% - Conservative parser: explicit "Final answer:", \boxed{}, or a lone number;
+%   never the last number in the working; unresolved answers count as incorrect.
+%   Bold answers ("**230**") were wrongly rejected until 2026-10-20.
+%   -> README.md; journal/2026-10-06.md; journal/2026-10-20.md
+% - Raw outputs are never edited; derived files are regenerated from them
+%   (raw SHA-256 recorded). -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md
+
+\subsection{Arithmetic consistency checker}\label{sec:method-arith}
+% OWNER: Patrick. OUTLINE -- describe it as code/src/arithmetic_checker.py actually works:
+% - Reasoning text = the thinking (thinking mode) or the response before its
+%   "Final answer" line (no-thinking mode).
+% - Normalisation: LaTeX (\times, \frac, \cdot), Unicode operators, word operators
+%   ("times", "divided by", "is"), thousands commas and percentages; text is split
+%   into clauses (lines, sentence ends, ", ") so numbers from different clauses
+%   never merge.
+% - Extraction: equation chains a = b = c, checked as adjacent pairs where the left
+%   side contains an operator. Clauses with variables or unsupported text are
+%   skipped, not counted as wrong.
+% - Evaluation: EXACT RATIONAL ARITHMETIC with Python's fractions.Fraction. Every
+%   number is converted to a Fraction, so 0.1 + 0.2 = 0.3 exactly. NOT SymPy.
+%   A step is valid if both sides are equal, or equal after rounding to the number
+%   of decimals the model wrote (e.g. 20/3 = 6.67).
+% - Correction flag: a nearby "wait", "actually", "mistake", ... within 200
+%   characters after an invalid step. A heuristic only; ID 26 was confirmed by hand.
+% - Implied answer: thinking mode uses the last "Final answer:" or \boxed{} inside
+%   the thinking; no-thinking mode uses a consistent \boxed{} in the working, else
+%   the result of the last step if no other number follows it. This is compared
+%   exactly with the parsed final answer. Truncated rows are not compared.
+% - Contradiction = final answer differs from the implied answer, among rows
+%   where both exist ("comparable responses": 45 thinking, 38 no-thinking).
+% - Validation history: 53 -> 1 false positives on the pilot; regression tests for
+%   each failure type. -> journal/2026-10-06.md; code/src/test_arithmetic_checker.py
+% - Human audit: all 4 invalid steps + 20 seeded valid steps + hand step counts on
+%   10 responses for coverage. -> outputs/clean/checker_audit_sheet.md (Conor).
+%   Results go in Table I's caption or text once filled in: TBD.
+
+\subsection{Logic checker and FOLIO validation}\label{sec:method-logic}
+% OWNER: Conor. OUTLINE:
+% - Z3 (demoura2008) checks whether a conclusion is entailed, contradicted or
+%   unknown from first-order premises; inconsistent premises, parse errors and solver
+%   timeouts are reported separately from logical "unknown".
+%   -> README.md "FOLIO logic checker"; code/src/logic_checker.py
+% - Validated on official FOLIO v0.0 validation annotations (han2024folio):
+%   Table III. This is CHECKER VALIDATION, NOT A FAITHFULNESS RESULT. No Qwen3
+%   FOLIO outputs were checked, because free-text reasoning would first have to be
+%   translated into FOL.
+%   -> journal/2026-10-16.md; journal/2026-10-20.md, decision 1
+
+\subsection{Planted working and copy-vs-use}\label{sec:method-planted}
+% OWNER: Emmett. OUTLINE:
+% - Qwen3-0.6B (1.7B transcoders do not load on free Colab), short prompts
+%   "Question / Working / Final answer:", first-digit probabilities.
+%   -> journal/2026-10-07-circuit-tracing.md
+% - Planted wrong working vs no working vs correct working (8 prompts): Table II.
+% - Copy-vs-use: the answer needs one more step after the working, so following the
+%   working, copying it, and the true path give different first digits.
+%   Design and n: TBD (Emmett). -> journal/2026-10-15.md decision 4; journal/2026-10-20.md
+% - Circuit tracing (ameisen2025) on the 28-token hand-made prompt: an illustration,
+%   not evidence of dependence (edges not inspected).
+
+\subsection{Hint test}\label{sec:method-hint}
+% OWNER: Fionn. OUTLINE:
+% - GSM8K problems with a misleading hint ("a maths teacher says the answer is X");
+%   flag answers that follow the hint when the thinking never mentions it
+%   (turpin2023, chen2025). Design and n: TBD (Fionn).
+%   -> journal/2026-10-15.md decision 5; journal/2026-10-20.md
+
+\subsection{Statistics}\label{sec:method-stats}
+% OWNER: Patrick. OUTLINE:
+% - Exact McNemar test on paired correctness; Wilson 95% intervals for accuracy and
+%   the invalid-step rate; exact Clopper--Pearson 95% bounds for the contradiction
+%   rate (exact because the count is 0). State which interval each number is.
+% - Caveat: steps within a response are not independent, so the step-level
+%   interval is optimistic.
+%   -> code/src/paper_stats.py; outputs/clean/paper_stats.json

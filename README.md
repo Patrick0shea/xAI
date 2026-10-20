@@ -14,8 +14,8 @@ from its written reasoning.
 **Approach:**
 1. **Generate:** run Qwen3 on short maths (GSM8K) and logic (FOLIO) problems, with
    thinking mode on and off.
-2. **Formally check:** verify each reasoning step automatically (SymPy for arithmetic,
-   Z3 for logic) and test whether the final answer matches what the reasoning implies.
+2. **Formally check:** verify each reasoning step automatically (exact rational
+   arithmetic with Python's `fractions.Fraction` for arithmetic, Z3 for logic) and test whether the final answer matches what the reasoning implies.
    No gold labels are needed: we measure faithfulness, not accuracy.
 3. **Compare:** does thinking mode produce reasoning the model actually uses?
 4. **Look inside (stretch goal):** use circuit tracing on a few cases where the answer
@@ -128,7 +128,8 @@ analysis to:
 - `outputs/clean/qwen3_1.7b_gsm8k_arithmetic_checked.jsonl`
 - `outputs/clean/qwen3_1.7b_gsm8k_arithmetic_summary.json`
 
-The checker extracts equations such as `3 + 4 = 7`, validates them with SymPy,
+The checker extracts equations such as `3 + 4 = 7`, evaluates both sides exactly
+with Python's `fractions.Fraction` (rational arithmetic, not SymPy),
 flags invalid arithmetic steps, and compares the model's final answer with the
 last valid arithmetic result it can infer. It is conservative: unparseable text is
 skipped rather than treated as wrong.

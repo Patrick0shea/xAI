@@ -1,0 +1,49 @@
+% Does the Answer Follow the Reasoning? -- IEEE conference paper skeleton.
+% Upload the whole report/paper/ folder to Overleaf (compiler: pdfLaTeX, main document: main.tex).
+% Each section lives in sections/ and has an OWNER comment at the top. Write prose
+% only in your own section; the outline comments say what each section must cover
+% and which journal entry or output file supports each point.
+% Numbers in tables come only from committed outputs; \textbf{TBD} marks results
+% that do not exist yet (experiments freeze Wed 21 Oct, 9pm).
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage[T1]{fontenc}
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{url}
+
+\begin{document}
+% Short author lists in the references (max 3 names, then et al.); see refs.bib.
+\bstctlcite{IEEEexample:BSTcontrol}
+
+\title{Does the Answer Follow the Reasoning?\\
+Formally Checking Chain-of-Thought Consistency in Qwen3}
+% TODO (group): final title. "Consistency" vs "Faithfulness" in the title is a
+% framing decision -- see journal/2026-10-15.md, point 2, and Section V.
+
+\author{
+\IEEEauthorblockN{Patrick O'Shea, Fionn \'{O} Murch\'{u}, Conor Lydon, Emmett Macken}
+\IEEEauthorblockA{University of Limerick, Ireland}
+}
+% TODO (group): check name spellings and add student IDs / emails if required.
+
+\maketitle
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/method}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+% TODO (Patrick, Thu 22 Oct): remove \nocite{*} once every reference is cited in
+% the text; any entry still uncited then should be dropped from the paper.
+\nocite{*}
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\end{document}

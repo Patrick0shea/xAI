@@ -1,0 +1,10 @@
+# LaTeX build files (compile on Overleaf or with latexmk)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+main.pdf

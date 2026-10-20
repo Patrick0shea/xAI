@@ -1,0 +1,22 @@
+% =====================================================================
+% ABSTRACT -- OWNER: Patrick. Write last (Thu 22 Oct), after Results are frozen.
+% =====================================================================
+\begin{abstract}
+% OUTLINE (comments only; no finished prose yet). About 150 words.
+% 1. Problem: reasoning models' written working is read as an explanation, but
+%    training only rewards the final answer, so nothing guarantees it is faithful.
+%    -> journal/2026-09-25.md; readings/jacovi_goldberg_2020.md
+% 2. What we did: a label-free, formally checked consistency test on Qwen3-1.7B,
+%    50 paired GSM8K problems, thinking on/off; exact rational arithmetic checker.
+%    -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md; Section III
+% 3. Headline numbers (from outputs/clean/paper_stats.json only):
+%    accuracy 92% vs 80% (exact McNemar p = 0.031); 0/83 answer--reasoning
+%    contradictions (Clopper--Pearson 95% upper bound 4.3%); 4 invalid of 924 steps.
+% 4. The critique: consistency is not faithfulness (Parcalabescu & Frank);
+%    planted wrong working changes the answer (8 prompts, Qwen3-0.6B).
+%    -> journal/2026-10-15.md; journal/2026-10-07-circuit-tracing.md
+% 5. Final experiments: copy-vs-use (Emmett) and hint test (Fionn): TBD.
+%    Only mention them if they made the Wed 21 Oct 9pm freeze.
+%    -> journal/2026-10-20.md
+\textbf{TBD}
+\end{abstract}

@@ -1,0 +1,39 @@
+% =====================================================================
+% V. DISCUSSION -- OWNER: Patrick
+% =====================================================================
+\section{Discussion}\label{sec:discussion}
+% OUTLINE (comments only; no finished prose yet). About 0.5 column.
+%
+% 1. Consistency is not faithfulness. A final answer that matches the working is
+%    consistent with it; the model could reach the answer another way and still
+%    write matching steps. 0/83 cannot rule that out. (parcalabescu2024, jacovi2020)
+%    -> journal/2026-10-15.md, point 2
+%
+% 2. Why the null result? On easy GSM8K problems natural arithmetic errors are rare
+%    (4/924 steps), so an "answer ignores the working" event almost never has a
+%    chance to show up. The test has little power on easy maths; that is a finding
+%    about the method, not evidence of faithfulness.
+%    -> journal/2026-10-06.md "What this means"; outputs/clean/paper_stats.json
+%
+% 3. ID 11 (no-thinking): the working and the final answer agree on a wrong sum
+%    (700). That is consistency at work, not correctness, and a clean example of
+%    point 1. -> 50-problem report, example 1
+%
+% 4. Evidence from the other direction: planted wrong working changes the answer
+%    (Table II), so the model is sensitive to its written reasoning. Copy-vs-use
+%    tells us whether that is use or copying: TBD (Emmett). If it is copying, the
+%    planted-working result says little about faithfulness.
+%    -> journal/2026-10-07-circuit-tracing.md; journal/2026-10-20.md
+%
+% 5. Hint test: provoked unfaithfulness (the answer follows the hint and the thinking
+%    hides it) versus our natural-error null. TBD (Fionn); compare with turpin2023,
+%    chen2025.
+%
+% 6. Thinking vs no thinking: more accurate (McNemar p = 0.031), and no measurable
+%    difference in contradictions (both 0). Do NOT claim thinking is "more
+%    faithful".
+%
+% 7. Process lesson (one sentence, if space allows): the checker's own errors look
+%    like model errors (53 -> 1 false positives), and a stale summary and an
+%    uncommitted parser fix changed reported numbers. Regenerating from raw
+%    outputs caught both. -> journal/2026-10-06.md; journal/2026-10-20.md

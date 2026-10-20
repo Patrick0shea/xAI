@@ -1,0 +1,34 @@
+% =====================================================================
+% I. INTRODUCTION -- OWNER: Patrick
+% =====================================================================
+\section{Introduction}\label{sec:intro}
+% OUTLINE (comments only; no finished prose yet). About 0.5 column.
+%
+% 1. Motivation: reasoning models (Qwen3 thinking mode) write out working before
+%    answering, and users treat it as an explanation. Training only rewards the
+%    final answer, so the working need not reflect how the answer was produced.
+%    -> journal/2026-09-25.md; cite wei2022 (CoT), qwen3
+%
+% 2. Faithfulness vs plausibility: an explanation is faithful if it reflects the
+%    model's actual decision process, not just convincing to a reader.
+%    -> readings/jacovi_goldberg_2020.md; cite jacovi2020
+%
+% 3. Gap: existing tests perturb or edit the reasoning (lanham2023, turpin2023,
+%    chen2025). We instead formally check the model's own, unedited steps,
+%    with no gold labels needed.
+%    -> journal/2026-09-25.md "Pivots"; readings/lanham_2023.md
+%
+% 4. Research question: do Qwen3's final answers follow from its written reasoning,
+%    and does thinking mode change that?
+%    -> README.md "Topic & Scope"
+%
+% 5. Contributions (match the 2026-10-15 reframing):
+%    (a) a label-free, exact-arithmetic consistency checker, with a Z3 logic checker
+%        validated on FOLIO annotations;
+%    (b) a null result on GSM8K: 0/83 contradictions, with the bound it implies;
+%    (c) a critique of what consistency can show, plus planted-working and
+%        (if frozen in time) copy-vs-use and hint evidence.
+%    -> journal/2026-10-15.md "What the results mean for the paper";
+%       journal/2026-10-20.md
+%
+% 6. One-line roadmap of Sections II--VI (cut if over the page limit).

@@ -1,0 +1,32 @@
+% =====================================================================
+% VI. LIMITATIONS AND CONCLUSION -- OWNER: Conor
+% =====================================================================
+\section{Limitations and Conclusion}\label{sec:conclusion}
+% OUTLINE (comments only; no finished prose yet). About 0.4 column.
+%
+% Limitations
+% 1. One model (Qwen3-1.7B), one dataset (GSM8K), n = 50 per mode: the intervals
+%    are wide (Table I). -> outputs/clean/paper_stats.json
+% 2. Checker coverage: only steps written as equations or operator words are seen
+%    ("she has 9 left" is not). Coverage estimate from the hand counts: TBD (Conor).
+%    17 of 100 responses had no comparison. -> outputs/clean/checker_audit_sheet.md
+% 3. Steps within a response are not independent, so the step-level interval is
+%    optimistic. -> Section III-F
+% 4. The 0.6B/1.7B gap: tracing and planted working use Qwen3-0.6B, but the GSM8K
+%    outputs are from 1.7B. Transcoders approximate the MLPs, and the graph explains
+%    the replacement model, not Qwen3 directly. Prompts are short and the answer
+%    token is the first digit only.
+%    -> journal/2026-10-07-circuit-tracing.md "Why" (limitations list)
+% 5. FOLIO validates the checker only; no model logic outputs were checked.
+%    -> journal/2026-10-16.md
+% 6. Repetition loops and one truncation (thinking ID 21).
+%    -> 50-problem report "Data integrity"
+%
+% Future work (anything that missed the Wed 21 Oct 9pm freeze goes here)
+% - Translate free-text reasoning into FOL with human review, then run Qwen3 on FOLIO.
+% - Harder problems where natural errors are frequent enough to measure.
+% - Feature interventions on attribution graphs; 1.7B on larger-RAM hardware.
+% - Hint test / copy-vs-use, if they are not in Section IV.
+%
+% Conclusion: 2--3 sentences restating the answer to the research question and
+% the consistency-vs-faithfulness point.

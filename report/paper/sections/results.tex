@@ -1,0 +1,139 @@
+% =====================================================================
+% IV. RESULTS -- OWNERS: Fionn (A, GSM8K consistency) and Emmett (B, planted working
+% and copy-vs-use). Fionn also reports the hint test (C); Conor supplies Table III.
+% =====================================================================
+\section{Results}\label{sec:results}
+% Table numbers below come only from committed outputs (sources in each comment).
+% \textbf{TBD} = not computed yet. Do not fill a TBD by hand: regenerate from the
+% committed output file and cite it in the comment.
+
+\subsection{GSM8K: accuracy and answer--reasoning consistency}\label{sec:res-gsm8k}
+% OWNER: Fionn. OUTLINE:
+% - Table I. Thinking is more accurate: 6 problems only thinking solves (IDs 5, 8,
+%   11, 12, 43, 45), none the other way; exact McNemar p = 0.031.
+% - No contradictions: 0/45 thinking, 0/38 no-thinking, 0/83 pooled. The
+%   Clopper--Pearson 95% upper bound (pooled 4.3%) is the strongest claim the data
+%   supports. It does NOT cover the 17 responses with no comparison.
+% - Natural arithmetic errors are rare: 4 invalid of 924 checked steps (3 in
+%   thinking, one of them corrected; 1 in no-thinking).
+% - Examples (pick 2 at most for space): ID 11 no-thinking (204+160+330=700, and the
+%   final answer agrees with the wrong sum); ID 26 thinking (error, then
+%   self-correction); ID 7 (valid arithmetic, wrong interpretation); ID 21
+%   (repetition loop, truncated).
+%   -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md "Five examples"
+% - Human audit result (Conor): TBD. -> outputs/clean/checker_audit_sheet.md
+\begin{table}[t]
+\centering
+\caption{Qwen3-1.7B on 50 paired GSM8K problems. Intervals: accuracy and invalid-step
+rate are Wilson 95\%; contradiction rate is the exact Clopper--Pearson 95\% two-sided
+upper bound (lower bound 0).}
+\label{tab:gsm8k}
+% Source: outputs/clean/paper_stats.json (code/src/paper_stats.py), from
+% outputs/clean/qwen3_1.7b_gsm8k_50_completed_arithmetic_checked.jsonl.
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+ & Thinking & No thinking & Pooled \\
+\midrule
+Accuracy & 46/50 & 40/50 & -- \\
+\quad Wilson 95\% CI (\%) & [81.2, 96.8] & [67.0, 88.8] & -- \\
+Steps checked & 762 & 162 & 924 \\
+Invalid steps & 3 & 1 & 4 \\
+\quad rate (\%) & 0.39 & 0.62 & 0.43 \\
+\quad Wilson 95\% CI (\%) & [0.13, 1.15] & [0.11, 3.41] & [0.17, 1.11] \\
+Comparable responses & 45 & 38 & 83 \\
+Contradictions & 0 & 0 & 0 \\
+\quad CP 95\% upper bound (\%) & 7.9 & 9.3 & 4.3 \\
+\bottomrule
+\end{tabular}
+\\[2pt]
+{\footnotesize Exact McNemar on paired correctness: 6 vs 0 discordant pairs, $p = 0.031$.}
+\end{table}
+
+\subsection{Planted working and copy-vs-use}\label{sec:res-planted}
+% OWNER: Emmett. OUTLINE:
+% - Table II: a planted wrong working overrides the model's own default answer.
+%   8 hand-picked prompts, first digit only, Qwen3-0.6B: it demonstrates the effect
+%   and is not a rate. -> journal/2026-10-07-circuit-tracing.md
+% - Table IV: copy-vs-use. Does the model use the working or copy it? TBD.
+% - Optional figure: outputs/circuits/hand_12plus7_working21.png (illustration only).
+\begin{table}[t]
+\centering
+\caption{Planted working on Qwen3-0.6B (8 hand-made addition prompts): probability of
+the first answer digit. Min--max over prompts (mean).}
+\label{tab:planted}
+% Source: outputs/circuits/hand_made_behavioural.csv and hand_made_baseline.csv
+% (min, max and mean computed from the committed CSVs).
+\begin{tabular}{@{}llc@{}}
+\toprule
+Working in prompt & Digit & $p$ \\
+\midrule
+None & true answer & 0.68--0.83 (0.75) \\
+Correct & true answer & 0.990--0.996 (0.992) \\
+Wrong & follows working & 0.94--0.99 (0.98) \\
+Wrong & true answer & 0.0005--0.013 (0.003) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Copy-vs-use control (Emmett). Placeholder until the results are committed.}
+\label{tab:copyuse}
+% Source: TBD (Emmett's copy_vs_use output file).
+\begin{tabular}{@{}lc@{}}
+\toprule
+First digit follows & $p$ / share of prompts \\
+\midrule
+Using the working (one more step) & \textbf{TBD} \\
+Copying the working & \textbf{TBD} \\
+True path from the question & \textbf{TBD} \\
+\midrule
+Prompts ($n$) & \textbf{TBD} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Hint test}\label{sec:res-hint}
+% OWNER: Fionn. OUTLINE:
+% - Table V: how often the answer follows a misleading hint, and how often the
+%   thinking mentions the hint when it does. TBD.
+% - If it misses the Wed 21 Oct 9pm freeze: delete this subsection and Table V,
+%   and move the design to Future Work (Section VI). -> journal/2026-10-20.md
+\begin{table}[t]
+\centering
+\caption{Misleading-hint test (Fionn). Placeholder until the results are committed.}
+\label{tab:hint}
+% Source: TBD (Fionn's hint experiment output file).
+\begin{tabular}{@{}lcc@{}}
+\toprule
+ & Thinking & No thinking \\
+\midrule
+Problems ($n$) & \textbf{TBD} & \textbf{TBD} \\
+Answer follows hint & \textbf{TBD} & \textbf{TBD} \\
+\quad of which hint mentioned in reasoning & \textbf{TBD} & \textbf{TBD} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Logic checker validation on FOLIO}\label{sec:res-folio}
+% OWNER: Conor (table), placed here or in Section III-C to save space.
+% State it clearly: this validates the checker against dataset labels. It is not a
+% faithfulness result. -> journal/2026-10-16.md; journal/2026-10-20.md
+\begin{table}[t]
+\centering
+\caption{Z3 checker on FOLIO v0.0 validation annotations (500\,ms per solver call).
+Checker validation only; no model outputs.}
+\label{tab:folio}
+% Source: outputs/clean/folio_validation_summary.json
+\begin{tabular}{@{}lc@{}}
+\toprule
+Rows & 204 \\
+Parsed (5 malformed annotations) & 199 \\
+\quad entailed / contradicted / unknown & 67 / 58 / 74 \\
+Inconsistent premises; solver timeouts & 0; 0 \\
+Match dataset label & 191/199 \\
+\bottomrule
+\end{tabular}
+\end{table}
