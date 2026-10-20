@@ -9,6 +9,15 @@
 > `code/src/summarize_gsm8k.py` (last reproduce command) does not exist in the
 > repository. The report body is left as written; see `journal/2026-10-20.md`.
 
+> **Recovery (2026-10-20, Fionn with Codex):** the missing
+> `code/src/summarize_gsm8k.py`, completed-run audit Markdown and reviewed audit JSON
+> were found locally as untracked files. They are being committed with the paper
+> draft. All 24 saved audit equations match the current checked output. The
+> completed results JSON has been regenerated with 45/38 comparisons, and every
+> metric in `paper_stats.json` was reproduced directly from the preserved raw
+> responses. The historical report body below is unchanged. This recovery does
+> not turn the assistant audit into independent human validation.
+
 Analysis date: 2026-10-08. Completed 50-problem run, 100 responses total. The agreed experiment is now 50 problems in each mode, replacing the earlier 500-problem plan. Generation and automated analysis are complete; independent human sample review remains outstanding.
 
 Qwen/Qwen3-1.7B, seed 42, batch size 1; token limits 8,192 thinking and 2,048 no-thinking. The imported JSONL and downloaded configuration are preserved under outputs/raw/qwen3_1.7b_gsm8k_50_completed*. The earlier incomplete raw file and report remain separate historical artifacts.

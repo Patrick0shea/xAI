@@ -22,6 +22,30 @@
 %   (repetition loop, truncated).
 %   -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md "Five examples"
 % - Human audit result (Conor): TBD. -> outputs/clean/checker_audit_sheet.md
+Thinking answered 46 of 50 problems correctly (92\%), compared with 40 of 50
+(80\%) without thinking (Table~\ref{tab:gsm8k}). Six paired problems were
+correct only with thinking, and none only without it (exact McNemar
+$p=0.03125$). This is a result on the first 50 test problems, rather than a
+random sample of the full benchmark.
+
+The checker detected no final-answer contradiction among 45 thinking and 38
+no-thinking responses. The pooled count is therefore 0/83, with a two-sided
+exact 95\% interval whose upper endpoint is 4.3\%. This bound concerns the
+checker-comparable responses under the interval's sampling assumptions; it
+does not cover the 17 excluded responses or establish that the model used its
+written reasoning. The two responses for each problem are also paired, so the
+pooled interval should be read as descriptive rather than as accounting for
+within-problem dependence. The previously reported denominator of 74 could
+not be reproduced and is superseded by these regenerated counts.
+
+There were four invalid arithmetic occurrences among 924 checked steps:
+three with thinking and one without. Thinking ID~26 subsequently corrected
+its addition error and reached the correct answer. No-thinking ID~11 instead
+wrote $204+160+330=700$ and answered 700, although the sum is 694. Agreement
+between the answer and erroneous working therefore passes a consistency test
+without establishing correctness. One thinking response exhausted its token
+budget. Independent human checker-audit results remain outstanding.
+
 \begin{table}[t]
 \centering
 \caption{Qwen3-1.7B on 50 paired GSM8K problems. Intervals: accuracy and invalid-step
