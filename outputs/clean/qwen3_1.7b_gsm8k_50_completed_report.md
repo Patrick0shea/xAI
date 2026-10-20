@@ -4,8 +4,8 @@
 > parser (2026-10-20 bold-answer fix), the rows with an answer comparison are **45 thinking and
 > 38 no-thinking (83 total)**, not 36 and 38 (74) as below. The 36/38 summary could
 > not be reproduced from any committed code version. Accuracy (46/50, 40/50), step
-> counts and the 0 contradictions are unchanged. The `code/src` unittest suite runs
-> 14 tests (13 before the parser regression test was added), not 24.
+> counts and the 0 contradictions are unchanged. The `code/src` unittest suite ran
+> 13 tests before 2026-10-20 and runs 26 after that day's additions, not 24.
 > `code/src/summarize_gsm8k.py` (last reproduce command) does not exist in the
 > repository. The report body is left as written; see `journal/2026-10-20.md`.
 
