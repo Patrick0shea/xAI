@@ -1,0 +1,494 @@
+{
+  "seed": 42,
+  "selection": "Up to 20 random valid and 20 random invalid steps; all when fewer exist",
+  "steps": [
+    {
+      "id": "43",
+      "mode": "thinking",
+      "step_index": 1,
+      "raw": "the remaining calories you can consume  =  2000 - 1800 = 200 calories.",
+      "left": "2000 - 1800",
+      "right": "200",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "200",
+      "right_value": "200",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "200",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "10",
+      "mode": "thinking",
+      "step_index": 4,
+      "raw": "60 + 180  =  240",
+      "left": "60 + 180",
+      "right": "240",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "240",
+      "right_value": "240",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "240",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "3",
+      "mode": "thinking",
+      "step_index": 6,
+      "raw": "9 * 60 = 540.",
+      "left": "9 * 60",
+      "right": "540",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "540",
+      "right_value": "540",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "540",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "0",
+      "mode": "no_thinking",
+      "step_index": 0,
+      "raw": "3   + 4   = 7",
+      "left": "3 + 4",
+      "right": "7",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "7",
+      "right_value": "7",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "7",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "20",
+      "mode": "thinking",
+      "step_index": 27,
+      "raw": "total water  =  47/3 - 2/3 = 45/3 = 15 liters.",
+      "left": "45/3",
+      "right": "15",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "15",
+      "right_value": "15",
+      "followed_by_correction": true,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "15",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "19",
+      "mode": "thinking",
+      "step_index": 3,
+      "raw": "12 - 4 - 2 = 6 miles.",
+      "left": "12 - 4 - 2",
+      "right": "6",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "6",
+      "right_value": "6",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "6",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "17",
+      "mode": "thinking",
+      "step_index": 13,
+      "raw": "700 + 450 = 1,150.",
+      "left": "700 + 450",
+      "right": "1,150",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "1150",
+      "right_value": "1150",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "1150",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "12",
+      "mode": "thinking",
+      "step_index": 1,
+      "raw": "10.5 - 3 =  7.50 per year.",
+      "left": "10.5 - 3",
+      "right": "7.50",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "7.5",
+      "right_value": "7.5",
+      "followed_by_correction": true,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "7.5",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "49",
+      "mode": "thinking",
+      "step_index": 4,
+      "raw": "120  /  2  =  60",
+      "left": "120 / 2",
+      "right": "60",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "60",
+      "right_value": "60",
+      "followed_by_correction": true,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "60",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "9",
+      "mode": "thinking",
+      "step_index": 4,
+      "raw": "so 5*12=60.",
+      "left": "5*12",
+      "right": "60",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "60",
+      "right_value": "60",
+      "followed_by_correction": true,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "60",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "45",
+      "mode": "thinking",
+      "step_index": 4,
+      "raw": "So 5 + (2/5)*5 = 5 + 2 = 7.",
+      "left": "5 + 2",
+      "right": "7",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "7",
+      "right_value": "7",
+      "followed_by_correction": true,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "7",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "49",
+      "mode": "thinking",
+      "step_index": 8,
+      "raw": "120 - 90  =  30.",
+      "left": "120 - 90",
+      "right": "30",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "30",
+      "right_value": "30",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "30",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "47",
+      "mode": "no_thinking",
+      "step_index": 3,
+      "raw": "= 40 + 0.5 * 40 = 40 + 20 = 60",
+      "left": "40 + 20",
+      "right": "60",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "60",
+      "right_value": "60",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "60",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "37",
+      "mode": "thinking",
+      "step_index": 25,
+      "raw": "total money  =  13*15=195.",
+      "left": "13*15",
+      "right": "195",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "195",
+      "right_value": "195",
+      "followed_by_correction": true,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "195",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "8",
+      "mode": "thinking",
+      "step_index": 20,
+      "raw": "so he  =  180 - 135 = 45 miles from home.",
+      "left": "180 - 135",
+      "right": "45",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "45",
+      "right_value": "45",
+      "followed_by_correction": true,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "45",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "37",
+      "mode": "thinking",
+      "step_index": 71,
+      "raw": "8*20=160.",
+      "left": "8*20",
+      "right": "160",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "160",
+      "right_value": "160",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "160",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "26",
+      "mode": "thinking",
+      "step_index": 53,
+      "raw": "So total  =  116 + 1.00 = 117.00?",
+      "left": "116 + 1.00",
+      "right": "117.00",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "117",
+      "right_value": "117",
+      "followed_by_correction": true,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "117.00",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "4",
+      "mode": "thinking",
+      "step_index": 6,
+      "raw": "the final meal must be 60 - 40 = 20.",
+      "left": "60 - 40",
+      "right": "20",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "20",
+      "right_value": "20",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "20",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "4",
+      "mode": "thinking",
+      "step_index": 4,
+      "raw": "So total for 20 chickens  =  20 * 3 = 60 cups.",
+      "left": "20 * 3",
+      "right": "60",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "60",
+      "right_value": "60",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "60",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "8",
+      "mode": "thinking",
+      "step_index": 26,
+      "raw": "he  =  180 - 135 = 45 miles from home.",
+      "left": "180 - 135",
+      "right": "45",
+      "valid": true,
+      "reason": "ok",
+      "left_value": "45",
+      "right_value": "45",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "45",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "21",
+      "mode": "thinking",
+      "step_index": 36,
+      "raw": "Raymond was born in 2023 - 25 = 2000.",
+      "left": "2023 - 25",
+      "right": "2000",
+      "valid": false,
+      "reason": "arithmetic mismatch",
+      "left_value": "1998",
+      "right_value": "2000",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "1998",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "21",
+      "mode": "thinking",
+      "step_index": 33,
+      "raw": "then Raymond was born in 2023 - 25 = 2000.",
+      "left": "2023 - 25",
+      "right": "2000",
+      "valid": false,
+      "reason": "arithmetic mismatch",
+      "left_value": "1998",
+      "right_value": "2000",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "1998",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "26",
+      "mode": "thinking",
+      "step_index": 36,
+      "raw": "I had 49.50 + 67.50 + 126.00 = 243.50.",
+      "left": "49.50 + 67.50 + 126.00",
+      "right": "243.50",
+      "valid": false,
+      "reason": "arithmetic mismatch",
+      "left_value": "243",
+      "right_value": "243.5",
+      "followed_by_correction": true,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "243.00",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    },
+    {
+      "id": "11",
+      "mode": "no_thinking",
+      "step_index": 3,
+      "raw": "204 + 160 + 330 = 700",
+      "left": "204 + 160 + 330",
+      "right": "700",
+      "valid": false,
+      "reason": "arithmetic mismatch",
+      "left_value": "694",
+      "right_value": "700",
+      "followed_by_correction": false,
+      "review": {
+        "reviewer": "Codex assistant",
+        "date": "2026-10-08",
+        "independent_result": "694",
+        "label_agrees": true,
+        "source_equation_confirmed": true
+      }
+    }
+  ],
+  "review": {
+    "kind": "assistant review, not human validation",
+    "valid_agreements": 20,
+    "valid_reviewed": 20,
+    "invalid_agreements": 4,
+    "invalid_reviewed": 4,
+    "id_26_correction_confirmed": true
+  }
+}

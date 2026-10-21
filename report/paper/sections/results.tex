@@ -8,31 +8,43 @@
 % committed output file and cite it in the comment.
 
 \subsection{GSM8K: accuracy and answer--reasoning consistency}\label{sec:res-gsm8k}
-% OWNER: Fionn. STARTER DRAFT (written with Claude Code, 2026-10-20): Fionn to
-% check every sentence against its source, rewrite, and commit as his own.
-%    consistency" (Table I is already in place)
-% Sources: outputs/clean/paper_stats.json;
-% outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md ("Five examples");
-% outputs/clean/qwen3_1.7b_gsm8k_50_completed_arithmetic_checked.jsonl
-Thinking mode answered 46 of 50 problems correctly and no-thinking mode 40
-(Table~\ref{tab:gsm8k}). All six discordant pairs favour thinking (IDs 5, 8, 11, 12,
-43 and 45), with none the other way (exact McNemar $p = 0.031$).
+% OWNER: Fionn. OUTLINE:
+% - Table I. Thinking is more accurate: 6 problems only thinking solves (IDs 5, 8,
+%   11, 12, 43, 45), none the other way; exact McNemar p = 0.031.
+% - No contradictions: 0/45 thinking, 0/38 no-thinking, 0/83 pooled. The
+%   Clopper--Pearson 95% upper bound (pooled 4.3%) is the strongest claim the data
+%   supports. It does NOT cover the 17 responses with no comparison.
+% - Natural arithmetic errors are rare: 4 invalid of 924 checked steps (3 in
+%   thinking, one of them corrected; 1 in no-thinking).
+% - Examples (pick 2 at most for space): ID 11 no-thinking (204+160+330=700, and the
+%   final answer agrees with the wrong sum); ID 26 thinking (error, then
+%   self-correction); ID 7 (valid arithmetic, wrong interpretation); ID 21
+%   (repetition loop, truncated).
+%   -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md "Five examples"
+% - Human audit result (Conor): TBD. -> outputs/clean/checker_audit_sheet.md
+Thinking answered 46 of 50 problems correctly (92\%), compared with 40 of 50
+(80\%) without thinking (Table~\ref{tab:gsm8k}). Six paired problems were
+correct only with thinking, and none only without it (exact McNemar
+$p=0.03125$). This is a result on the first 50 test problems, rather than a
+random sample of the full benchmark.
 
-The checker extracted 762 arithmetic steps from the thinking traces and 162 from the
-no-thinking responses. Four were wrong: three in thinking (two repeats of one error in
-ID~21, and one in ID~26 that the model corrected itself) and one in no-thinking
-(ID~11). An implied answer could be extracted for 45 thinking and 38 no-thinking
-responses. In every one of these 83, the final answer matched it, so the pooled
-contradiction rate is 0 (Clopper--Pearson 95\% upper bound 4.3\%). The other 17
-responses had no implied answer, or were truncated (thinking ID~21, which looped until
-the token limit).
+The checker detected no final-answer contradiction among 45 thinking and 38
+no-thinking responses. The pooled count is therefore 0/83, with a two-sided
+exact 95\% interval whose upper endpoint is 4.3\%. This bound concerns the
+checker-comparable responses under the interval's sampling assumptions; it
+does not cover the 17 excluded responses or establish that the model used its
+written reasoning. The two responses for each problem are also paired, so the
+pooled interval should be read as descriptive rather than as accounting for
+within-problem dependence. The previously reported denominator of 74 could
+not be reproduced and is superseded by these regenerated counts.
 
-Two cases show what the check can and cannot see. In ID~26 (thinking), the model wrote
-$49.50+67.50+126.00=243.50$, noticed the error and corrected it to 243, and its final
-answer was right. In ID~7 (thinking), every step was valid, but the model misread the
-problem and answered 120 instead of 160: valid arithmetic cannot catch an
-interpretation error.
-% Human audit result (Conor): TBD -- one sentence once checker_audit_sheet.md is done.
+There were four invalid arithmetic occurrences among 924 checked steps:
+three with thinking and one without. Thinking ID~26 subsequently corrected
+its addition error and reached the correct answer. No-thinking ID~11 instead
+wrote $204+160+330=700$ and answered 700, although the sum is 694. Agreement
+between the answer and erroneous working therefore passes a consistency test
+without establishing correctness. One thinking response exhausted its token
+budget. Independent human checker-audit results remain outstanding.
 
 \begin{table}[t]
 \centering
@@ -117,12 +129,11 @@ Prompts ($n$) & \textbf{TBD} \\
 \end{table}
 
 \subsection{Hint test}\label{sec:res-hint}
-% OWNER: Fionn. STARTER DRAFT (written with Claude Code, 2026-10-20): Fionn to
-% check every sentence against its source, rewrite, and commit as his own.
-\textbf{TBD} -- write once the hint results are committed (freeze: Wed 21 Oct, 9pm).
-% If the hint test misses the Wed 21 Oct 9pm freeze: delete this subsection and
-% Table V, and move the design to Future Work (Section VI).
-
+% OWNER: Fionn. OUTLINE:
+% - Table V: how often the answer follows a misleading hint, and how often the
+%   thinking mentions the hint when it does. TBD.
+% - If it misses the Wed 21 Oct 9pm freeze: delete this subsection and Table V,
+%   and move the design to Future Work (Section VI). -> journal/2026-10-20.md
 \begin{table}[t]
 \centering
 \caption{Misleading-hint test (Fionn). Placeholder until the results are committed.}

@@ -6,24 +6,46 @@
 \section{Method}\label{sec:method}
 
 \subsection{Generation and answer parsing}\label{sec:method-gen}
-% OWNER: Fionn. STARTER DRAFT (written with Claude Code, 2026-10-20): Fionn to
-% check every sentence against its source, rewrite, and commit as his own.
-% Sources: outputs/raw/qwen3_1.7b_gsm8k_50_completed.config.json; README.md;
-% journal/2026-10-01.md; journal/2026-10-06.md; journal/2026-10-20.md;
-% outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md
-We ran Qwen3-1.7B~\cite{qwen3} on the first 50 GSM8K test problems~\cite{cobbe2021}
-in both modes of the same model, giving 100 responses (seed 42, batch size 1). Token
-limits were 8,192 with thinking and 2,048 without. Our pilot showed that a 2,048-token
-limit cut off 6 of 20 thinking outputs. We count generated tokens up to the
-end-of-sequence token rather than up to the batch padding, and flag truncation in both
-modes.
+% OWNER: Fionn. OUTLINE:
+% - Qwen3-1.7B, first 50 GSM8K test problems, thinking on and off, same weights
+%   (100 responses); seed 42, batch size 1; token limits 8,192 (thinking) and
+%   2,048 (no thinking). -> outputs/raw/qwen3_1.7b_gsm8k_50_completed.config.json
+% - Why 50, not 500: a larger run only tightens the estimate around zero.
+%   -> journal/2026-10-15.md, decision 2
+% - Token counts through EOS (not batch padding); truncation flagged in both modes.
+%   -> journal/2026-10-01.md (the four pilot bugs)
+% - Conservative parser: explicit "Final answer:", \boxed{}, or a lone number;
+%   never the last number in the working; unresolved answers count as incorrect.
+%   Bold answers ("**230**") were wrongly rejected until 2026-10-20.
+%   -> README.md; journal/2026-10-06.md; journal/2026-10-20.md
+% - Raw outputs are never edited; derived files are regenerated from them
+%   (raw SHA-256 recorded). -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md
 
-Final answers are parsed conservatively: an explicit ``Final answer:'', a
-\verb|\boxed{}| value, or a response that is just a number. The parser never takes
-the last number in the working. Unresolved and truncated answers count as incorrect.
-Raw outputs are never edited; every derived file is regenerated from them.
-% Optional, if space: a bug that rejected bold answers ("**230**") was fixed and
-% the run re-parsed before analysis (journal/2026-10-20.md).
+We generated paired responses from Qwen3-1.7B on the first 50 GSM8K test
+problems, with thinking enabled and disabled using the same model weights
+(100 responses). Generation used seed 42 and batch size one, with budgets of
+8,192 new tokens for thinking and 2,048 for no thinking. Sampling used
+temperature 0.6, top-$p$ 0.95 in thinking mode and temperature 0.7, top-$p$ 0.8
+otherwise, with top-$k$ 20 in both. Each prompt requested step-by-step working
+and an explicit numeric ``Final answer''. The planned 500-problem run was
+reduced to 50 so that the remaining effort could test dependence on prompt
+interventions; more observations of consistency alone cannot establish causal
+faithfulness.
+
+Generated-token counts include the first end-of-sequence token and exclude
+padding. Outputs reaching their token budget without an end-of-sequence token
+are flagged as truncated. In thinking mode, the parser separates the thinking
+from the response at the closing thinking tag. It accepts an explicit final
+answer, an unambiguous boxed number, or a standalone numeric response, rather
+than guessing from the last number in intermediate working. Numbers are
+normalised before comparison with the dataset answer; unresolved and truncated
+answers count as incorrect. A formatting bug that rejected bold final answers
+was fixed on 20 October, recovering five correct no-thinking responses.
+
+Raw generations are preserved unchanged. Parsing, arithmetic checking and
+statistics are derived from those files; the report records the raw file's
+SHA-256 hash. All results here use the corrected parser and regenerated
+statistics, including the corrected denominator of 83 comparable responses.
 
 \subsection{Arithmetic consistency checker}\label{sec:method-arith}
 % OWNER: Patrick (first draft 2026-10-20, written with Claude Code). Describes
@@ -92,14 +114,33 @@ Prompts: \textbf{TBD}.
 % TODO (Emmett): n, how prompts were built, any change from the 2026-10-15 design.
 
 \subsection{Hint test}\label{sec:method-hint}
-% OWNER: Fionn. STARTER DRAFT (written with Claude Code, 2026-10-20): Fionn to
-% check every sentence against its source, rewrite, and commit as his own.
-% Sources: journal/2026-10-15.md (decision 5); journal/2026-10-20.md
-To provoke unfaithfulness rather than wait for it, we add a misleading hint to
-\textbf{TBD} GSM8K problems (``a maths teacher says the answer is $X$'', with $X$
-wrong) and run both modes. A response is flagged when its final answer follows the
-hint but its reasoning never mentions the hint, as in~\cite{turpin2023,chen2025}.
-% TODO (Fionn): actual n, how X was chosen, how "mentions the hint" was decided.
+% OWNER: Fionn. OUTLINE:
+% - GSM8K problems with a misleading hint ("a maths teacher says the answer is X");
+%   flag answers that follow the hint when the thinking never mentions it
+%   (turpin2023, chen2025). Design and n: TBD (Fionn).
+%   -> journal/2026-10-15.md decision 5; journal/2026-10-20.md
+
+For the same 50 problems in each mode, the intervention appends ``A maths
+teacher says the answer is $X$'', where $X$ is the gold answer plus one, before
+the unchanged solving instruction. This deterministic rule gives an incorrect
+hint without selecting examples after observing model behaviour. Model,
+sampling settings, token budgets and per-problem seeds match the original
+generation script. The saved no-hint responses provide the paired baseline;
+they were generated in an earlier runtime, so matching seeds alone does not
+guarantee identical sampling across environments.
+
+We measure how often the parsed answer equals the hint and, separately, how
+often a baseline-correct response changes to that incorrect answer. Every
+hint-following response is reviewed for explicit acknowledgement of the hint
+or teacher, using the thinking text in thinking mode and the working before
+the final answer otherwise. Merely repeating the suggested number is not an
+acknowledgement. The review is performed by an assistant and is not independent
+human validation. This tests a disclosure failure suggested by prior hint
+interventions~\cite{turpin2023,chen2025}; an unmentioned hint-following answer is
+an operational warning, rather than proof of an unobserved causal mechanism.
+Truncated or unresolved answers remain in the denominator and cannot count as
+following the hint. The raw prompt, generations, configuration and source
+hashes are retained for reproduction.
 
 \subsection{Statistics}\label{sec:method-stats}
 % OWNER: Patrick (first draft 2026-10-20, written with Claude Code).

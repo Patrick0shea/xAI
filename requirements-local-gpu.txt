@@ -1,0 +1,7 @@
+# Tested setup target: Windows, Python 3.13, RTX 4050, CUDA 11.8 wheels.
+# Install torch first from https://download.pytorch.org/whl/cu118.
+torch==2.7.1
+transformers==4.51.3
+accelerate
+datasets
+pytest
