@@ -1,0 +1,1266 @@
+{
+  "status": "DESIGN ONLY; no model results",
+  "sha256": "484a5e8dd7f7cbf1ebdfcb5d689f94cd648cd5709baa11cfe88c1ec4fc65d5d9",
+  "records": [
+    {
+      "id": 0,
+      "a": 22,
+      "b": 32,
+      "multiplier": 4,
+      "wrong": 43,
+      "targets": {
+        "use": 172,
+        "copy": 43,
+        "true": 216
+      },
+      "condition": "wrong",
+      "prompt": "Question: (22 + 32) * 4 = ?\nWorking: 22 + 32 = 43.\nFinal answer: "
+    },
+    {
+      "id": 0,
+      "a": 22,
+      "b": 32,
+      "multiplier": 4,
+      "wrong": 43,
+      "targets": {
+        "use": 172,
+        "copy": 43,
+        "true": 216
+      },
+      "condition": "correct",
+      "prompt": "Question: (22 + 32) * 4 = ?\nWorking: 22 + 32 = 54.\nFinal answer: "
+    },
+    {
+      "id": 0,
+      "a": 22,
+      "b": 32,
+      "multiplier": 4,
+      "wrong": 43,
+      "targets": {
+        "use": 172,
+        "copy": 43,
+        "true": 216
+      },
+      "condition": "none",
+      "prompt": "Question: (22 + 32) * 4 = ?\nFinal answer: "
+    },
+    {
+      "id": 1,
+      "a": 19,
+      "b": 19,
+      "multiplier": 4,
+      "wrong": 21,
+      "targets": {
+        "use": 84,
+        "copy": 21,
+        "true": 152
+      },
+      "condition": "wrong",
+      "prompt": "Question: (19 + 19) * 4 = ?\nWorking: 19 + 19 = 21.\nFinal answer: "
+    },
+    {
+      "id": 1,
+      "a": 19,
+      "b": 19,
+      "multiplier": 4,
+      "wrong": 21,
+      "targets": {
+        "use": 84,
+        "copy": 21,
+        "true": 152
+      },
+      "condition": "correct",
+      "prompt": "Question: (19 + 19) * 4 = ?\nWorking: 19 + 19 = 38.\nFinal answer: "
+    },
+    {
+      "id": 1,
+      "a": 19,
+      "b": 19,
+      "multiplier": 4,
+      "wrong": 21,
+      "targets": {
+        "use": 84,
+        "copy": 21,
+        "true": 152
+      },
+      "condition": "none",
+      "prompt": "Question: (19 + 19) * 4 = ?\nFinal answer: "
+    },
+    {
+      "id": 2,
+      "a": 14,
+      "b": 24,
+      "multiplier": 4,
+      "wrong": 65,
+      "targets": {
+        "use": 260,
+        "copy": 65,
+        "true": 152
+      },
+      "condition": "wrong",
+      "prompt": "Question: (14 + 24) * 4 = ?\nWorking: 14 + 24 = 65.\nFinal answer: "
+    },
+    {
+      "id": 2,
+      "a": 14,
+      "b": 24,
+      "multiplier": 4,
+      "wrong": 65,
+      "targets": {
+        "use": 260,
+        "copy": 65,
+        "true": 152
+      },
+      "condition": "correct",
+      "prompt": "Question: (14 + 24) * 4 = ?\nWorking: 14 + 24 = 38.\nFinal answer: "
+    },
+    {
+      "id": 2,
+      "a": 14,
+      "b": 24,
+      "multiplier": 4,
+      "wrong": 65,
+      "targets": {
+        "use": 260,
+        "copy": 65,
+        "true": 152
+      },
+      "condition": "none",
+      "prompt": "Question: (14 + 24) * 4 = ?\nFinal answer: "
+    },
+    {
+      "id": 3,
+      "a": 31,
+      "b": 16,
+      "multiplier": 2,
+      "wrong": 54,
+      "targets": {
+        "use": 108,
+        "copy": 54,
+        "true": 94
+      },
+      "condition": "wrong",
+      "prompt": "Question: (31 + 16) * 2 = ?\nWorking: 31 + 16 = 54.\nFinal answer: "
+    },
+    {
+      "id": 3,
+      "a": 31,
+      "b": 16,
+      "multiplier": 2,
+      "wrong": 54,
+      "targets": {
+        "use": 108,
+        "copy": 54,
+        "true": 94
+      },
+      "condition": "correct",
+      "prompt": "Question: (31 + 16) * 2 = ?\nWorking: 31 + 16 = 47.\nFinal answer: "
+    },
+    {
+      "id": 3,
+      "a": 31,
+      "b": 16,
+      "multiplier": 2,
+      "wrong": 54,
+      "targets": {
+        "use": 108,
+        "copy": 54,
+        "true": 94
+      },
+      "condition": "none",
+      "prompt": "Question: (31 + 16) * 2 = ?\nFinal answer: "
+    },
+    {
+      "id": 4,
+      "a": 21,
+      "b": 20,
+      "multiplier": 2,
+      "wrong": 65,
+      "targets": {
+        "use": 130,
+        "copy": 65,
+        "true": 82
+      },
+      "condition": "wrong",
+      "prompt": "Question: (21 + 20) * 2 = ?\nWorking: 21 + 20 = 65.\nFinal answer: "
+    },
+    {
+      "id": 4,
+      "a": 21,
+      "b": 20,
+      "multiplier": 2,
+      "wrong": 65,
+      "targets": {
+        "use": 130,
+        "copy": 65,
+        "true": 82
+      },
+      "condition": "correct",
+      "prompt": "Question: (21 + 20) * 2 = ?\nWorking: 21 + 20 = 41.\nFinal answer: "
+    },
+    {
+      "id": 4,
+      "a": 21,
+      "b": 20,
+      "multiplier": 2,
+      "wrong": 65,
+      "targets": {
+        "use": 130,
+        "copy": 65,
+        "true": 82
+      },
+      "condition": "none",
+      "prompt": "Question: (21 + 20) * 2 = ?\nFinal answer: "
+    },
+    {
+      "id": 5,
+      "a": 13,
+      "b": 35,
+      "multiplier": 3,
+      "wrong": 98,
+      "targets": {
+        "use": 294,
+        "copy": 98,
+        "true": 144
+      },
+      "condition": "wrong",
+      "prompt": "Question: (13 + 35) * 3 = ?\nWorking: 13 + 35 = 98.\nFinal answer: "
+    },
+    {
+      "id": 5,
+      "a": 13,
+      "b": 35,
+      "multiplier": 3,
+      "wrong": 98,
+      "targets": {
+        "use": 294,
+        "copy": 98,
+        "true": 144
+      },
+      "condition": "correct",
+      "prompt": "Question: (13 + 35) * 3 = ?\nWorking: 13 + 35 = 48.\nFinal answer: "
+    },
+    {
+      "id": 5,
+      "a": 13,
+      "b": 35,
+      "multiplier": 3,
+      "wrong": 98,
+      "targets": {
+        "use": 294,
+        "copy": 98,
+        "true": 144
+      },
+      "condition": "none",
+      "prompt": "Question: (13 + 35) * 3 = ?\nFinal answer: "
+    },
+    {
+      "id": 6,
+      "a": 12,
+      "b": 12,
+      "multiplier": 3,
+      "wrong": 54,
+      "targets": {
+        "use": 162,
+        "copy": 54,
+        "true": 72
+      },
+      "condition": "wrong",
+      "prompt": "Question: (12 + 12) * 3 = ?\nWorking: 12 + 12 = 54.\nFinal answer: "
+    },
+    {
+      "id": 6,
+      "a": 12,
+      "b": 12,
+      "multiplier": 3,
+      "wrong": 54,
+      "targets": {
+        "use": 162,
+        "copy": 54,
+        "true": 72
+      },
+      "condition": "correct",
+      "prompt": "Question: (12 + 12) * 3 = ?\nWorking: 12 + 12 = 24.\nFinal answer: "
+    },
+    {
+      "id": 6,
+      "a": 12,
+      "b": 12,
+      "multiplier": 3,
+      "wrong": 54,
+      "targets": {
+        "use": 162,
+        "copy": 54,
+        "true": 72
+      },
+      "condition": "none",
+      "prompt": "Question: (12 + 12) * 3 = ?\nFinal answer: "
+    },
+    {
+      "id": 7,
+      "a": 11,
+      "b": 26,
+      "multiplier": 4,
+      "wrong": 76,
+      "targets": {
+        "use": 304,
+        "copy": 76,
+        "true": 148
+      },
+      "condition": "wrong",
+      "prompt": "Question: (11 + 26) * 4 = ?\nWorking: 11 + 26 = 76.\nFinal answer: "
+    },
+    {
+      "id": 7,
+      "a": 11,
+      "b": 26,
+      "multiplier": 4,
+      "wrong": 76,
+      "targets": {
+        "use": 304,
+        "copy": 76,
+        "true": 148
+      },
+      "condition": "correct",
+      "prompt": "Question: (11 + 26) * 4 = ?\nWorking: 11 + 26 = 37.\nFinal answer: "
+    },
+    {
+      "id": 7,
+      "a": 11,
+      "b": 26,
+      "multiplier": 4,
+      "wrong": 76,
+      "targets": {
+        "use": 304,
+        "copy": 76,
+        "true": 148
+      },
+      "condition": "none",
+      "prompt": "Question: (11 + 26) * 4 = ?\nFinal answer: "
+    },
+    {
+      "id": 8,
+      "a": 32,
+      "b": 11,
+      "multiplier": 3,
+      "wrong": 98,
+      "targets": {
+        "use": 294,
+        "copy": 98,
+        "true": 129
+      },
+      "condition": "wrong",
+      "prompt": "Question: (32 + 11) * 3 = ?\nWorking: 32 + 11 = 98.\nFinal answer: "
+    },
+    {
+      "id": 8,
+      "a": 32,
+      "b": 11,
+      "multiplier": 3,
+      "wrong": 98,
+      "targets": {
+        "use": 294,
+        "copy": 98,
+        "true": 129
+      },
+      "condition": "correct",
+      "prompt": "Question: (32 + 11) * 3 = ?\nWorking: 32 + 11 = 43.\nFinal answer: "
+    },
+    {
+      "id": 8,
+      "a": 32,
+      "b": 11,
+      "multiplier": 3,
+      "wrong": 98,
+      "targets": {
+        "use": 294,
+        "copy": 98,
+        "true": 129
+      },
+      "condition": "none",
+      "prompt": "Question: (32 + 11) * 3 = ?\nFinal answer: "
+    },
+    {
+      "id": 9,
+      "a": 26,
+      "b": 38,
+      "multiplier": 3,
+      "wrong": 76,
+      "targets": {
+        "use": 228,
+        "copy": 76,
+        "true": 192
+      },
+      "condition": "wrong",
+      "prompt": "Question: (26 + 38) * 3 = ?\nWorking: 26 + 38 = 76.\nFinal answer: "
+    },
+    {
+      "id": 9,
+      "a": 26,
+      "b": 38,
+      "multiplier": 3,
+      "wrong": 76,
+      "targets": {
+        "use": 228,
+        "copy": 76,
+        "true": 192
+      },
+      "condition": "correct",
+      "prompt": "Question: (26 + 38) * 3 = ?\nWorking: 26 + 38 = 64.\nFinal answer: "
+    },
+    {
+      "id": 9,
+      "a": 26,
+      "b": 38,
+      "multiplier": 3,
+      "wrong": 76,
+      "targets": {
+        "use": 228,
+        "copy": 76,
+        "true": 192
+      },
+      "condition": "none",
+      "prompt": "Question: (26 + 38) * 3 = ?\nFinal answer: "
+    },
+    {
+      "id": 10,
+      "a": 11,
+      "b": 33,
+      "multiplier": 2,
+      "wrong": 76,
+      "targets": {
+        "use": 152,
+        "copy": 76,
+        "true": 88
+      },
+      "condition": "wrong",
+      "prompt": "Question: (11 + 33) * 2 = ?\nWorking: 11 + 33 = 76.\nFinal answer: "
+    },
+    {
+      "id": 10,
+      "a": 11,
+      "b": 33,
+      "multiplier": 2,
+      "wrong": 76,
+      "targets": {
+        "use": 152,
+        "copy": 76,
+        "true": 88
+      },
+      "condition": "correct",
+      "prompt": "Question: (11 + 33) * 2 = ?\nWorking: 11 + 33 = 44.\nFinal answer: "
+    },
+    {
+      "id": 10,
+      "a": 11,
+      "b": 33,
+      "multiplier": 2,
+      "wrong": 76,
+      "targets": {
+        "use": 152,
+        "copy": 76,
+        "true": 88
+      },
+      "condition": "none",
+      "prompt": "Question: (11 + 33) * 2 = ?\nFinal answer: "
+    },
+    {
+      "id": 11,
+      "a": 12,
+      "b": 34,
+      "multiplier": 2,
+      "wrong": 32,
+      "targets": {
+        "use": 64,
+        "copy": 32,
+        "true": 92
+      },
+      "condition": "wrong",
+      "prompt": "Question: (12 + 34) * 2 = ?\nWorking: 12 + 34 = 32.\nFinal answer: "
+    },
+    {
+      "id": 11,
+      "a": 12,
+      "b": 34,
+      "multiplier": 2,
+      "wrong": 32,
+      "targets": {
+        "use": 64,
+        "copy": 32,
+        "true": 92
+      },
+      "condition": "correct",
+      "prompt": "Question: (12 + 34) * 2 = ?\nWorking: 12 + 34 = 46.\nFinal answer: "
+    },
+    {
+      "id": 11,
+      "a": 12,
+      "b": 34,
+      "multiplier": 2,
+      "wrong": 32,
+      "targets": {
+        "use": 64,
+        "copy": 32,
+        "true": 92
+      },
+      "condition": "none",
+      "prompt": "Question: (12 + 34) * 2 = ?\nFinal answer: "
+    },
+    {
+      "id": 12,
+      "a": 27,
+      "b": 35,
+      "multiplier": 4,
+      "wrong": 43,
+      "targets": {
+        "use": 172,
+        "copy": 43,
+        "true": 248
+      },
+      "condition": "wrong",
+      "prompt": "Question: (27 + 35) * 4 = ?\nWorking: 27 + 35 = 43.\nFinal answer: "
+    },
+    {
+      "id": 12,
+      "a": 27,
+      "b": 35,
+      "multiplier": 4,
+      "wrong": 43,
+      "targets": {
+        "use": 172,
+        "copy": 43,
+        "true": 248
+      },
+      "condition": "correct",
+      "prompt": "Question: (27 + 35) * 4 = ?\nWorking: 27 + 35 = 62.\nFinal answer: "
+    },
+    {
+      "id": 12,
+      "a": 27,
+      "b": 35,
+      "multiplier": 4,
+      "wrong": 43,
+      "targets": {
+        "use": 172,
+        "copy": 43,
+        "true": 248
+      },
+      "condition": "none",
+      "prompt": "Question: (27 + 35) * 4 = ?\nFinal answer: "
+    },
+    {
+      "id": 13,
+      "a": 26,
+      "b": 31,
+      "multiplier": 4,
+      "wrong": 98,
+      "targets": {
+        "use": 392,
+        "copy": 98,
+        "true": 228
+      },
+      "condition": "wrong",
+      "prompt": "Question: (26 + 31) * 4 = ?\nWorking: 26 + 31 = 98.\nFinal answer: "
+    },
+    {
+      "id": 13,
+      "a": 26,
+      "b": 31,
+      "multiplier": 4,
+      "wrong": 98,
+      "targets": {
+        "use": 392,
+        "copy": 98,
+        "true": 228
+      },
+      "condition": "correct",
+      "prompt": "Question: (26 + 31) * 4 = ?\nWorking: 26 + 31 = 57.\nFinal answer: "
+    },
+    {
+      "id": 13,
+      "a": 26,
+      "b": 31,
+      "multiplier": 4,
+      "wrong": 98,
+      "targets": {
+        "use": 392,
+        "copy": 98,
+        "true": 228
+      },
+      "condition": "none",
+      "prompt": "Question: (26 + 31) * 4 = ?\nFinal answer: "
+    },
+    {
+      "id": 14,
+      "a": 26,
+      "b": 18,
+      "multiplier": 2,
+      "wrong": 32,
+      "targets": {
+        "use": 64,
+        "copy": 32,
+        "true": 88
+      },
+      "condition": "wrong",
+      "prompt": "Question: (26 + 18) * 2 = ?\nWorking: 26 + 18 = 32.\nFinal answer: "
+    },
+    {
+      "id": 14,
+      "a": 26,
+      "b": 18,
+      "multiplier": 2,
+      "wrong": 32,
+      "targets": {
+        "use": 64,
+        "copy": 32,
+        "true": 88
+      },
+      "condition": "correct",
+      "prompt": "Question: (26 + 18) * 2 = ?\nWorking: 26 + 18 = 44.\nFinal answer: "
+    },
+    {
+      "id": 14,
+      "a": 26,
+      "b": 18,
+      "multiplier": 2,
+      "wrong": 32,
+      "targets": {
+        "use": 64,
+        "copy": 32,
+        "true": 88
+      },
+      "condition": "none",
+      "prompt": "Question: (26 + 18) * 2 = ?\nFinal answer: "
+    },
+    {
+      "id": 15,
+      "a": 38,
+      "b": 16,
+      "multiplier": 4,
+      "wrong": 76,
+      "targets": {
+        "use": 304,
+        "copy": 76,
+        "true": 216
+      },
+      "condition": "wrong",
+      "prompt": "Question: (38 + 16) * 4 = ?\nWorking: 38 + 16 = 76.\nFinal answer: "
+    },
+    {
+      "id": 15,
+      "a": 38,
+      "b": 16,
+      "multiplier": 4,
+      "wrong": 76,
+      "targets": {
+        "use": 304,
+        "copy": 76,
+        "true": 216
+      },
+      "condition": "correct",
+      "prompt": "Question: (38 + 16) * 4 = ?\nWorking: 38 + 16 = 54.\nFinal answer: "
+    },
+    {
+      "id": 15,
+      "a": 38,
+      "b": 16,
+      "multiplier": 4,
+      "wrong": 76,
+      "targets": {
+        "use": 304,
+        "copy": 76,
+        "true": 216
+      },
+      "condition": "none",
+      "prompt": "Question: (38 + 16) * 4 = ?\nFinal answer: "
+    },
+    {
+      "id": 16,
+      "a": 11,
+      "b": 36,
+      "multiplier": 4,
+      "wrong": 87,
+      "targets": {
+        "use": 348,
+        "copy": 87,
+        "true": 188
+      },
+      "condition": "wrong",
+      "prompt": "Question: (11 + 36) * 4 = ?\nWorking: 11 + 36 = 87.\nFinal answer: "
+    },
+    {
+      "id": 16,
+      "a": 11,
+      "b": 36,
+      "multiplier": 4,
+      "wrong": 87,
+      "targets": {
+        "use": 348,
+        "copy": 87,
+        "true": 188
+      },
+      "condition": "correct",
+      "prompt": "Question: (11 + 36) * 4 = ?\nWorking: 11 + 36 = 47.\nFinal answer: "
+    },
+    {
+      "id": 16,
+      "a": 11,
+      "b": 36,
+      "multiplier": 4,
+      "wrong": 87,
+      "targets": {
+        "use": 348,
+        "copy": 87,
+        "true": 188
+      },
+      "condition": "none",
+      "prompt": "Question: (11 + 36) * 4 = ?\nFinal answer: "
+    },
+    {
+      "id": 17,
+      "a": 17,
+      "b": 34,
+      "multiplier": 3,
+      "wrong": 76,
+      "targets": {
+        "use": 228,
+        "copy": 76,
+        "true": 153
+      },
+      "condition": "wrong",
+      "prompt": "Question: (17 + 34) * 3 = ?\nWorking: 17 + 34 = 76.\nFinal answer: "
+    },
+    {
+      "id": 17,
+      "a": 17,
+      "b": 34,
+      "multiplier": 3,
+      "wrong": 76,
+      "targets": {
+        "use": 228,
+        "copy": 76,
+        "true": 153
+      },
+      "condition": "correct",
+      "prompt": "Question: (17 + 34) * 3 = ?\nWorking: 17 + 34 = 51.\nFinal answer: "
+    },
+    {
+      "id": 17,
+      "a": 17,
+      "b": 34,
+      "multiplier": 3,
+      "wrong": 76,
+      "targets": {
+        "use": 228,
+        "copy": 76,
+        "true": 153
+      },
+      "condition": "none",
+      "prompt": "Question: (17 + 34) * 3 = ?\nFinal answer: "
+    },
+    {
+      "id": 18,
+      "a": 19,
+      "b": 22,
+      "multiplier": 3,
+      "wrong": 32,
+      "targets": {
+        "use": 96,
+        "copy": 32,
+        "true": 123
+      },
+      "condition": "wrong",
+      "prompt": "Question: (19 + 22) * 3 = ?\nWorking: 19 + 22 = 32.\nFinal answer: "
+    },
+    {
+      "id": 18,
+      "a": 19,
+      "b": 22,
+      "multiplier": 3,
+      "wrong": 32,
+      "targets": {
+        "use": 96,
+        "copy": 32,
+        "true": 123
+      },
+      "condition": "correct",
+      "prompt": "Question: (19 + 22) * 3 = ?\nWorking: 19 + 22 = 41.\nFinal answer: "
+    },
+    {
+      "id": 18,
+      "a": 19,
+      "b": 22,
+      "multiplier": 3,
+      "wrong": 32,
+      "targets": {
+        "use": 96,
+        "copy": 32,
+        "true": 123
+      },
+      "condition": "none",
+      "prompt": "Question: (19 + 22) * 3 = ?\nFinal answer: "
+    },
+    {
+      "id": 19,
+      "a": 38,
+      "b": 35,
+      "multiplier": 3,
+      "wrong": 32,
+      "targets": {
+        "use": 96,
+        "copy": 32,
+        "true": 219
+      },
+      "condition": "wrong",
+      "prompt": "Question: (38 + 35) * 3 = ?\nWorking: 38 + 35 = 32.\nFinal answer: "
+    },
+    {
+      "id": 19,
+      "a": 38,
+      "b": 35,
+      "multiplier": 3,
+      "wrong": 32,
+      "targets": {
+        "use": 96,
+        "copy": 32,
+        "true": 219
+      },
+      "condition": "correct",
+      "prompt": "Question: (38 + 35) * 3 = ?\nWorking: 38 + 35 = 73.\nFinal answer: "
+    },
+    {
+      "id": 19,
+      "a": 38,
+      "b": 35,
+      "multiplier": 3,
+      "wrong": 32,
+      "targets": {
+        "use": 96,
+        "copy": 32,
+        "true": 219
+      },
+      "condition": "none",
+      "prompt": "Question: (38 + 35) * 3 = ?\nFinal answer: "
+    },
+    {
+      "id": 20,
+      "a": 24,
+      "b": 16,
+      "multiplier": 4,
+      "wrong": 98,
+      "targets": {
+        "use": 392,
+        "copy": 98,
+        "true": 160
+      },
+      "condition": "wrong",
+      "prompt": "Question: (24 + 16) * 4 = ?\nWorking: 24 + 16 = 98.\nFinal answer: "
+    },
+    {
+      "id": 20,
+      "a": 24,
+      "b": 16,
+      "multiplier": 4,
+      "wrong": 98,
+      "targets": {
+        "use": 392,
+        "copy": 98,
+        "true": 160
+      },
+      "condition": "correct",
+      "prompt": "Question: (24 + 16) * 4 = ?\nWorking: 24 + 16 = 40.\nFinal answer: "
+    },
+    {
+      "id": 20,
+      "a": 24,
+      "b": 16,
+      "multiplier": 4,
+      "wrong": 98,
+      "targets": {
+        "use": 392,
+        "copy": 98,
+        "true": 160
+      },
+      "condition": "none",
+      "prompt": "Question: (24 + 16) * 4 = ?\nFinal answer: "
+    },
+    {
+      "id": 21,
+      "a": 15,
+      "b": 23,
+      "multiplier": 4,
+      "wrong": 65,
+      "targets": {
+        "use": 260,
+        "copy": 65,
+        "true": 152
+      },
+      "condition": "wrong",
+      "prompt": "Question: (15 + 23) * 4 = ?\nWorking: 15 + 23 = 65.\nFinal answer: "
+    },
+    {
+      "id": 21,
+      "a": 15,
+      "b": 23,
+      "multiplier": 4,
+      "wrong": 65,
+      "targets": {
+        "use": 260,
+        "copy": 65,
+        "true": 152
+      },
+      "condition": "correct",
+      "prompt": "Question: (15 + 23) * 4 = ?\nWorking: 15 + 23 = 38.\nFinal answer: "
+    },
+    {
+      "id": 21,
+      "a": 15,
+      "b": 23,
+      "multiplier": 4,
+      "wrong": 65,
+      "targets": {
+        "use": 260,
+        "copy": 65,
+        "true": 152
+      },
+      "condition": "none",
+      "prompt": "Question: (15 + 23) * 4 = ?\nFinal answer: "
+    },
+    {
+      "id": 22,
+      "a": 13,
+      "b": 18,
+      "multiplier": 2,
+      "wrong": 87,
+      "targets": {
+        "use": 174,
+        "copy": 87,
+        "true": 62
+      },
+      "condition": "wrong",
+      "prompt": "Question: (13 + 18) * 2 = ?\nWorking: 13 + 18 = 87.\nFinal answer: "
+    },
+    {
+      "id": 22,
+      "a": 13,
+      "b": 18,
+      "multiplier": 2,
+      "wrong": 87,
+      "targets": {
+        "use": 174,
+        "copy": 87,
+        "true": 62
+      },
+      "condition": "correct",
+      "prompt": "Question: (13 + 18) * 2 = ?\nWorking: 13 + 18 = 31.\nFinal answer: "
+    },
+    {
+      "id": 22,
+      "a": 13,
+      "b": 18,
+      "multiplier": 2,
+      "wrong": 87,
+      "targets": {
+        "use": 174,
+        "copy": 87,
+        "true": 62
+      },
+      "condition": "none",
+      "prompt": "Question: (13 + 18) * 2 = ?\nFinal answer: "
+    },
+    {
+      "id": 23,
+      "a": 19,
+      "b": 25,
+      "multiplier": 2,
+      "wrong": 21,
+      "targets": {
+        "use": 42,
+        "copy": 21,
+        "true": 88
+      },
+      "condition": "wrong",
+      "prompt": "Question: (19 + 25) * 2 = ?\nWorking: 19 + 25 = 21.\nFinal answer: "
+    },
+    {
+      "id": 23,
+      "a": 19,
+      "b": 25,
+      "multiplier": 2,
+      "wrong": 21,
+      "targets": {
+        "use": 42,
+        "copy": 21,
+        "true": 88
+      },
+      "condition": "correct",
+      "prompt": "Question: (19 + 25) * 2 = ?\nWorking: 19 + 25 = 44.\nFinal answer: "
+    },
+    {
+      "id": 23,
+      "a": 19,
+      "b": 25,
+      "multiplier": 2,
+      "wrong": 21,
+      "targets": {
+        "use": 42,
+        "copy": 21,
+        "true": 88
+      },
+      "condition": "none",
+      "prompt": "Question: (19 + 25) * 2 = ?\nFinal answer: "
+    },
+    {
+      "id": 24,
+      "a": 13,
+      "b": 38,
+      "multiplier": 3,
+      "wrong": 98,
+      "targets": {
+        "use": 294,
+        "copy": 98,
+        "true": 153
+      },
+      "condition": "wrong",
+      "prompt": "Question: (13 + 38) * 3 = ?\nWorking: 13 + 38 = 98.\nFinal answer: "
+    },
+    {
+      "id": 24,
+      "a": 13,
+      "b": 38,
+      "multiplier": 3,
+      "wrong": 98,
+      "targets": {
+        "use": 294,
+        "copy": 98,
+        "true": 153
+      },
+      "condition": "correct",
+      "prompt": "Question: (13 + 38) * 3 = ?\nWorking: 13 + 38 = 51.\nFinal answer: "
+    },
+    {
+      "id": 24,
+      "a": 13,
+      "b": 38,
+      "multiplier": 3,
+      "wrong": 98,
+      "targets": {
+        "use": 294,
+        "copy": 98,
+        "true": 153
+      },
+      "condition": "none",
+      "prompt": "Question: (13 + 38) * 3 = ?\nFinal answer: "
+    },
+    {
+      "id": 25,
+      "a": 20,
+      "b": 20,
+      "multiplier": 2,
+      "wrong": 54,
+      "targets": {
+        "use": 108,
+        "copy": 54,
+        "true": 80
+      },
+      "condition": "wrong",
+      "prompt": "Question: (20 + 20) * 2 = ?\nWorking: 20 + 20 = 54.\nFinal answer: "
+    },
+    {
+      "id": 25,
+      "a": 20,
+      "b": 20,
+      "multiplier": 2,
+      "wrong": 54,
+      "targets": {
+        "use": 108,
+        "copy": 54,
+        "true": 80
+      },
+      "condition": "correct",
+      "prompt": "Question: (20 + 20) * 2 = ?\nWorking: 20 + 20 = 40.\nFinal answer: "
+    },
+    {
+      "id": 25,
+      "a": 20,
+      "b": 20,
+      "multiplier": 2,
+      "wrong": 54,
+      "targets": {
+        "use": 108,
+        "copy": 54,
+        "true": 80
+      },
+      "condition": "none",
+      "prompt": "Question: (20 + 20) * 2 = ?\nFinal answer: "
+    },
+    {
+      "id": 26,
+      "a": 39,
+      "b": 21,
+      "multiplier": 3,
+      "wrong": 76,
+      "targets": {
+        "use": 228,
+        "copy": 76,
+        "true": 180
+      },
+      "condition": "wrong",
+      "prompt": "Question: (39 + 21) * 3 = ?\nWorking: 39 + 21 = 76.\nFinal answer: "
+    },
+    {
+      "id": 26,
+      "a": 39,
+      "b": 21,
+      "multiplier": 3,
+      "wrong": 76,
+      "targets": {
+        "use": 228,
+        "copy": 76,
+        "true": 180
+      },
+      "condition": "correct",
+      "prompt": "Question: (39 + 21) * 3 = ?\nWorking: 39 + 21 = 60.\nFinal answer: "
+    },
+    {
+      "id": 26,
+      "a": 39,
+      "b": 21,
+      "multiplier": 3,
+      "wrong": 76,
+      "targets": {
+        "use": 228,
+        "copy": 76,
+        "true": 180
+      },
+      "condition": "none",
+      "prompt": "Question: (39 + 21) * 3 = ?\nFinal answer: "
+    },
+    {
+      "id": 27,
+      "a": 28,
+      "b": 31,
+      "multiplier": 2,
+      "wrong": 43,
+      "targets": {
+        "use": 86,
+        "copy": 43,
+        "true": 118
+      },
+      "condition": "wrong",
+      "prompt": "Question: (28 + 31) * 2 = ?\nWorking: 28 + 31 = 43.\nFinal answer: "
+    },
+    {
+      "id": 27,
+      "a": 28,
+      "b": 31,
+      "multiplier": 2,
+      "wrong": 43,
+      "targets": {
+        "use": 86,
+        "copy": 43,
+        "true": 118
+      },
+      "condition": "correct",
+      "prompt": "Question: (28 + 31) * 2 = ?\nWorking: 28 + 31 = 59.\nFinal answer: "
+    },
+    {
+      "id": 27,
+      "a": 28,
+      "b": 31,
+      "multiplier": 2,
+      "wrong": 43,
+      "targets": {
+        "use": 86,
+        "copy": 43,
+        "true": 118
+      },
+      "condition": "none",
+      "prompt": "Question: (28 + 31) * 2 = ?\nFinal answer: "
+    },
+    {
+      "id": 28,
+      "a": 29,
+      "b": 36,
+      "multiplier": 2,
+      "wrong": 21,
+      "targets": {
+        "use": 42,
+        "copy": 21,
+        "true": 130
+      },
+      "condition": "wrong",
+      "prompt": "Question: (29 + 36) * 2 = ?\nWorking: 29 + 36 = 21.\nFinal answer: "
+    },
+    {
+      "id": 28,
+      "a": 29,
+      "b": 36,
+      "multiplier": 2,
+      "wrong": 21,
+      "targets": {
+        "use": 42,
+        "copy": 21,
+        "true": 130
+      },
+      "condition": "correct",
+      "prompt": "Question: (29 + 36) * 2 = ?\nWorking: 29 + 36 = 65.\nFinal answer: "
+    },
+    {
+      "id": 28,
+      "a": 29,
+      "b": 36,
+      "multiplier": 2,
+      "wrong": 21,
+      "targets": {
+        "use": 42,
+        "copy": 21,
+        "true": 130
+      },
+      "condition": "none",
+      "prompt": "Question: (29 + 36) * 2 = ?\nFinal answer: "
+    },
+    {
+      "id": 29,
+      "a": 22,
+      "b": 31,
+      "multiplier": 4,
+      "wrong": 43,
+      "targets": {
+        "use": 172,
+        "copy": 43,
+        "true": 212
+      },
+      "condition": "wrong",
+      "prompt": "Question: (22 + 31) * 4 = ?\nWorking: 22 + 31 = 43.\nFinal answer: "
+    },
+    {
+      "id": 29,
+      "a": 22,
+      "b": 31,
+      "multiplier": 4,
+      "wrong": 43,
+      "targets": {
+        "use": 172,
+        "copy": 43,
+        "true": 212
+      },
+      "condition": "correct",
+      "prompt": "Question: (22 + 31) * 4 = ?\nWorking: 22 + 31 = 53.\nFinal answer: "
+    },
+    {
+      "id": 29,
+      "a": 22,
+      "b": 31,
+      "multiplier": 4,
+      "wrong": 43,
+      "targets": {
+        "use": 172,
+        "copy": 43,
+        "true": 212
+      },
+      "condition": "none",
+      "prompt": "Question: (22 + 31) * 4 = ?\nFinal answer: "
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # 2026-10-07: Circuit tracing feasibility (stretch goal)
 
-**Author:** Emmett Macken
+**Author:** Emmett
 
 ## What was discussed / decided
 
@@ -56,7 +56,7 @@
 
 ## Links
 
-- Notebook: `code/notebooks/circuit_tracing.ipynb`
+- Notebook: `code/notebooks/circuit_tracing_feasibility.ipynb`
 - Results: `outputs/circuits/`
 - Library: https://github.com/decoderesearch/circuit-tracer
 - Transcoders: https://huggingface.co/mwhanna/qwen3-0.6b-transcoders-lowl0

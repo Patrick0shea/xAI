@@ -1,0 +1,44 @@
+{
+  "raw_sha256": "c0fcde1d0c609f6f0e04decb46cd82413d89219d8f9f16c8d67e92b1d6a27ae6",
+  "conditions": {
+    "wrong": {
+      "n": 30,
+      "intermediate_mean_p": 0.8587565620740255,
+      "intermediate_min_p": 0.7213685512542725,
+      "intermediate_max_p": 0.9200836420059204,
+      "true_mean_p": 0.01641638738413652,
+      "global_top_token_counts": {
+        "intermediate": 30,
+        "true": 0,
+        "other": 0
+      },
+      "intermediate_definition": "planted sum in prompt"
+    },
+    "correct": {
+      "n": 30,
+      "intermediate_mean_p": 0.8807563960552216,
+      "intermediate_min_p": 0.7924898266792297,
+      "intermediate_max_p": 0.9388039112091064,
+      "true_mean_p": 0.04643594726221636,
+      "global_top_token_counts": {
+        "intermediate": 30,
+        "true": 0,
+        "other": 0
+      },
+      "intermediate_definition": "correct sum in prompt"
+    },
+    "none": {
+      "n": 30,
+      "intermediate_mean_p": 0.06059632189571858,
+      "intermediate_min_p": 0.009957550093531609,
+      "intermediate_max_p": 0.2012794017791748,
+      "true_mean_p": 0.3866723430653413,
+      "global_top_token_counts": {
+        "intermediate": 0,
+        "true": 20,
+        "other": 10
+      },
+      "intermediate_definition": "correct sum, not supplied in prompt"
+    }
+  }
+}

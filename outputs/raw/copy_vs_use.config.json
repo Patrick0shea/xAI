@@ -1,0 +1,28 @@
+{
+  "model": "Qwen/Qwen3-0.6B",
+  "requested_revision": "main",
+  "resolved_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+  "device": "cuda",
+  "dtype": "torch.float16",
+  "torch": "2.11.0+cu130",
+  "transformers": "4.57.6",
+  "python": "3.13.15",
+  "timestamp_utc": "2026-10-20T15:29:05.219698+00:00",
+  "seed": 42,
+  "prompt_manifest_sha256": "484a5e8dd7f7cbf1ebdfcb5d689f94cd648cd5709baa11cfe88c1ec4fc65d5d9",
+  "digit_token_ids": {
+    "0": 15,
+    "1": 16,
+    "2": 17,
+    "3": 18,
+    "4": 19,
+    "5": 20,
+    "6": 21,
+    "7": 22,
+    "8": 23,
+    "9": 24
+  },
+  "prompt_format": "plain prefix; no chat template; add_special_tokens=False",
+  "model_kind": "original Hugging Face weights; no replacement transcoders",
+  "metric": "unconditional next-token probabilities over full vocabulary"
+}

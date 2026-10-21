@@ -1,0 +1,27 @@
+{
+  "n_prompts": 8,
+  "sources": [
+    "outputs/circuits/hand_made_behavioural.csv",
+    "outputs/circuits/hand_made_baseline.csv"
+  ],
+  "p_follows_working": {
+    "min": 0.9394,
+    "max": 0.9923,
+    "mean": 0.9789125
+  },
+  "p_follows_question": {
+    "min": 0.0005,
+    "max": 0.0132,
+    "mean": 0.002875
+  },
+  "p_true_digit_no_working": {
+    "min": 0.6796,
+    "max": 0.8257,
+    "mean": 0.7467875
+  },
+  "p_true_digit_correct_working": {
+    "min": 0.9898,
+    "max": 0.9961,
+    "mean": 0.9921375
+  }
+}

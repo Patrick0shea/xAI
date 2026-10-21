@@ -2,7 +2,29 @@
 % II. RELATED WORK -- OWNERS: Conor and Emmett
 % =====================================================================
 \section{Related Work}\label{sec:related}
-% OUTLINE (comments only; no finished prose yet). About 0.5 column.
+
+Faithfulness concerns whether an explanation reflects the model's actual
+reasoning, distinct from whether it appears plausible~\cite{jacovi2020}.
+Lanham et al.~\cite{lanham2023} probe dependence on chain-of-thought by
+truncating it, inserting mistakes, and paraphrasing it. Turpin et
+al.~\cite{turpin2023} show that input biases can change answers while
+remaining unmentioned in their explanations. Chen et al.~\cite{chen2025}
+extend hint-based tests to reasoning models, measuring acknowledgement
+among paired responses that switch to the hinted answer. These motivate
+intervention controls alongside our textual consistency checks.
+Arcuschin et al.~\cite{arcuschin2025} also investigate unfaithful reasoning
+on unmanipulated prompts, so natural-setting evaluation is not itself a
+novel contribution of our study.
+
+NSF-CoT~\cite{pramanik2026} combines formal verification with an LLM-based
+entailment component to assess written steps. Our narrower arithmetic
+checker evaluates extracted equations deterministically using exact
+rational arithmetic. It measures local arithmetic validity and agreement
+between a recoverable implied answer and the final answer; it does not
+verify all natural-language reasoning or establish causal faithfulness.
+% Conor: add Lyu and Parcalabescu after completing source-grounded notes.
+% Xiong overlap and circuit-biology reading remain outstanding; no novelty claim here.
+% Draft above; retained outline below for shared editing. Target about 0.5 column.
 % Rule from journal/2026-10-15.md "Reading gaps": only cite a paper someone in the
 % group has read; each claim must be supported by the source.
 %
@@ -15,8 +37,8 @@
 % 3. Unverbalised influences / hints: turpin2023 (biasing features not mentioned
 %    in the CoT); chen2025 (reasoning models rarely verbalise hints they use).
 %    This motivates Fionn's hint test.
-%    -> NO READING NOTES YET (journal/2026-10-15.md "Reading gaps"): someone must
-%       read both before citing.
+%    -> readings/turpin_2023.md and readings/chen_2025.md (AI-assisted drafts); owners must
+%       review the AI-assisted notes before submission.
 %
 % 4. Unfaithfulness without prompting: arcuschin2025 (natural, unprompted
 %    unfaithful CoT). -> readings/arcuschin_2025.md

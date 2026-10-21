@@ -59,7 +59,15 @@ Intervals are from [`outputs/clean/paper_stats.json`](outputs/clean/paper_stats.
   follows the working with p = 0.94–0.99 ([`journal/2026-10-07-circuit-tracing.md`](journal/2026-10-07-circuit-tracing.md)).
 - Z3 checker validation on FOLIO: 191/199 parsed rows match their labels (checker
   validation, not a faithfulness result).
-- Copy-vs-use and hint experiments: **TBD** (experiments freeze Wed 21 Oct, 9pm).
+- Copy-vs-use (Qwen3-0.6B, 30 constructed problems): the top answer token matches
+  the planted intermediate sum on 30/30 wrong-working prompts (mean p = 0.859).
+  Correct-working prompts also repeat the intermediate sum on 30/30; without
+  working, the true final digit is top on 20/30. This supports a copying-compatible
+  interpretation of this prompt format, not proof of faithful arithmetic use.
+  [Results](outputs/clean/copy_vs_use_summary.json),
+  [baseline checks](outputs/clean/copy_vs_use_baselines.json),
+  [Colab notebook](code/notebooks/copy_vs_use.ipynb).
+- Hint experiment
 
 Details: [`outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md`](outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md)
 and [`journal/2026-10-20.md`](journal/2026-10-20.md).

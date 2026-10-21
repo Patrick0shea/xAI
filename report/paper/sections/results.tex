@@ -76,11 +76,40 @@ Contradictions & 0 & 0 & 0 \\
 \end{table}
 
 \subsection{Planted working and copy-vs-use}\label{sec:res-planted}
+
+Table~\ref{tab:planted} reports first-digit probabilities for eight
+constructed addition problems. Without working, the true digit receives
+mean probability 0.747; with correct working, 0.992. With incorrect working,
+the digit matching the planted answer receives mean probability 0.979,
+while the true digit receives 0.0029. Thus supplied incorrect working
+strongly changes the next-token distribution in these examples. The
+0.94--0.99 range is a range of probabilities, not the proportion of prompts
+following the working. Because copying the planted answer predicts the
+same digit, this experiment alone cannot establish arithmetic use of the
+working. The copy-vs-use control (Table~\ref{tab:copyuse}) favours the copying
+prediction in all 30 wrong-working cases: mean probability 0.859,
+compared with 0.037 for applying the remaining multiplication to the
+planted sum and 0.016 for recomputing the true answer. No other token is
+the global top prediction in those cases.
+
+However, with correct working the top token also matches the supplied
+intermediate sum in 30/30 cases (mean probability 0.881), while the true
+final-answer digit receives mean probability 0.046 and is never the top
+token. Without working, the true digit is the top token in 20/30 cases
+(mean probability 0.387). Thus the plain prefix appears to encourage
+repeating a supplied intermediate value even when it is correct, rather
+than completing the operation requested in the question. This is evidence
+against interpreting the earlier planted-answer sensitivity as arithmetic
+use, but it does not establish a copying mechanism internally. These are
+first-token results on constructed prompts with original 0.6B weights;
+the earlier tracing setup used a transcoder replacement model, limiting
+direct comparison.
 % OWNER: Emmett. OUTLINE:
 % - Table II: a planted wrong working overrides the model's own default answer.
 %   8 hand-picked prompts, first digit only, Qwen3-0.6B: it demonstrates the effect
 %   and is not a rate. -> journal/2026-10-07-circuit-tracing.md
-% - Table IV: copy-vs-use. Does the model use the working or copy it? TBD.
+% - Table IV: wrong-working first digits favour copying (30/30);
+%   correct-working baseline also repeats the intermediate value (30/30).
 % - Optional figure: outputs/circuits/hand_12plus7_working21.png (illustration only).
 \begin{table}[t]
 \centering
@@ -103,18 +132,21 @@ Wrong & true answer & 0.0005--0.013 (0.003) \\
 
 \begin{table}[t]
 \centering
-\caption{Copy-vs-use control (Emmett). Placeholder until the results are committed.}
+\caption{Copy-vs-use on Qwen3-0.6B: 30 constructed problems with wrong
+working. Probabilities are means over prompts; counts use the global
+top token over the full vocabulary.}
 \label{tab:copyuse}
-% Source: TBD (Emmett's copy_vs_use output file).
-\begin{tabular}{@{}lc@{}}
+% Source: outputs/clean/copy_vs_use_summary.json, verified from
+% outputs/raw/copy_vs_use.jsonl by code/src/analyze_copy_vs_use.py.
+\footnotesize
+\begin{tabular}{@{}lcc@{}}
 \toprule
-First digit follows & $p$ / share of prompts \\
+First digit matches & Mean $p$ & Top token \\
 \midrule
-Using the working (one more step) & \textbf{TBD} \\
-Copying the working & \textbf{TBD} \\
-True path from the question & \textbf{TBD} \\
-\midrule
-Prompts ($n$) & \textbf{TBD} \\
+Using the planted sum & 0.037 & 0/30 \\
+Copying the planted sum & 0.859 & 30/30 \\
+True path from the question & 0.016 & 0/30 \\
+Other token & -- & 0/30 \\
 \bottomrule
 \end{tabular}
 \end{table}
