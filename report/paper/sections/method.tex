@@ -77,21 +77,42 @@ responses, are not compared.
 
 On a 20-problem pilot, the first version of the checker flagged 53 invalid steps, of
 which only one was a real model error; each false-positive pattern now has a
-regression test. A team member who did not write the checker is auditing it by hand
-(all invalid steps, 20 sampled valid steps, and hand step counts for 10 responses):
-\textbf{TBD}.
+regression test. A provisional review agrees with the arithmetic verdict on all
+four invalid occurrences and 20 sampled valid occurrences. This checks numerical
+equality, not whether a calculation correctly models the problem. A separate
+ten-response review records calculations missed by extraction, including prose
+and expressions with units. These review records await confirmation by a human
+who did not write the checker; they are not independent human validation.
 
 \subsection{Logic checker and FOLIO validation}\label{sec:method-logic}
-% OWNER: Conor. OUTLINE:
-% - Z3 (demoura2008) checks whether a conclusion is entailed, contradicted or
-%   unknown from first-order premises; inconsistent premises, parse errors and solver
-%   timeouts are reported separately from logical "unknown".
-%   -> README.md "FOLIO logic checker"; code/src/logic_checker.py
-% - Validated on official FOLIO v0.0 validation annotations (han2024folio):
-%   Table III. This is CHECKER VALIDATION, NOT A FAITHFULNESS RESULT. No Qwen3
-%   FOLIO outputs were checked, because free-text reasoning would first have to be
-%   translated into FOL.
-%   -> journal/2026-10-16.md; journal/2026-10-20.md, decision 1
+% OWNER: Conor. Sources: code/src/{logic_checker,folio_parser}.py;
+% outputs/clean/folio_validation_summary.json; journal/2026-10-16.md.
+
+The logic checker parses supplied first-order formulas and evaluates them with
+Z3~\cite{demoura2008}. The parser supports quantified predicates, relations,
+equality and Boolean connectives over one nonempty uninterpreted domain, without
+unique-name or closed-world assumptions. It first checks the premises $P$ for
+consistency. For consistent premises, a conclusion $C$ is entailed when
+$P\land\neg C$ is unsatisfiable and contradicted when $P\land C$ is
+unsatisfiable. If both are satisfiable, the conclusion is logically unknown.
+Malformed formulas, inconsistent premises and solver-unknown outcomes, including
+timeouts, are reported separately from logical uncertainty. The validation run
+uses a 500\,ms limit per solver call.
+
+Optional formal reasoning steps are checked in order against the premises and
+earlier proved steps. Only entailed steps enter the context, preventing an
+unsupported step from licensing later deductions. This facility requires explicit
+formulas: the checker does not infer a formalisation from natural-language text.
+
+We validated the implementation against the official FOLIO v0.0 validation
+annotations~\cite{han2024folio}. Of 204 rows, 199 parsed and 191 matched the
+dataset label (Table~\ref{tab:folio}); five rows produced parse errors and eight
+parsed rows disagreed with the labels. No inconsistent premise sets or
+solver-unknown outcomes were recorded. The eight disagreements remain unresolved
+and are not evidence of model errors. This is checker validation, not a
+faithfulness experiment: the run contains no model-generated formal steps or
+model-answer comparisons. Checking Qwen3's reasoning would additionally require
+reviewed translation of its text into first-order logic.
 
 \subsection{Planted working and copy-vs-use}\label{sec:method-planted}
 

@@ -1,8 +1,6 @@
-% =====================================================================
 % II. RELATED WORK -- OWNERS: Conor and Emmett
-% =====================================================================
+% Sources: readings/*.md. Shared prose integrates both contributions.
 \section{Related Work}\label{sec:related}
-
 Faithfulness concerns whether an explanation reflects the model's actual
 reasoning, distinct from whether it appears plausible~\cite{jacovi2020}.
 Lanham et al.~\cite{lanham2023} probe dependence on chain-of-thought by
@@ -16,50 +14,27 @@ Arcuschin et al.~\cite{arcuschin2025} also investigate unfaithful reasoning
 on unmanipulated prompts, so natural-setting evaluation is not itself a
 novel contribution of our study.
 
+Parcalabescu and Frank argue that many explanation tests measure self-consistency
+rather than faithfulness to internal computation. Their CC-SHAP measure compares
+input contributions to answer and explanation generation~\cite{parcalabescu2024}.
+Our consistency measure is narrower: agreement between a final answer and the
+answer extracted from its written working, without computing input attributions.
+
 NSF-CoT~\cite{pramanik2026} combines formal verification with an LLM-based
 entailment component to assess written steps. Our narrower arithmetic
 checker evaluates extracted equations deterministically using exact
 rational arithmetic. It measures local arithmetic validity and agreement
 between a recoverable implied answer and the final answer; it does not
 verify all natural-language reasoning or establish causal faithfulness.
-% Conor: add Lyu and Parcalabescu after completing source-grounded notes.
-% Xiong overlap and circuit-biology reading remain outstanding; no novelty claim here.
-% Draft above; retained outline below for shared editing. Target about 0.5 column.
-% Rule from journal/2026-10-15.md "Reading gaps": only cite a paper someone in the
-% group has read; each claim must be supported by the source.
-%
-% 1. Defining faithfulness: jacovi2020 (faithfulness vs plausibility; graded,
-%    not binary). -> readings/jacovi_goldberg_2020.md
-%
-% 2. Intervention tests on CoT: lanham2023 (truncation, adding mistakes,
-%    paraphrasing). -> readings/lanham_2023.md
-%
-% 3. Unverbalised influences / hints: turpin2023 (biasing features not mentioned
-%    in the CoT); chen2025 (reasoning models rarely verbalise hints they use).
-%    This motivates Fionn's hint test.
-%    -> readings/turpin_2023.md and readings/chen_2025.md (AI-assisted drafts); owners must
-%       review the AI-assisted notes before submission.
-%
-% 4. Unfaithfulness without prompting: arcuschin2025 (natural, unprompted
-%    unfaithful CoT). -> readings/arcuschin_2025.md
-%
-% 5. Formal / symbolic verification of CoT: pramanik2026 (NSF-CoT), lyu2023
-%    (Faithful CoT: translate to a symbolic program and execute it).
-%    How we differ: we check the model's own natural-language steps, not a
-%    generated formal program. -> readings/pramanik_2026_nsf_cot.md;
-%    lyu2023 has NO READING NOTES YET.
-%
-% 6. Consistency vs faithfulness: parcalabescu2024 (most "faithfulness" tests
-%    measure self-consistency). Sets up Section V.
-%    -> NO READING NOTES YET.
-%
-% 7. Closest prior work: xiong2025 (faithfulness of thinking drafts in reasoning
-%    models). Overlap check still to do; confirm this is the intended paper (see
-%    the CHECK note in refs.bib). -> journal/2026-10-15.md "Reading gaps"
-%
-% 8. Interpretability: ameisen2025 (circuit tracing, transcoders), lindsey2025
-%    (case studies incl. arithmetic and unfaithful CoT). -> Emmett;
-%    journal/2026-10-07-circuit-tracing.md "Still open"
-%
-% 9. Datasets and tools (cite in passing): cobbe2021 (GSM8K), han2024folio (FOLIO),
-%    demoura2008 (Z3), qwen3. -> readings/han_2024_folio.md
+Lyu et al.'s Faithful CoT instead translates a query into a chain containing
+symbolic instructions and executes it with a deterministic solver~\cite{lyu2023}.
+Execution makes that chain responsible for the system's answer, while leaving
+the translation process and its correctness as separate concerns. Our checker
+evaluates already generated expressions or formal annotations; it does not
+produce Qwen3's answer and provides no equivalent execution guarantee.
+FOLIO's first-order annotations supply an additional benchmark for validating
+the logic checker~\cite{han2024folio}.
+
+% The source-note drafts require their owners' review before submission.
+% Xiong identity/overlap and circuit-biology reading remain outstanding;
+% no unsupported novelty claim or numerical result from those sources is made here.

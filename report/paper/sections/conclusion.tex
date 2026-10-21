@@ -1,32 +1,37 @@
-% =====================================================================
 % VI. LIMITATIONS AND CONCLUSION -- OWNER: Conor
-% =====================================================================
+% Sources: outputs/clean/paper_stats.json; checker_audit_sheet.md;
+% checker_audit_review.md; folio_validation_summary.json;
+% copy_vs_use_summary.json; copy_vs_use_baselines.json;
+% journal/2026-10-07-circuit-tracing.md.
 \section{Limitations and Conclusion}\label{sec:conclusion}
-% OUTLINE (comments only; no finished prose yet). About 0.4 column.
-%
-% Limitations
-% 1. One model (Qwen3-1.7B), one dataset (GSM8K), n = 50 per mode: the intervals
-%    are wide (Table I). -> outputs/clean/paper_stats.json
-% 2. Checker coverage: only steps written as equations or operator words are seen
-%    ("she has 9 left" is not). Coverage estimate from the hand counts: TBD (Conor).
-%    17 of 100 responses had no comparison. -> outputs/clean/checker_audit_sheet.md
-% 3. Steps within a response are not independent, so the step-level interval is
-%    optimistic. -> Section III-F
-% 4. The 0.6B/1.7B gap: tracing and planted working use Qwen3-0.6B, but the GSM8K
-%    outputs are from 1.7B. Transcoders approximate the MLPs, and the graph explains
-%    the replacement model, not Qwen3 directly. Prompts are short and the answer
-%    token is the first digit only.
-%    -> journal/2026-10-07-circuit-tracing.md "Why" (limitations list)
-% 5. FOLIO validates the checker only; no model logic outputs were checked.
-%    -> journal/2026-10-16.md
-% 6. Repetition loops and one truncation (thinking ID 21).
-%    -> 50-problem report "Data integrity"
-%
-% Future work (anything that missed the Wed 21 Oct 9pm freeze goes here)
-% - Translate free-text reasoning into FOL with human review, then run Qwen3 on FOLIO.
-% - Harder problems where natural errors are frequent enough to measure.
-% - Feature interventions on attribution graphs; 1.7B on larger-RAM hardware.
-% - Hint test / copy-vs-use, if they are not in Section IV.
-%
-% Conclusion: 2--3 sentences restating the answer to the research question and
-% the consistency-vs-faithfulness point.
+Our natural-output evaluation uses the first 50 GSM8K test problems and one
+model, Qwen3-1.7B. This small, non-random subset limits generalisation, and
+different sampling settings prevent attributing the accuracy difference solely
+to thinking. The contradiction bound covers only 83 comparable responses,
+excluding 17 others. Paired responses and repeated steps are dependent; the
+pooled response and step intervals do not fully account for this.
+
+The checker verifies supported numerical equalities, rather than every inference
+or the interpretation of the problem. A provisional ten-response review identifies
+missed calculations in prose and expressions with units; independent human
+confirmation remains outstanding. Repetition loops and one truncated thinking
+response further restrict the evidence. FOLIO validates the checker on supplied
+annotations only: no model reasoning was translated into logic and checked, and
+eight label disagreements remain unresolved.
+
+Planted-working and tracing experiments use Qwen3-0.6B rather than 1.7B.
+Eight hand-made addition prompts and first-digit probabilities cannot establish
+population rates or full-answer behaviour. Tracing uses a transcoder replacement
+model, whereas copy-vs-use uses original weights; attribution graphs alone do not
+establish causality. The copy-vs-use control favours repeating the supplied
+intermediate value with both wrong and correct working. This limits an
+interpretation of prompt sensitivity as arithmetic use, without establishing an
+internal copying mechanism. Future work should validate extraction with human
+review, test harder problems, translate reasoning into reviewed logical formulas,
+and apply controlled feature interventions. Hint results are still required to
+assess responses to misleading advice.
+
+Thinking improved accuracy in this sample, but neither mode produced a detected
+answer--working contradiction among comparable responses. Agreement is evidence
+of observable consistency, including agreement with faulty working; it does not
+establish that the written reasoning caused the answer.

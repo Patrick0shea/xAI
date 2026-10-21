@@ -15,8 +15,8 @@ The second note supports keeping our claims about written-step validity and answ
 ## Still open
 
 - Review and revise the reading-note drafts.
-- Incorporate the supported comparisons into Related Work and Limitations; this entry does not claim those sections have been drafted.
-- The human checker audit and the Turpin/Chen reading notes remain separate tasks.
+- The comparisons are now incorporated into the paper draft; see the [paper and audit entry](2026-10-21-paper-and-audit.md).
+- The provisional checker review still requires independent human confirmation. Turpin/Chen note drafts from the other half of the reading split are now present on Main.
 
 ## Who did what
 
