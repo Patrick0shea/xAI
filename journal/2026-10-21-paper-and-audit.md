@@ -2,6 +2,8 @@
 
 **Contribution:** Conor's paper sections and checker-audit preparation.
 
+**Author:** Conor.
+
 ## What was done / decided
 
 Drafted Related Work, Method C (logic checker and FOLIO validation), and
@@ -38,6 +40,26 @@ and repeated calculations. Since the counting convention needs human agreement,
 the paper records these limitations without claiming a validated numerical
 coverage percentage. The raw generations, checker code and benchmark statistics
 were preserved.
+
+## Reflection and next session
+
+The main issue in today's write-up was deciding what our results actually
+support. The zero-contradiction result looks strong until extraction coverage
+and the difference between consistency and faithfulness are considered. The
+age example makes a further distinction clear: checking an equation correctly
+does not check whether the model chose the right equation for the problem.
+
+The copy-vs-use baseline also changes how the planted-working result should be
+read. Repeating an intermediate value with both correct and incorrect working
+weakens the claim that sensitivity to the prompt shows the model using the
+arithmetic. The conclusion now includes that qualification rather than treating
+the intervention as confirmation of faithful reasoning.
+
+The next session should prioritise confirming the audit counts and recording
+any corrections, then checking that the final paper uses the same denominators
+and conclusions throughout. Before Friday's submission, any experiment without
+committed results needs to be clearly excluded from the findings. Further
+journal entries should record the work and decisions made on those days.
 
 ## Validation
 
