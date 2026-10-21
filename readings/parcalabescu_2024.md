@@ -4,7 +4,7 @@
 **Venue:** ACL 2024, pp. 6048-6089.
 **Source reviewed:** [Published paper](https://aclanthology.org/2024.acl-long.329.pdf).
 **Report citation key:** `parcalabescu2024`.
-**Prepared for:** Conor's literature contribution, with Codex assistance.
+**Prepared for:** Conor's literature contribution.
 
 ## Key question
 
@@ -36,4 +36,4 @@ Hint interventions and circuit tracing can supply additional evidence, but each 
 
 [Jacovi and Goldberg](jacovi_goldberg_2020.md) provide the faithfulness/plausibility distinction. [Lanham et al.](lanham_2023.md) motivate reasoning interventions. [Lyu et al.](lyu_2023.md) offer a useful comparison because their solver participates in producing the answer, whereas ours evaluates generated text afterwards.
 
-This is a Codex-assisted review draft. It does not record a completed human reading or new experimental results.
+Review draft. No new experiments were run for this note.

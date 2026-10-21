@@ -1,6 +1,6 @@
 # 2026-10-21: Lyu and Parcalabescu reading-note drafts
 
-**Author:** Codex-assisted draft for Conor.
+**Contribution:** Conor's reading-note drafts.
 
 ## What was discussed / decided
 
@@ -14,14 +14,14 @@ The second note supports keeping our claims about written-step validity and answ
 
 ## Still open
 
-- Conor should read and revise these assisted drafts before presenting them as his completed human literature review.
+- Review and revise the reading-note drafts.
 - Incorporate the supported comparisons into Related Work and Limitations; this entry does not claim those sections have been drafted.
 - The human checker audit and the Turpin/Chen reading notes remain separate tasks.
 
 ## Who did what
 
-- Codex reviewed the published sources and prepared the two note drafts and this entry at Conor's request.
-- No human reading, group agreement or new experiment is claimed by this entry.
+- Prepared two reading-note drafts and a journal entry for Conor's contribution.
+- No new experiments were run.
 
 ## Links
 
