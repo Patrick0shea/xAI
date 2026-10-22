@@ -10,9 +10,18 @@ remaining unmentioned in their explanations. Chen et al.~\cite{chen2025}
 extend hint-based tests to reasoning models, measuring acknowledgement
 among paired responses that switch to the hinted answer. These motivate
 intervention controls alongside our textual consistency checks.
-Arcuschin et al.~\cite{arcuschin2025} also investigate unfaithful reasoning
-on unmanipulated prompts, so natural-setting evaluation is not itself a
-novel contribution of our study.
+
+% OWNER: Emmett. Circuit tracing and Arcuschin
+Circuit tracing~\cite{ameisen2025} constructs attribution graphs through
+interpretable transcoder replacement models, with interventions used to test
+hypotheses about computational pathways. Our graph remains illustrative
+because we have not analysed edges or performed interventions. Arcuschin et
+al.~\cite{arcuschin2025} find unfaithful reasoning on naturally worded prompts,
+including contradictory justifications and illogical shortcuts.
+Natural-setting evaluation is therefore not novel here.
+Their findings motivate checking reasoning; our deterministic
+arithmetic checks assess local validity and answer consistency without
+certifying how an answer was produced.
 
 Parcalabescu and Frank argue that many explanation tests measure self-consistency
 rather than faithfulness to internal computation. Their CC-SHAP measure compares

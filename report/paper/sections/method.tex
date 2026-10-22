@@ -100,47 +100,22 @@ reviewed translation of its text into first-order logic.
 
 \subsection{Planted working and copy-vs-use}\label{sec:method-planted}
 
-We tested short, constructed prefixes on Qwen3-0.6B, using the format
-``Question / Working / Final answer:'' and scoring the next answer digit.
-The earlier circuit-tracing setup used a transcoder replacement model;
-loading the 1.7B transcoders exceeded the free Colab session's system RAM.
-Eight addition problems were evaluated with incorrect working, correct
-working, and no working. These hand-picked examples demonstrate sensitivity
-to supplied working; they do not estimate a population frequency.
-
-Our copy-vs-use control evaluates 30
-addition-then-multiplication problems before model evaluation, selecting
-cases by arithmetic constraints with seed 42. For example, for
-$(12+7)\times2$ with planted working $12+7=21$, using the intermediate
-value gives 42, copying gives 21, and recomputing gives 38. All selected
-cases have three distinct target first digits. Each has paired correct-working
-and no-working baselines (90 prefixes total). The runner uses original
-Qwen3-0.6B weights without transcoders, records the resolved model revision,
-and scores full-vocabulary next-token probabilities without sampling or
-renormalising over candidate digits. We report each candidate's mean
-probability and the number of global top-token predictions matching it;
-all other tokens form a separate category. For baseline interpretation, we
-also score the digit of the intermediate sum actually supplied in each
-working condition: the planted sum for wrong working and the correct sum
-for correct working. The three candidate labels in the exported summary
-remain defined by the wrong-working hypotheses in every condition.
-These measures concern only
-the first token, not complete answers or faithful internal computation.
-
-Circuit tracing~\cite{ameisen2025} succeeded on a 28-token planted-working
-prefix. We use its graph as an illustration only: edges and causal
-interventions have not been analysed.
-% OWNER: Emmett. OUTLINE:
-% - Qwen3-0.6B (1.7B transcoders do not load on free Colab), short prompts
-%   "Question / Working / Final answer:", first-digit probabilities.
-%   -> journal/2026-10-07-circuit-tracing.md
-% - Planted wrong working vs no working vs correct working (8 prompts): Table II.
-% - Copy-vs-use: the answer needs one more step after the working, so following the
-%   working, copying it, and the true path give different first digits.
-%   Completed: 30 fixed cases, 3 conditions; 90 prefixes.
-%   -> code/src/run_copy_vs_use.py; journal/2026-10-20-emmett.md
-% - Circuit tracing (ameisen2025) on the 28-token hand-made prompt: an illustration,
-%   not evidence of dependence (edges not inspected).
+% OWNER: Emmett. Sources: outputs/clean/copy_vs_use_summary.json,
+% outputs/clean/copy_vs_use_design.json, outputs/circuits/run_log.json.
+We tested Qwen3-0.6B only with ``Question / Working / Final answer:''
+prefixes, scoring the first answer digit. Eight hand-picked addition prompts
+compared wrong, correct and absent working. To separate copying from
+continued calculation, we fixed 30 addition-then-multiplication cases using
+arithmetic constraints and seed 42. Each had distinct first digits for copying
+the planted sum, multiplying it, and recomputing the true answer. Three
+working conditions gave 90 prefixes, evaluated with original weights without
+transcoders. We report full-vocabulary next-token probabilities and global
+top-token counts, without sampling or candidate renormalisation. These
+measure first-token behaviour, not complete answers. Separately, circuit
+tracing~\cite{ameisen2025} produced an illustrative graph for a short prefix
+using a transcoder replacement model; edges and interventions remain
+unanalysed. Loading 1.7B transcoders exceeded available RAM; these experiments
+do not characterise Qwen3-1.7B.
 
 \subsection{Hint test}\label{sec:method-hint}
 % OWNER: Fionn. OUTLINE:

@@ -80,79 +80,80 @@ Contradictions & 0 & 0 & 0 \\
 
 \subsection{Planted working and copy-vs-use}\label{sec:res-planted}
 
-Table~\ref{tab:planted} reports first-digit probabilities for eight
-constructed addition problems. Without working, the true digit receives
-mean probability 0.747; with correct working, 0.992. With incorrect working,
-the digit matching the planted answer receives mean probability 0.979,
-while the true digit receives 0.0029. Thus supplied incorrect working
-strongly changes the next-token distribution in these examples. The
-0.94--0.99 range is a range of probabilities, not the proportion of prompts
-following the working. Because copying the planted answer predicts the
-same digit, this experiment alone cannot establish arithmetic use of the
-working. The copy-vs-use control (Table~\ref{tab:copyuse}) favours the copying
-prediction in all 30 wrong-working cases: mean probability 0.859,
-compared with 0.037 for applying the remaining multiplication to the
-planted sum and 0.016 for recomputing the true answer. No other token is
-the global top prediction in those cases.
+% OWNER: Emmett. Copy-vs-use numbers: outputs/clean/copy_vs_use_summary.json.
+All planted-working and copy-vs-use experiments used Qwen3-0.6B only.
+In the eight addition examples (Table~\ref{tab:planted}), wrong working
+shifted probability towards its stated answer. However, copying and
+arithmetic use predict the same digit in this setup, so that result alone
+cannot distinguish them.
 
-However, with correct working the top token also matches the supplied
-intermediate sum in 30/30 cases (mean probability 0.881), while the true
-final-answer digit receives mean probability 0.046 and is never the top
-token. Without working, the true digit is the top token in 20/30 cases
-(mean probability 0.387). Thus the plain prefix appears to encourage
-repeating a supplied intermediate value even when it is correct, rather
-than completing the operation requested in the question. This is evidence
-against interpreting the earlier planted-answer sensitivity as arithmetic
-use, but it does not establish a copying mechanism internally. These are
-first-token results on constructed prompts with original 0.6B weights;
-the earlier tracing setup used a transcoder replacement model, limiting
-direct comparison.
-% OWNER: Emmett. OUTLINE:
-% - Table II: a planted wrong working overrides the model's own default answer.
-%   8 hand-picked prompts, first digit only, Qwen3-0.6B: it demonstrates the effect
-%   and is not a rate. -> journal/2026-10-07-circuit-tracing.md
-% - Table IV: wrong-working first digits favour copying (30/30);
-%   correct-working baseline also repeats the intermediate value (30/30).
-% - Optional figure: outputs/circuits/hand_12plus7_working21.png (illustration only).
+The copy-vs-use control separates those predictions. With wrong working,
+the model copies the planted number in 30/30 global top-token predictions
+(mean probability $\approx0.86$), rather than carrying on from it
+($\approx0.04$) or giving the true answer ($\approx0.02$). The latter two
+candidates are never the global top token; Table~\ref{tab:copyuse} gives
+three-decimal means. Without working, the true-answer digit is top in
+20/30 cases (mean probability 0.387). With correct working, the true-answer
+digit has mean probability 0.046 and is never top. Candidate labels remain
+fixed to the wrong-working hypotheses; the summary's baseline ``copy''
+category therefore does not measure copying the correct intermediate sum.
+
+This supports copying as the behavioural description on these constructed
+prefixes; it does not establish an internal copying mechanism or complete-answer
+accuracy. Figure~\ref{fig:tracing} illustrates the separate tracing setup,
+without analysed edges or interventions. Neither these 0.6B results nor the
+illustrative graph tells us whether Qwen3-1.7B uses its reasoning.
+
 \begin{table}[t]
 \centering
-\caption{Planted working on Qwen3-0.6B (8 hand-made addition prompts): probability of
-the first answer digit. Min--max over prompts (mean).}
+\caption{Qwen3-0.6B first-digit results. Means over prompts;
+counts indicate the global top token over the full vocabulary.
+Addition examples cannot separate copying from arithmetic use.}
 \label{tab:planted}
-% Source: outputs/circuits/hand_made_behavioural.csv and hand_made_baseline.csv
-% (min, max and mean computed from the committed CSVs).
-\begin{tabular}{@{}llc@{}}
-\toprule
-Working in prompt & Digit & $p$ \\
-\midrule
-None & true answer & 0.68--0.83 (0.75) \\
-Correct & true answer & 0.990--0.996 (0.992) \\
-Wrong & follows working & 0.94--0.99 (0.98) \\
-Wrong & true answer & 0.0005--0.013 (0.003) \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[t]
-\centering
-\caption{Copy-vs-use on Qwen3-0.6B: 30 constructed problems with wrong
-working. Probabilities are means over prompts; counts use the global
-top token over the full vocabulary.}
 \label{tab:copyuse}
-% Source: outputs/clean/copy_vs_use_summary.json, verified from
-% outputs/raw/copy_vs_use.jsonl by code/src/analyze_copy_vs_use.py.
+% Addition source: outputs/clean/planted_table_audit.json, derived from
+% outputs/circuits/hand_made_behavioural.csv and hand_made_baseline.csv.
+% Copy-vs-use source: outputs/clean/copy_vs_use_summary.json.
 \footnotesize
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}lcc@{}}
 \toprule
-First digit matches & Mean $p$ & Top token \\
+Condition / first digit matches & Mean $p$ & Top token \\
 \midrule
-Using the planted sum & 0.037 & 0/30 \\
+\multicolumn{3}{@{}l}{\emph{Addition only (8 hand-picked prompts)}} \\
+No working: true answer & 0.747 & -- \\
+Correct working: true answer & 0.992 & -- \\
+Wrong working: stated answer & 0.979 & -- \\
+Wrong working: true answer & 0.003 & -- \\
+\midrule
+\multicolumn{3}{@{}l}{\emph{Copy-vs-use, wrong working (30 fixed cases)}} \\
 Copying the planted sum & 0.859 & 30/30 \\
-True path from the question & 0.016 & 0/30 \\
+Carrying on from the planted sum & 0.037 & 0/30 \\
+True answer from the question & 0.016 & 0/30 \\
 Other token & -- & 0/30 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[t]
+\centering
+% Crop viewer chrome and empty details pane; retain all plotted nodes,
+% layer labels and token labels. Original screenshot: outputs/circuits/.
+% Keep the original feature map and add readable labels at column width.
+\setlength{\unitlength}{\dimexpr\columnwidth/252\relax}
+\begin{picture}(252,118)
+\put(0,0){\includegraphics[width=\columnwidth,trim=8 98 524 100,clip]{figures/planted-working-trace.png}}
+\put(132,65){\makebox(0,0)[l]{\scriptsize Working's ``2''}}
+\put(199,104){\makebox(0,0)[l]{\scriptsize Output}}
+\end{picture}
+\caption{Feature-location view from circuit tracing on a Qwen3-0.6B
+transcoder replacement model, with viewer pruning set to 0.30.
+Prompt: ``Question: $12+7=?$ Working: $12+7=21$.
+Final answer:''. Nodes appear at the working's ``2'' token and near
+the output position. No edges are displayed or analysed; locations alone
+do not establish causal dependence or a copying mechanism.}
+\label{fig:tracing}
+\end{figure}
 
 \subsection{Hint test}\label{sec:res-hint}
 % OWNER: Fionn. OUTLINE:
@@ -202,6 +203,9 @@ Truncated: baseline / hint & 1 / 8 & 0 / 0 \\
 \end{table}
 
 \subsection{Logic checker validation on FOLIO}\label{sec:res-folio}
+Table~\ref{tab:folio} summarises validation against supplied FOLIO annotations;
+no model outputs were evaluated.
+
 % OWNER: Conor (table), placed here or in Section III-C to save space.
 % State it clearly: this validates the checker against dataset labels. It is not a
 % faithfulness result. -> journal/2026-10-16.md; journal/2026-10-20.md
