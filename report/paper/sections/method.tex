@@ -48,36 +48,26 @@ SHA-256 hash. All results here use the corrected parser and regenerated
 statistics, including the corrected denominator of 83 comparable responses.
 
 \subsection{Arithmetic consistency checker}\label{sec:method-arith}
-% OWNER: Patrick (first draft 2026-10-20, written with Claude Code). Describes
-% code/src/arithmetic_checker.py as it works: exact Fraction arithmetic, NOT SymPy.
-% Sources: journal/2026-10-06.md; code/src/test_arithmetic_checker.py;
-% outputs/clean/checker_audit_sheet.md.
-The checker reads the reasoning text: the thinking in thinking mode, or the response
-up to its ``Final answer'' line in no-thinking mode. It first normalises LaTeX
-(\verb|\times|, \verb|\frac|, \verb|\cdot|), Unicode operators, word operators
-(``times'', ``divided by'', ``is''), thousands separators and percentages, and splits
-the text into clauses so numbers from different clauses never merge. It then extracts
-equation chains such as $a = b = c$ and checks each adjacent pair whose left side
-contains an operator. Clauses with variables or other unsupported text are skipped,
-not counted as wrong.
+% OWNER: Patrick (first draft 2026-10-20, revised 2026-10-22, written with Claude Code).
+% Describes code/src/arithmetic_checker.py as it works: exact Fraction arithmetic, NOT
+% SymPy. Sources: journal/2026-10-06.md; code/src/test_arithmetic_checker.py.
+% The sentences from "A provisional review" to "independent human validation." are
+% Conor's (commit 3e3a0f7), kept verbatim. Sources: outputs/clean/checker_audit_review.md.
+The checker reads the thinking or, without thinking, the response before its
+``Final answer'' line. It normalises LaTeX, Unicode and word operators, splits the
+text into clauses, and extracts equation chains such as
+$a = b = c$, checking each adjacent pair whose left side contains an operator. Both
+sides are evaluated exactly with Python's \texttt{fractions.Fraction}; a step is
+valid if they are equal, or equal after rounding to the decimals the model wrote. Anything it cannot parse, including clauses
+with variables, is skipped rather than marked wrong: the checker misses steps rather
+than inventing errors.
 
-Each side is evaluated with exact rational arithmetic (Python's
-\texttt{fractions.Fraction}), so decimals introduce no floating-point error. A step is
-valid if the two sides are equal, or equal after rounding to the number of decimals
-the model wrote (so $20/3 = 6.67$ passes). An invalid step followed within 200
-characters by words such as ``wait'' or ``actually'' is marked as possibly corrected;
-this is a heuristic, which we confirmed by hand only for ID~26.
-
-The \emph{implied answer} is the answer the working itself reaches. In thinking mode
-it is the last ``Final answer'' or \verb|\boxed{}| inside the thinking. In no-thinking
-mode it is a consistent \verb|\boxed{}| value in the working, or else the result of
-the last step if no other number follows it. A \emph{contradiction} is a final answer
-that differs from the implied answer. Responses with no implied answer, and truncated
-responses, are not compared.
-
-On a 20-problem pilot, the first version of the checker flagged 53 invalid steps, of
-which only one was a real model error; each false-positive pattern now has a
-regression test. A provisional review agrees with the arithmetic verdict on all
+A response is \emph{comparable} when it is untruncated and has both a final and an
+implied answer. The implied answer is the last ``Final answer'' or
+\verb|\boxed{}| in the thinking or, without thinking, a consistent boxed value in the
+working or the result of its last step when no later number follows. A
+\emph{contradiction} is a comparable response whose two answers differ.
+A provisional review agrees with the arithmetic verdict on all
 four invalid occurrences and 20 sampled valid occurrences. This checks numerical
 equality, not whether a calculation correctly models the problem. A separate
 ten-response review records calculations missed by extraction, including prose
@@ -188,9 +178,7 @@ following the hint. The raw prompt, generations, configuration and source
 hashes are retained for reproduction.
 
 \subsection{Statistics}\label{sec:method-stats}
-% OWNER: Patrick (first draft 2026-10-20, written with Claude Code).
-% Sources: code/src/paper_stats.py; outputs/clean/paper_stats.json.
-We compare paired correctness between modes with an exact McNemar test. Accuracy and
-the invalid-step rate have Wilson 95\% intervals. Because no contradictions occurred,
-we report exact Clopper--Pearson 95\% bounds for the contradiction rate. Steps within
-one response are not independent, so the step-level interval is optimistic.
+% OWNER: Patrick (first draft 2026-10-20, revised 2026-10-22, written with Claude Code).
+% Sources: code/src/paper_stats.py; outputs/clean/paper_stats.json (interval_method fields).
+Paired correctness uses an exact McNemar test; accuracy and invalid-step rates use
+Wilson 95\% intervals; contradiction rates use exact Clopper--Pearson 95\% bounds.

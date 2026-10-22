@@ -1,36 +1,28 @@
 % =====================================================================
-% V. DISCUSSION -- OWNER: Patrick (first draft 2026-10-20, written with Claude Code)
-% Sources: journal/2026-10-15.md (point 2, consistency vs faithfulness);
-% journal/2026-10-06.md (53 -> 1 false positives); journal/2026-10-20.md;
-% journal/2026-10-07-circuit-tracing.md; outputs/clean/paper_stats.json;
-% outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md (ID 11);
-% outputs/circuits/hand_made_*.csv (Table II).
+% V. DISCUSSION -- OWNER: Patrick (first draft 2026-10-20, revised 2026-10-22, written
+% with Claude Code). The text from "In the copy-vs-use control," to the "% Sources"
+% comment after it is Emmett's (commit adceff8), kept verbatim.
+% Sources: outputs/clean/paper_stats.json; qwen3_1.7b_gsm8k_50_completed_arithmetic_summary.json;
+% qwen3_1.7b_gsm8k_50_completed_report.md (ID 11); outputs/clean/copy_vs_use_summary.json;
+% outputs/raw/copy_vs_use.config.json (Qwen3-0.6B); hint_experiment_protocol.md;
+% journal/2026-10-21.md (hint run on CPU, fp32, ATEN_CPU_CAPABILITY=default; baseline GPU fp16).
 % =====================================================================
 \section{Discussion}\label{sec:discussion}
-\textbf{Consistency is not faithfulness.} Whenever the checker could compare them,
-Qwen3's final answer matched the answer its working arrived at: 0 of 45 thinking and
-0 of 38 no-thinking responses (Table~\ref{tab:gsm8k}). This is a result about
-consistency. A model could reach its answer some other way and still write working
-that ends on the same number, and output-level tests of this kind measure
-self-consistency rather than faithfulness to the model's inner
-workings~\cite{parcalabescu2024}. Our 0/83 bounds how often the answer visibly
-contradicts the working (at most 4.3\% at 95\% confidence). It cannot show that the
-working caused the answer.
+\textbf{Consistent where checkable.} Wherever the checker could compare them,
+Qwen3-1.7B's final answer matched the answer its working reached: 0 of 45 thinking
+and 0 of 38 no-thinking responses (pooled 95\% upper bound 4.3\%;
+Table~\ref{tab:gsm8k}). Natural errors were rare (4 of 924 checked steps), so the
+test seldom could fire, and it is silent on the 17 responses without an implied
+answer. ID~11 answered 700 after summing
+$204+160+330$ to 700: consistent, and wrong.
 
-\textbf{Why the null result.} The test only fires when the working and the answer come
-apart, and on GSM8K the written arithmetic is almost always right: 4 of 924 checked
-steps were wrong, and the model corrected one of them itself. With so few natural
-errors, an answer that ignores its working has little chance to show, so the test has
-low power on easy problems. ID~11 shows the opposite case. Without thinking, the model
-summed $204+160+330$ to 700 instead of 694 and answered 700: the answer followed the
-faulty working exactly, so it was consistent and wrong.
-
-\textbf{Sensitivity to the working.} The planted-working test comes from the other
-direction. With a wrong working in the prompt, Qwen3-0.6B's first answer digit follows
-the working with probability 0.94--0.99. Given no working, it gives the true answer's
-first digit with probability 0.68--0.83 (Table~\ref{tab:planted}). The model is
-therefore sensitive to written reasoning, but this test cannot separate \emph{using}
-the working from \emph{copying} its last number. In the copy-vs-use control,
+\textbf{Consistency is not faithfulness.} A model could reach its answer by another
+route and still write working that ends on the same number. Agreement between output
+and explanation measures self-consistency, not faithfulness to the internal
+computation~\cite{parcalabescu2024}, and a plausible explanation need not be a
+faithful one~\cite{jacovi2020}. Planted wrong working pulls Qwen3-0.6B's first answer
+digit towards it (Table~\ref{tab:planted}), but cannot separate \emph{using} the
+working from \emph{copying} its last number. In the copy-vs-use control,
 the copying digit is the global top token on all 30 wrong-working prompts
 (mean probability 0.859; Table~\ref{tab:copyuse}). Correct-working prompts also
 repeat the intermediate sum on all 30 cases, suggesting that the prefix format
@@ -41,21 +33,20 @@ model whose outputs we checked, and the control uses original weights whereas
 the earlier tracing setup used a transcoder replacement model.
 % Sources: outputs/clean/copy_vs_use_summary.json; copy_vs_use_baselines.json.
 
-\textbf{Provoked unfaithfulness.} Prior work finds that models often use hints in the
-prompt without mentioning them in their reasoning~\cite{turpin2023,chen2025}. Our hint
-test: \textbf{TBD} (Table~\ref{tab:hint}).
-% TODO (Patrick + Fionn, after the freeze): contrast the hint result with the
-% natural-error null. If the hint test missed the freeze, delete this paragraph and
-% keep one sentence in Future Work (Section VI).
-
-\textbf{Thinking versus no thinking.} Thinking mode solved six problems that
-no-thinking mode missed and none the other way (exact McNemar $p = 0.031$). Both
-modes had zero contradictions, so we find no difference in consistency, and we do not
-claim that thinking-mode reasoning is more faithful.
-
-\textbf{Checker errors look like model errors.} Our first arithmetic checker flagged 53
-invalid steps on a 20-problem pilot, and only one of them was a real model error.
-Later, a stale summary and an uncommitted parser fix changed our reported counts until
-we regenerated every number from the raw outputs. A formal checker is only as reliable
-as the extraction in front of it.
-% Cut this paragraph first if over the page limit.
+\textbf{Hint test.} A misleading hint tests faithfulness more directly:
+following a hint the reasoning never mentions suggests the reasoning is an incomplete
+account of the answer~\cite{turpin2023,chen2025}, though not what the mechanism is.
+% PROVISIONAL -- DO NOT CITE until the run completes (thinking mode, 47 of 50
+% problems, CPU run; not from a committed output file):
+%   - 4/47 answered with the hint (IDs 12, 29, 37, 43); 12 and 43 had been correct
+%     without the hint.
+%   - Mean thinking length 5,418 vs 1,958 tokens without the hint.
+%   - 8 hit the 8,192-token limit vs 1 without the hint; 5 of those 8 mention the teacher.
+%   - Accuracy 35/47 vs 43/47.
+With thinking, \textbf{TBD} of \textbf{TBD} answers matched the incorrect hint,
+\textbf{TBD} of which had been correct without it, and \textbf{TBD} of the
+hint-following responses mentioned the teacher. Two caveats apply. The hint run used different
+hardware from the baseline (CPU, 32-bit floats, \texttt{ATEN\_CPU\_CAPABILITY=default},
+versus GPU, 16-bit), so equal seeds need not give equal samples. And the consistency
+checker cannot score responses that never reach an answer, so a hint that derails
+reasoning without redirecting the answer is invisible to it.
