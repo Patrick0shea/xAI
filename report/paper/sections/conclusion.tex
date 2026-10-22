@@ -1,39 +1,25 @@
 % VI. LIMITATIONS AND CONCLUSION -- OWNER: Conor
-% Sources: outputs/clean/paper_stats.json; checker_audit_sheet.md;
-% checker_audit_review.md; folio_validation_summary.json;
-% copy_vs_use_summary.json; copy_vs_use_baselines.json;
-% journal/2026-10-07-circuit-tracing.md.
+% Sources: paper_stats.json; checker_audit_sheet.md; folio_validation_summary.json;
+% copy_vs_use_summary.json; qwen3_1.7b_gsm8k_50_hint_summary.json.
 \section{Limitations and Conclusion}\label{sec:conclusion}
-Our natural-output evaluation uses the first 50 GSM8K test problems and one
-model, Qwen3-1.7B. This small, non-random subset limits generalisation, and
-different sampling settings prevent attributing the accuracy difference solely
-to thinking. The contradiction bound covers only 83 comparable responses,
-excluding 17 others. Paired responses and repeated steps are dependent; the
-pooled response and step intervals do not fully account for this.
+The natural-output evaluation covers one model and the first 50 GSM8K problems,
+limiting generalisation. Different sampling settings confound attributing accuracy
+gains solely to thinking. The contradiction bound excludes 17 incomparable
+responses; paired responses and repeated steps are dependent. Extraction misses
+prose and unit-bearing calculations, while valid arithmetic can misinterpret a
+problem. Repetition and truncation further restrict the evidence.
 
-The checker verifies supported numerical equalities, rather than every inference
-or the interpretation of the problem. A provisional ten-response review identifies
-missed calculations in prose and expressions with units; independent human
-confirmation remains outstanding. Repetition loops and one truncated thinking
-response further restrict the evidence. FOLIO validates the checker on supplied
-annotations only: no model reasoning was translated into logic and checked, and
-eight label disagreements remain unresolved.
+FOLIO validates supplied annotations only, with eight unresolved label disagreements;
+no model reasoning was checked. Copy-vs-use was run on Qwen3-0.6B only, whereas
+the main evaluation uses 1.7B. Constructed prompts and first-digit probabilities
+cannot establish population rates or full-answer behaviour. Tracing approximates
+the network, and attribution graphs alone do not establish causality. All five
+hint followers acknowledged the suggestion, but hardware differences limit
+causal attribution to the hint.
 
-Planted-working and tracing experiments use Qwen3-0.6B rather than 1.7B.
-Eight hand-made addition prompts and first-digit probabilities cannot establish
-population rates or full-answer behaviour. Tracing uses a transcoder replacement
-model, whereas copy-vs-use uses original weights; attribution graphs alone do not
-establish causality. The copy-vs-use control favours repeating the supplied
-intermediate value with both wrong and correct working. This limits an
-interpretation of prompt sensitivity as arithmetic use, without establishing an
-internal copying mechanism. Future work should validate extraction with human
-review, test harder problems, translate reasoning into reviewed logical formulas,
-and apply controlled feature interventions. The misleading-hint test found five
-followers across the two modes, all acknowledging the supplied answer. It
-therefore found no undisclosed hint following; hardware differences between
-baseline and hint runs limit attribution of the observed changes to the hint alone.
-
-Thinking improved accuracy in this sample, but neither mode produced a detected
-answer--working contradiction among comparable responses. Agreement is evidence
-of observable consistency, including agreement with faulty working; it does not
-establish that the written reasoning caused the answer.
+Future work should validate extraction coverage, test harder problems, review
+logical translations and apply controlled feature interventions. Thinking improved
+accuracy in this sample, but zero detected answer--working contradictions
+establishes observable consistency, including agreement with faulty working,
+rather than faithful internal computation. The copy-vs-use result likewise
+cautions against treating prompt sensitivity as arithmetic use.

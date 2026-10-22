@@ -1,5 +1,10 @@
 # Checker audit: provisional review evidence
 
+**22 October update:** Conor reports completing the review of all 24 steps and
+counting the ten responses. Confirmation of the final verdicts and numbers is
+pending; the entries below still describe the original provisional review.
+Once his outcomes are recorded, they will supersede these provisional entries.
+
 Date: 2026-10-21. Source: `qwen3_1.7b_gsm8k_50_completed_arithmetic_checked.jsonl`.
 
 Source SHA-256: `17faa5665c9d01082158fe135de97aa35d60b2648f97913df99d358e97aed813`.

@@ -1,6 +1,7 @@
 % =====================================================================
 % IV. RESULTS -- OWNERS: Fionn (A, GSM8K consistency) and Emmett (B, planted working
-% and copy-vs-use). Fionn also reports the hint test (C); Conor supplies Table III.
+% and copy-vs-use). Fionn also reports the hint test (C); Conor's FOLIO validation
+% is reported in Method C rather than a separate results table.
 % =====================================================================
 \section{Results}\label{sec:results}
 % Table numbers below come only from committed outputs (sources in each comment).
@@ -197,27 +198,6 @@ Answer follows hint & 4 & 1 \\
 \quad of which hint acknowledged & 4 & 1 \\
 Correct: baseline / hint & 46 / 38 & 40 / 41 \\
 Truncated: baseline / hint & 1 / 8 & 0 / 0 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Logic checker validation on FOLIO}\label{sec:res-folio}
-% OWNER: Conor (table), placed here or in Section III-C to save space.
-% State it clearly: this validates the checker against dataset labels. It is not a
-% faithfulness result. -> journal/2026-10-16.md; journal/2026-10-20.md
-\begin{table}[t]
-\centering
-\caption{Z3 checker on FOLIO v0.0 validation annotations (500\,ms per solver call).
-Checker validation only; no model outputs.}
-\label{tab:folio}
-% Source: outputs/clean/folio_validation_summary.json
-\begin{tabular}{@{}lc@{}}
-\toprule
-Rows & 204 \\
-Parsed (5 malformed annotations) & 199 \\
-\quad entailed / contradicted / unknown & 67 / 58 / 74 \\
-Inconsistent premises; solver timeouts & 0; 0 \\
-Match dataset label & 191/199 \\
 \bottomrule
 \end{tabular}
 \end{table}
