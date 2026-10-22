@@ -67,7 +67,8 @@ Intervals are from [`outputs/clean/paper_stats.json`](outputs/clean/paper_stats.
   [Results](outputs/clean/copy_vs_use_summary.json),
   [baseline checks](outputs/clean/copy_vs_use_baselines.json),
   [Colab notebook](code/notebooks/copy_vs_use.ipynb).
-- Hint experiment
+- Hint experiment: final outputs and named human attribution review pending.
+  [Completion checklist](outputs/clean/hint_completion_checklist.md).
 
 Details: [`outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md`](outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md)
 and [`journal/2026-10-20.md`](journal/2026-10-20.md).

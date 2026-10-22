@@ -22,29 +22,32 @@
 %   (repetition loop, truncated).
 %   -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md "Five examples"
 % - Human audit result (Conor): TBD. -> outputs/clean/checker_audit_sheet.md
-Thinking answered 46 of 50 problems correctly (92\%), compared with 40 of 50
-(80\%) without thinking (Table~\ref{tab:gsm8k}). Six paired problems were
-correct only with thinking, and none only without it (exact McNemar
-$p=0.03125$). This is a result on the first 50 test problems, rather than a
-random sample of the full benchmark.
+Thinking answered 46/50 problems correctly (92\%), compared with 40/50 (80\%)
+without thinking (Table~\ref{tab:gsm8k}). Six problems were correct only with
+thinking, none only without it (exact McNemar $p=0.03125$). These are the first
+50 test problems, not a random benchmark sample.
 
-The checker detected no final-answer contradiction among 45 thinking and 38
-no-thinking responses. The pooled count is therefore 0/83, with a two-sided
-exact 95\% interval whose upper endpoint is 4.3\%. This bound concerns the
-checker-comparable responses under the interval's sampling assumptions; it
-does not cover the 17 excluded responses or establish that the model used its
-written reasoning. The two responses for each problem are also paired, so the
-pooled interval should be read as descriptive rather than as accounting for
-within-problem dependence. The previously reported denominator of 74 could
-not be reproduced and is superseded by these regenerated counts.
+The checker detected no final-answer contradictions among 45 thinking and 38
+no-thinking responses: 0/83 pooled, with a two-sided exact 95\% interval whose
+upper endpoint is 4.3\%. This bound concerns checker-comparable responses
+under the interval's sampling assumptions. It excludes 17 responses and does
+not establish use of written reasoning. Because responses are paired within
+problems, the pooled interval is descriptive and does not account for that
+dependence. The regenerated denominator of 83 supersedes the unreproducible
+earlier count of 74.
 
-There were four invalid arithmetic occurrences among 924 checked steps:
-three with thinking and one without. Thinking ID~26 subsequently corrected
-its addition error and reached the correct answer. No-thinking ID~11 instead
-wrote $204+160+330=700$ and answered 700, although the sum is 694. Agreement
-between the answer and erroneous working therefore passes a consistency test
+Comparability requires an extracted implied answer and a completed response.
+Unsupported expressions and calculations missed by extraction therefore limit
+what the absence of detected contradictions can show.
+
+Four of 924 checked arithmetic steps were invalid: three with thinking, one
+without. Thinking ID~26 corrected its addition error and answered correctly.
+No-thinking ID~11 wrote $204+160+330=700$ and answered 700, although the sum
+is 694. Thus agreement with erroneous working passes a consistency test
 without establishing correctness. One thinking response exhausted its token
-budget. Independent human checker-audit results remain outstanding.
+budget. Independent human checker-audit results remain outstanding; these
+counts describe extracted arithmetic, rather than all calculations in the
+responses.
 
 \begin{table}[t]
 \centering
@@ -155,8 +158,10 @@ Other token & -- & 0/30 \\
 % OWNER: Fionn. OUTLINE:
 % - Table V: how often the answer follows a misleading hint, and how often the
 %   thinking mentions the hint when it does. TBD.
-% - If it misses the Wed 21 Oct 9pm freeze: delete this subsection and Table V,
-%   and move the design to Future Work (Section VI). -> journal/2026-10-20.md
+% - Revised deadline: Friday 23 Oct, 14:00 Europe/Dublin (22 Oct instruction).
+% - Populate from the complete summary only after named human attribution review.
+% - Results C target: about 150 words. Cover paired switches, acknowledgement,
+%   accuracy, truncation and the runtime confound; no preliminary totals here.
 \begin{table}[t]
 \centering
 \caption{Misleading-hint test (Fionn). Placeholder until the results are committed.}
