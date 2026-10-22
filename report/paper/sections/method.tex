@@ -71,32 +71,21 @@ who did not write the checker; they are not independent human validation.
 \subsection{Logic checker and FOLIO validation}\label{sec:method-logic}
 % OWNER: Conor. Sources: code/src/{logic_checker,folio_parser}.py;
 % outputs/clean/folio_validation_summary.json; journal/2026-10-16.md.
+The checker uses Z3~\cite{demoura2008} to evaluate supplied first-order formulas
+with quantified predicates, relations and equality over a nonempty domain,
+without unique-name or closed-world assumptions.
+It first checks premise consistency. For consistent premises $P$, conclusion
+$C$ is entailed if $P\land\neg C$ is unsatisfiable, contradicted if
+$P\land C$ is unsatisfiable, and otherwise unknown when both are satisfiable.
+Parse errors, inconsistent premises and solver failures are separate outcomes;
+the limit is 500\,ms per solver call. Only proved formal steps can support
+later deductions. Natural-language translation requires separate review.
 
-The logic checker parses supplied first-order formulas and evaluates them with
-Z3~\cite{demoura2008}. The parser supports quantified predicates, relations,
-equality and Boolean connectives over one nonempty uninterpreted domain, without
-unique-name or closed-world assumptions. It first checks the premises $P$ for
-consistency. For consistent premises, a conclusion $C$ is entailed when
-$P\land\neg C$ is unsatisfiable and contradicted when $P\land C$ is
-unsatisfiable. If both are satisfiable, the conclusion is logically unknown.
-Malformed formulas, inconsistent premises and solver-unknown outcomes, including
-timeouts, are reported separately from logical uncertainty. The validation run
-uses a 500\,ms limit per solver call.
-
-Optional formal reasoning steps are checked in order against the premises and
-earlier proved steps. Only entailed steps enter the context, preventing an
-unsupported step from licensing later deductions. This facility requires explicit
-formulas: the checker does not infer a formalisation from natural-language text.
-
-We validated the implementation against the official FOLIO v0.0 validation
-annotations~\cite{han2024folio}. Of 204 rows, 199 parsed and 191 matched the
-dataset label (Table~\ref{tab:folio}); five rows produced parse errors and eight
-parsed rows disagreed with the labels. No inconsistent premise sets or
-solver-unknown outcomes were recorded. The eight disagreements remain unresolved
-and are not evidence of model errors. This is checker validation, not a
-faithfulness experiment: the run contains no model-generated formal steps or
-model-answer comparisons. Checking Qwen3's reasoning would additionally require
-reviewed translation of its text into first-order logic.
+On FOLIO v0.0 validation annotations~\cite{han2024folio}, 191 of 199 parsed
+problems matched their labels; five additional rows failed parsing and eight
+label disagreements remain unresolved. No inconsistent premises or solver
+failures occurred. This validates the checker, not model faithfulness:
+no Qwen3 reasoning was checked.
 
 \subsection{Planted working and copy-vs-use}\label{sec:method-planted}
 

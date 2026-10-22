@@ -1,15 +1,13 @@
 % II. RELATED WORK -- OWNERS: Conor and Emmett
-% Sources: readings/*.md. Shared prose integrates both contributions.
 \section{Related Work}\label{sec:related}
+% Shared context and Emmett's hint-literature contribution.
 Faithfulness concerns whether an explanation reflects the model's actual
 reasoning, distinct from whether it appears plausible~\cite{jacovi2020}.
-Lanham et al.~\cite{lanham2023} probe dependence on chain-of-thought by
-truncating it, inserting mistakes, and paraphrasing it. Turpin et
-al.~\cite{turpin2023} show that input biases can change answers while
-remaining unmentioned in their explanations. Chen et al.~\cite{chen2025}
-extend hint-based tests to reasoning models, measuring acknowledgement
-among paired responses that switch to the hinted answer. These motivate
-intervention controls alongside our textual consistency checks.
+Turpin et al.~\cite{turpin2023} show that input biases can change answers
+while remaining unmentioned in their explanations. Chen et al.~\cite{chen2025}
+extend hint-based tests to reasoning models, measuring acknowledgement among
+paired responses that switch to the hinted answer. These motivate intervention
+controls alongside textual consistency checks.
 
 % OWNER: Emmett. Circuit tracing and Arcuschin
 Circuit tracing~\cite{ameisen2025} constructs attribution graphs through
@@ -23,27 +21,20 @@ Their findings motivate checking reasoning; our deterministic
 arithmetic checks assess local validity and answer consistency without
 certifying how an answer was produced.
 
-Parcalabescu and Frank argue that many explanation tests measure self-consistency
-rather than faithfulness to internal computation. Their CC-SHAP measure compares
-input contributions to answer and explanation generation~\cite{parcalabescu2024}.
-Our consistency measure is narrower: agreement between a final answer and the
-answer extracted from its written working, without computing input attributions.
+% Conor: Lanham, NSF-CoT, Lyu and Parcalabescu.
+Lanham et al.~\cite{lanham2023} probe answer dependence by truncating,
+corrupting and paraphrasing reasoning. NSF-CoT~\cite{pramanik2026} combines
+formal verification with an LLM entailment component to assess written steps.
+Lyu et al.'s Faithful CoT~\cite{lyu2023} generates symbolic instructions and
+executes them with a deterministic solver, making that chain responsible for
+the answer without guaranteeing correct translation. Our checker instead
+evaluates already generated arithmetic or formal annotations; it does not
+produce Qwen3's answer. Parcalabescu and Frank~\cite{parcalabescu2024} distinguish
+self-consistency from faithfulness to internal computation; their CC-SHAP
+compares input contributions to answer and explanation generation. Our narrower
+measure checks agreement between recoverable working and the final answer.
+Thus deterministic verification complements interventions but cannot establish
+that written reasoning caused an answer.
 
-NSF-CoT~\cite{pramanik2026} combines formal verification with an LLM-based
-entailment component to assess written steps. Our narrower arithmetic
-checker evaluates extracted equations deterministically using exact
-rational arithmetic. It measures local arithmetic validity and agreement
-between a recoverable implied answer and the final answer; it does not
-verify all natural-language reasoning or establish causal faithfulness.
-Lyu et al.'s Faithful CoT instead translates a query into a chain containing
-symbolic instructions and executes it with a deterministic solver~\cite{lyu2023}.
-Execution makes that chain responsible for the system's answer, while leaving
-the translation process and its correctness as separate concerns. Our checker
-evaluates already generated expressions or formal annotations; it does not
-produce Qwen3's answer and provides no equivalent execution guarantee.
-FOLIO's first-order annotations supply an additional benchmark for validating
-the logic checker~\cite{han2024folio}.
-
-% The source-note drafts require their owners' review before submission.
-% Xiong identity/overlap and circuit-biology reading remain outstanding;
-% no unsupported novelty claim or numerical result from those sources is made here.
+% Source-note owners must review their drafts before submission.
+% Xiong identity/overlap and circuit-biology reading remain outstanding.
