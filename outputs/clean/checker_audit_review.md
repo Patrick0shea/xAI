@@ -1,23 +1,19 @@
-# Checker audit: provisional review evidence
+# Checker audit: confirmed review evidence
 
-**22 October update:** Conor reports completing the review of all 24 steps and
-counting the ten responses. Confirmation of the final verdicts and numbers is
-pending; the entries below still describe the original provisional review.
-Once his outcomes are recorded, they will supersede these provisional entries.
+**Reviewer:** Conor Lydon. **Review date:** 2026-10-22.
 
-Date: 2026-10-21. Source: `qwen3_1.7b_gsm8k_50_completed_arithmetic_checked.jsonl`.
+Conor reported reviewing all 24 sampled steps and counting all ten responses,
+then confirmed that all verdicts and counts match the entries below. These final
+outcomes supersede the provisional entries prepared on 21 October. The signed
+[audit sheet](checker_audit_sheet.md) records his confirmation; this supporting
+ledger documents the calculations and counting convention.
 
+Source: `qwen3_1.7b_gsm8k_50_completed_arithmetic_checked.jsonl`.
 Source SHA-256: `17faa5665c9d01082158fe135de97aa35d60b2648f97913df99d358e97aed813`.
-
-This supporting review was prepared by the assistant from the original reasoning
-fields, separately from the checker's extracted-step list. It is not the required
-independent human audit. A human who did not write the checker must confirm or
-revise the verdicts and counts before signing the audit sheet. No human signature
-or completed human review is claimed.
 
 ## A and B: numerical verdicts
 
-The provisional verdict is **agree for all 24 sampled occurrences**. The four
+The confirmed verdict is **agree for all 24 sampled occurrences**. The four
 invalid occurrences evaluate to 1998, 1998, 243 and 694, respectively, rather than
 2000, 2000, 243.50 and 700. The first two are separate occurrences of the same
 mistake. Thinking ID 26 subsequently corrects its error; the incorrect occurrence
@@ -43,13 +39,11 @@ unresolved expressions, bare answers, or repetitions of a result without a
 reasserted calculation. Qualitative statements that standstill traffic means no
 movement are not treated as arithmetic calculations.
 
-This resolves ambiguities for the draft, but is not a substitute for a human
-agreeing the convention. In particular, implied calculations, restated unit
-conversions and totals given without an explicit plus sign need confirmation.
-The ledger below records the completed operations in source order. Arithmetic
-notation paraphrases prose; it is not a claim that every equation appears verbatim.
+Implied calculations, restated unit conversions and totals without an explicit
+plus sign are listed in the ledger so the count can be inspected. Arithmetic
+notation paraphrases prose; not every equation appears verbatim in the source.
 
-| Mode | ID | Checker checked | Provisional count |
+| Mode | ID | Checker checked | Confirmed hand count |
 |---|---:|---:|---:|
 | thinking | 6 | 8 | 12 |
 | thinking | 8 | 31 | 50 |
@@ -63,10 +57,10 @@ notation paraphrases prose; it is not a claim that every equation appears verbat
 | no_thinking | 45 | 4 | 4 |
 | Total | | 78 | 122 |
 
-The ratio 78/122 is descriptive of this provisional sample count. It is not a
-validated extraction-recall estimate: matching individual extracted steps to
-counted occurrences and confirming the counting convention require human review.
-No numerical coverage percentage is used in the paper draft.
+The checker checked 78 steps across the responses containing 122 human-counted
+calculation occurrences. This sample comparison does not establish a population
+coverage rate or an occurrence-matched extraction-recall estimate. No numerical
+coverage percentage is claimed in the paper.
 
 ### Thinking ID 6: 12
 
@@ -78,7 +72,7 @@ No numerical coverage percentage is used in the paper draft.
 9-12. "But let me verify" check: Seattle 20 implies Charleston 80 through
    the stated factor four; `2*80=160`; `160+80=240`; `240+20=260`.
 
-The last implied Charleston calculation needs confirmation under the prose rule.
+The last implied Charleston calculation is included under the prose rule.
 The checker also misses the initial `T = 2 * 80. That would be 160` and two
 "plus 20" continuations.
 

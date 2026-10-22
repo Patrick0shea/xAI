@@ -22,7 +22,7 @@
 %   self-correction); ID 7 (valid arithmetic, wrong interpretation); ID 21
 %   (repetition loop, truncated).
 %   -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md "Five examples"
-% - Human audit result (Conor): TBD. -> outputs/clean/checker_audit_sheet.md
+% - Human audit (Conor): 24/24 verdict agreement; 122 hand-counted occurrences vs 78 checked steps. -> outputs/clean/checker_audit_sheet.md
 Thinking answered 46/50 problems correctly (92\%), compared with 40/50 (80\%)
 without thinking (Table~\ref{tab:gsm8k}). Six problems were correct only with
 thinking, none only without it (exact McNemar $p=0.03125$). These are the first
@@ -46,9 +46,10 @@ without. Thinking ID~26 corrected its addition error and answered correctly.
 No-thinking ID~11 wrote $204+160+330=700$ and answered 700, although the sum
 is 694. Thus agreement with erroneous working passes a consistency test
 without establishing correctness. One thinking response exhausted its token
-budget. Independent human checker-audit results remain outstanding; these
-counts describe extracted arithmetic, rather than all calculations in the
-responses.
+budget. Conor's human audit agreed with all four invalid and 20 sampled valid
+verdicts. His ten-response count found 122 calculation occurrences against 78
+checked steps; the main step totals therefore describe extracted arithmetic,
+rather than all calculations in the responses.
 
 \begin{table}[t]
 \centering

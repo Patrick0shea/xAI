@@ -45,8 +45,7 @@ checker-comparable responses.
 % OWNER: Patrick (first draft 2026-10-20, revised 2026-10-22, written with Claude Code).
 % Describes code/src/arithmetic_checker.py as it works: exact Fraction arithmetic, NOT
 % SymPy. Sources: journal/2026-10-06.md; code/src/test_arithmetic_checker.py.
-% The sentences from "A provisional review" to "independent human validation." are
-% Conor's (commit 3e3a0f7), kept verbatim. Sources: outputs/clean/checker_audit_review.md.
+% Audit source: outputs/clean/checker_audit_sheet.md; confirmed by Conor, 22 October.
 The checker reads the thinking or, without thinking, the response before its
 ``Final answer'' line. It normalises LaTeX, Unicode and word operators, splits the
 text into clauses, and extracts equation chains such as
@@ -61,12 +60,12 @@ implied answer. The implied answer is the last ``Final answer'' or
 \verb|\boxed{}| in the thinking or, without thinking, a consistent boxed value in the
 working or the result of its last step when no later number follows. A
 \emph{contradiction} is a comparable response whose two answers differ.
-A provisional review agrees with the arithmetic verdict on all
-four invalid occurrences and 20 sampled valid occurrences. This checks numerical
-equality, not whether a calculation correctly models the problem. A separate
-ten-response review records calculations missed by extraction, including prose
-and expressions with units. These review records await confirmation by a human
-who did not write the checker; they are not independent human validation.
+Conor, who did not write the arithmetic checker, reviewed all four invalid
+occurrences and 20 sampled valid occurrences, agreeing with all 24 numerical
+verdicts. His hand counts identified 122 calculation occurrences across ten
+responses, compared with 78 checked steps. This sample exposes omissions in
+prose and expressions with units; numerical validity does not establish correct
+problem interpretation.
 
 \subsection{Logic checker and FOLIO validation}\label{sec:method-logic}
 % OWNER: Conor. Sources: code/src/{logic_checker,folio_parser}.py;
