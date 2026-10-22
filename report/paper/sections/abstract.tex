@@ -1,19 +1,20 @@
 % =====================================================================
-% ABSTRACT -- OWNER: Patrick (first draft 2026-10-20, written with Claude Code).
-% Revise on Thu 22 Oct once Results are frozen. Numbers: outputs/clean/paper_stats.json.
+% ABSTRACT -- OWNER: Patrick (first draft 2026-10-20, revised 2026-10-22, written with
+% Claude Code). Numbers: outputs/clean/paper_stats.json (accuracy, 0/83, bound);
+% outputs/clean/copy_vs_use_summary.json (30/30, Qwen3-0.6B per
+% outputs/raw/copy_vs_use.config.json). Hint numbers: TBD until the run is complete.
 % =====================================================================
 \begin{abstract}
-Reasoning models write out their working before answering, and readers treat that
-working as an explanation. We test whether Qwen3's final answers follow from its own
-written reasoning, using a label-free formal check: we extract each arithmetic step,
-re-evaluate it with exact rational arithmetic, and compare the final answer with the
-answer the working reaches. On 50 paired GSM8K problems, thinking mode raised
-accuracy from 80\% to 92\% (exact McNemar $p = 0.031$). In both modes, no final
-answer contradicted its working in 83 comparable responses (95\% upper bound 4.3\%),
-and only 4 of 924 checked steps were wrong. We argue that this shows consistency,
-not faithfulness: a model can write working that matches its answer without using it.
-Planted wrong working changes Qwen3-0.6B's answer, so the model is sensitive to its
-written reasoning. \textbf{TBD: one sentence each on the copy-vs-use control and the
-hint test, if they made the freeze.} A Z3 logic checker, validated on FOLIO
-annotations, extends the approach to first-order logic.
+Reasoning models write out their working before answering, and readers may take that
+working as an explanation. We test whether Qwen3-1.7B's final answers are consistent
+with its own written arithmetic. A label-free checker extracts each calculation,
+re-evaluates it with exact rational arithmetic, and compares the final answer with
+the answer the working reaches. On 50 paired GSM8K problems, accuracy was 92\% with
+thinking and 80\% without, and no final answer contradicted its working in any of
+the 83 comparable responses (95\% upper bound 4.3\%). In a copy-vs-use control on
+Qwen3-0.6B, the first digit of a planted wrong intermediate result was the top
+prediction in all 30 prompts, suggesting the working was copied rather than computed
+with. With a misleading hint, \textbf{TBD} of \textbf{TBD} thinking-mode answers
+followed it. Passing a consistency check therefore does not establish that written
+reasoning is faithful to how the answer was produced.
 \end{abstract}

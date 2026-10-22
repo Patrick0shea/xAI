@@ -1,41 +1,36 @@
 % =====================================================================
-% I. INTRODUCTION -- OWNER: Patrick (first draft 2026-10-20, written with Claude Code)
+% I. INTRODUCTION -- OWNER: Patrick (first draft 2026-10-20, revised 2026-10-22, written
+% with Claude Code)
 % Sources: journal/2026-09-25.md; readings/jacovi_goldberg_2020.md;
-% readings/lanham_2023.md; journal/2026-10-15.md; journal/2026-10-20.md;
-% outputs/clean/paper_stats.json. Claims about turpin2023, chen2025, wei2022,
-% qwen3 and parcalabescu2024 are taken from their abstracts (no reading notes yet).
+% readings/lanham_2023.md; readings/parcalabescu_2024.md; journal/2026-10-15.md;
+% journal/2026-10-20.md; journal/2026-10-21.md; outputs/clean/paper_stats.json;
+% outputs/clean/copy_vs_use_summary.json; outputs/raw/copy_vs_use.config.json (0.6B).
+% Claims about turpin2023, chen2025, wei2022 and qwen3 follow their abstracts.
 % =====================================================================
 \section{Introduction}\label{sec:intro}
-Reasoning models write out their working before they answer. Chain-of-thought
-prompting made step-by-step working standard for arithmetic and other multi-step
-problems~\cite{wei2022}, and Qwen3 builds a thinking mode and a non-thinking mode
-into the same model~\cite{qwen3}. It is tempting to read the working as an
-explanation of how the answer was reached. But an explanation can be plausible to a
-reader without being faithful to the process behind the prediction~\cite{jacovi2020},
-and nothing in training a model to give correct answers requires the working that
-precedes them to be an honest account.
+Reasoning models write out their working before they answer~\cite{wei2022}, and
+Qwen3 offers a thinking and a non-thinking mode in one model~\cite{qwen3}. Readers may
+take the working as an explanation of how the answer was reached. But an explanation
+can be plausible without being faithful to the process behind the
+prediction~\cite{jacovi2020}, and training a model to answer correctly does not
+require its working to be an honest account.
 
-Most tests of chain-of-thought faithfulness intervene. They truncate, corrupt or
-paraphrase the reasoning and check whether the answer changes~\cite{lanham2023}, or
-they add a biasing feature or hint to the prompt and check whether the reasoning
-mentions it~\cite{turpin2023,chen2025}. We ask a simpler question of the model's own,
-unedited output: \emph{does the final answer follow from the written reasoning?} For
-arithmetic this can be checked formally and without gold labels. We extract each
-calculation from the working, re-evaluate it with exact rational arithmetic, and
-compare the final answer with the answer the working itself arrives at.
-
-We apply this test to Qwen3-1.7B on 50 GSM8K problems~\cite{cobbe2021}, with thinking
-mode on and off. Our contributions are:
+Most faithfulness tests intervene: they corrupt or truncate the reasoning and watch
+the answer~\cite{lanham2023}, or add a hint to the prompt and check whether the
+reasoning mentions it~\cite{turpin2023,chen2025}. We first ask a narrower question of
+the model's own, unedited output: is the final answer \emph{consistent} with the
+written arithmetic? This can be checked formally and without gold labels. Consistency
+is weaker than faithfulness~\cite{parcalabescu2024}, so we pair it with two
+interventions. Our contributions are:
 \begin{itemize}
-\item a label-free consistency checker for natural-language arithmetic working, and a
-  Z3 logic checker~\cite{demoura2008} validated on FOLIO annotations~\cite{han2024folio};
-\item a null result: no final answer contradicted its own working in 83 comparable
-  responses (95\% upper bound 4.3\%), while thinking mode raised accuracy from 80\%
-  to 92\%;
-\item an analysis of what the null result can and cannot show. A matching answer is
-  \emph{consistent} with the reasoning, not necessarily \emph{faithful} to
-  it~\cite{parcalabescu2024}. We probe the gap with planted working and a
-  copy-vs-use control.
-  % TODO (Patrick, after the Wed 21 Oct freeze): add "and a misleading-hint test" if
-  % Fionn's results are in; otherwise leave the hint test to Future Work.
+\item an exact-arithmetic consistency checker for natural-language working, and a Z3
+  logic checker~\cite{demoura2008} validated on FOLIO annotations~\cite{han2024folio};
+\item a consistency result for Qwen3-1.7B on 50 GSM8K problems~\cite{cobbe2021}: no
+  contradictions in 83 comparable responses, with accuracy 92\% with thinking and
+  80\% without;
+\item a copy-vs-use control on Qwen3-0.6B, indicating that, at the first answer digit
+  of constructed prompts, sensitivity to planted working mostly reflects copying its
+  last number rather than computing with it;
+\item a misleading-hint test on Qwen3-1.7B (\textbf{TBD}), with its hardware
+  confound stated.
 \end{itemize}
