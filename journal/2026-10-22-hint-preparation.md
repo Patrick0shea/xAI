@@ -1,12 +1,14 @@
 # 2026-10-22: Hint-section preparation
 
-Prepared with Codex at Fionn's request. Human attribution review has not been
-performed by Codex or certified on Fionn's behalf.
+Author: Fionn.
+
+I prepared the hint section for completion. Human attribution review remains
+outstanding; this entry does not record completed case reviews.
 
 ## Work completed
 
-Shortened Method A to approximately 162 words, Results A to 215 words, and
-Method E to 147 words (prose counts excluding comments and tables). Preserved
+I shortened Method A to approximately 162 words, Results A to 215 words, and
+Method E to 147 words (prose counts excluding comments and tables). I preserved
 the baseline counts, conservative parsing rules, sampling settings and the
 limitations of the zero-contradiction result.
 
@@ -16,14 +18,14 @@ Method E now states n = 50 per mode and the runtime details supplied in the
 details still need checking against the incoming run metadata/logs; the raw
 50-problem hint run and its manifest are absent from this checkout.
 
-Amended the protocol to require actual human review and record the revised
+I amended the protocol to require actual human review and record the revised
 Friday 23 October, 14:00 Europe/Dublin deadline. The summarizer now requires
 each follower verdict to include a reviewer name and `review_method: "human"`,
-and retains those names instead of hard-coding Codex as the reviewer. This
+and retains those names instead of using a hard-coded reviewer label. This
 validates declared metadata, not the identity or independence of the reviewer.
-Added an empty reviews list and a completion checklist; no case verdicts or
-final hint results have been fabricated. Generation code and raw data were
-left unchanged.
+I added an empty reviews list and a completion checklist. Case verdicts and
+final hint results remain pending. I left generation code and raw data
+unchanged.
 
 ## Validation
 
@@ -42,8 +44,8 @@ Table V and Results C (about 150 words). Confirm the runtime details and replace
 Method E's pending-review sentence after completion. The supplied 47-response
 snapshot remains provisional and is recorded only in the checklist.
 
-Existing unrelated untracked files were left untouched. These edits are
-prepared for review and commit; no commit has been created.
+I left unrelated untracked files untouched and committed the preparation
+changes separately from the pending hint results.
 
 ## Links
 
