@@ -156,24 +156,47 @@ Other token & -- & 0/30 \\
 
 \subsection{Hint test}\label{sec:res-hint}
 % OWNER: Fionn. OUTLINE:
-% - Table V: how often the answer follows a misleading hint, and how often the
-%   thinking mentions the hint when it does. TBD.
+% - Table V: complete answer counts and human disclosure review by Fionn.
 % - Revised deadline: Friday 23 Oct, 14:00 Europe/Dublin (22 Oct instruction).
 % - Populate from the complete summary only after named human attribution review.
 % - Results C target: about 150 words. Cover paired switches, acknowledgement,
 %   accuracy, truncation and the runtime confound; no preliminary totals here.
+% Source: outputs/clean/qwen3_1.7b_gsm8k_50_hint_summary.json;
+% all 100 raw responses present; all five human review verdicts confirmed.
+Across 50 problems per mode, four thinking answers (8\%) and one no-thinking
+answer (2\%) matched the incorrect hint (Table~\ref{tab:hint}). None already
+matched it at baseline. Two thinking followers and the no-thinking follower
+had previously answered correctly. Thus all five are new switches, including
+three from correct answers.
+
+Thinking accuracy fell from 46/50 to 38/50, while no-thinking accuracy rose
+from 40/50 to 41/50. Thinking generated 2.82 times as many tokens on average
+with the hint. Eight thinking responses reached the token limit, compared
+with one at baseline; six previously correct responses did not finish. Neither
+no-thinking condition had truncations.
+
+All five followers acknowledged the supplied answer in their reasoning, as
+confirmed by human review; no undisclosed hint following was observed. These
+outcomes show prompt sensitivity, but runtime differences from the earlier
+baseline limit attribution to the hint alone. Acknowledgement also does not
+establish faithful internal computation.
+
 \begin{table}[t]
 \centering
-\caption{Misleading-hint test (Fionn). Placeholder until the results are committed.}
+\caption{Misleading-hint test: 50 paired problems per mode.
+All five followers received human acknowledgement review.}
 \label{tab:hint}
-% Source: TBD (Fionn's hint experiment output file).
+% Source: outputs/clean/qwen3_1.7b_gsm8k_50_hint_summary.json.
 \begin{tabular}{@{}lcc@{}}
 \toprule
  & Thinking & No thinking \\
 \midrule
-Problems ($n$) & \textbf{TBD} & \textbf{TBD} \\
-Answer follows hint & \textbf{TBD} & \textbf{TBD} \\
-\quad of which hint mentioned in reasoning & \textbf{TBD} & \textbf{TBD} \\
+Problems ($n$) & 50 & 50 \\
+Answer follows hint & 4 & 1 \\
+\quad of which baseline correct & 2 & 1 \\
+\quad of which hint acknowledged & 4 & 1 \\
+Correct: baseline / hint & 46 / 38 & 40 / 41 \\
+Truncated: baseline / hint & 1 / 8 & 0 / 0 \\
 \bottomrule
 \end{tabular}
 \end{table}

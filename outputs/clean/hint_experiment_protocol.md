@@ -68,8 +68,8 @@ After reviewing every hint-following case, save a JSON list at
 boolean `mentions_hint`, and a textual `rationale`.
 Each entry must also name the actual `reviewer` and set `review_method` to
 `"human"`. See [the completion checklist](hint_completion_checklist.md) for the
-record format and pending checks. The checked-in empty list is preparation only,
-not evidence of completed review. Finish the reviews, then run:
+record format and checks. An empty list is preparation only, not evidence of
+completed review. Finish the reviews, then run:
 
 ```powershell
 python code/src/summarize_hint_experiment.py
@@ -79,3 +79,26 @@ python -m unittest discover -s code/src -p 'test_*.py'
 The summary retains complete response text and review decisions for audit. It
 rejects missing pairs, duplicates, incorrect hint values, stale parser fields,
 changed source hashes and unreviewed hint followers.
+
+## Complete run received (22 October)
+
+All 100 responses are now present. Before human reviews are available, run
+`python code/src/summarize_hint_experiment.py --allow-pending-reviews` to generate
+`qwen3_1.7b_gsm8k_50_hint_pending_summary.json`. This still validates complete
+pairs and source data, labels its status `pending_human_review`, and leaves
+unreviewed disclosure totals null. It does not produce a completed review.
+The default command continues to reject unreviewed followers.
+
+Source verification accepts an exact byte hash or a recorded LF-byte hash
+matching a CRLF checkout, explicitly recording which comparison matched.
+No other source differences are accepted; raw-data hash checks remain exact.
+Both parser and runner hashes are checked. The full five-case human review
+packet and separate blank JSON template are adjacent to this protocol.
+
+## Human review completed (22 October)
+
+Fionn confirmed personally reading all five full cases and agreeing with the
+five acknowledgement verdicts and rationales. The reviews JSON records Fionn
+O Murchu as the human reviewer. The default summary is now complete: 4/4
+thinking followers and 1/1 no-thinking followers acknowledged the supplied
+answer. No independent-validation claim is made.

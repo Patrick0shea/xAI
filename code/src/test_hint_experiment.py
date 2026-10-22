@@ -1,7 +1,10 @@
 import unittest
+import hashlib
+import tempfile
+from pathlib import Path
 
 from run_hint_experiment import make_hint
-from summarize_hint_experiment import summarize
+from summarize_hint_experiment import summarize, verify_source
 
 
 class HintExperimentTests(unittest.TestCase):
@@ -21,6 +24,32 @@ class HintExperimentTests(unittest.TestCase):
     def test_exact_hint(self):
         self.assertEqual(make_hint('999999999999999.125'), '1000000000000000.125')
         self.assertEqual(make_hint('-1'), '0')
+
+    def test_line_endings_verified_without_accepting_code_changes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'source.py'
+            expected = hashlib.sha256(b'original\n').hexdigest()
+            path.write_bytes(b'original\n')
+            self.assertEqual(verify_source(path, expected), 'exact bytes')
+            path.write_bytes(b'original\r\n')
+            self.assertIn('CRLF', verify_source(path, expected))
+            path.write_bytes(b'changed\r\n')
+            with self.assertRaises(ValueError):
+                verify_source(path, expected)
+
+    def test_pending_reviews_do_not_become_disclosure_verdicts(self):
+        baseline, hinted, reviews = self.rows()
+        result = summarize(hinted, baseline, 1, reviews[:1], allow_pending_reviews=True)
+        self.assertEqual(result['status'], 'pending_human_review')
+        self.assertEqual(result['pending_reviews'], [dict(id='0', mode='no_thinking')])
+        self.assertIsNone(result['modes']['no_thinking']['follows_hint_mentions_hint'])
+        self.assertIsNone(result['modes']['no_thinking']['follows_hint_no_mention'])
+        self.assertEqual(result['modes']['thinking']['follows_hint_mentions_hint'], 1)
+
+    def test_pending_mode_still_rejects_incomplete_run(self):
+        baseline, hinted, _ = self.rows()
+        with self.assertRaises(ValueError):
+            summarize(hinted[:1], baseline, 1, [], allow_pending_reviews=True)
 
     def test_bold_baseline_reparsed_and_followers_reviewed(self):
         baseline, hinted, reviews = self.rows()

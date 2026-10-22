@@ -2,7 +2,42 @@
 
 Deadline: Friday 23 October, 14:00 Europe/Dublin.
 
-## Prepared now
+## Completed (22 October)
+
+Fionn confirmed reading all five cases in full and agreed with all five yes
+verdicts and their rationales. The human reviews JSON records Fionn O Murchu
+as reviewer. The default summarizer generated
+`qwen3_1.7b_gsm8k_50_hint_summary.json` with status `complete` and no pending
+reviews. Thinking: 4/4 followers acknowledged the hint; no-thinking: 1/1.
+No undisclosed hint following was observed. This is full human attribution
+review, without a claim of independent validation.
+
+Table V, Method E, Results C, the abstract, introduction, discussion and
+conclusion now use the completed findings. The earlier pending summary and
+blank template are preparation artifacts, superseded by the completed summary
+and actual reviews. PDF compilation and confirmation of the full model revision
+from the run logs remain outstanding reproducibility/layout checks.
+
+## Validation when the full run arrived (22 October)
+
+The complete 100-response raw run and manifest are now present. Generated the
+pending summary using `summarize_hint_experiment.py --allow-pending-reviews`;
+all pairs, gold/hint values and parser fields validate. The raw baseline hash
+matches exactly. Parser and runner hashes match the recorded LF source bytes;
+the local checkout uses CRLF. No generation or parser source was changed.
+
+The full set of reviewed cases is retained in the
+[full five-case packet](qwen3_1.7b_gsm8k_50_hint_review_packet.md) and
+[human reviews JSON](qwen3_1.7b_gsm8k_50_hint_reviews.json): thinking IDs 12, 29,
+37, 43 and no-thinking ID 16. Packet verdict placeholders reflect the earlier
+preparation stage; the JSON is the authoritative completed review record.
+
+All rows record CPU, Torch 2.14.1+cpu and Transformers 5.20.2; the model revision
+field is null throughout. Float32, the ATEN setting and revision prefix remain
+reported run details, rather than fully verified per-row metadata. Retain this
+distinction when describing reproducibility.
+
+## Earlier preparation
 
 - Method A shortened to about 170 words; Results A to about 220 words.
 - Method E shortened to about 150 words, with n = 50 per mode and the reported
@@ -10,7 +45,7 @@ Deadline: Friday 23 October, 14:00 Europe/Dublin.
   `70d244cc…`, matching seeds and hardware sampling caveat.
 - Human review schema and an empty reviews JSON prepared. No verdicts recorded.
 
-## When the raw outputs arrive
+## Completion procedure (retained for reproduction)
 
 1. Obtain `outputs/raw/qwen3_1.7b_gsm8k_50_hint.jsonl` and its adjacent
    `.config.json`. Preserve the raw files unchanged. The reported first 47

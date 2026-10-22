@@ -1,0 +1,5 @@
+# Preserve exact bytes for provenance hashes in newly archived/generated evidence.
+outputs/clean/historical/* -text
+outputs/raw/*_hint.jsonl -text
+outputs/raw/*_hint.config.json -text
+outputs/clean/*_hint*.json -text

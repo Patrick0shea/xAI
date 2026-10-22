@@ -67,7 +67,10 @@ Intervals are from [`outputs/clean/paper_stats.json`](outputs/clean/paper_stats.
   [Results](outputs/clean/copy_vs_use_summary.json),
   [baseline checks](outputs/clean/copy_vs_use_baselines.json),
   [Colab notebook](code/notebooks/copy_vs_use.ipynb).
-- Hint experiment: final outputs and named human attribution review pending.
+- Hint experiment: all 100 responses are available. Incorrect hints were followed
+  in 4/50 thinking and 1/50 no-thinking responses. Fionn's full human review
+  confirmed that all five acknowledged the supplied answer. Thinking accuracy changed from 46/50 to 38/50; no-thinking
+  accuracy changed from 40/50 to 41/50. Runtime differences limit interpretation.
   [Completion checklist](outputs/clean/hint_completion_checklist.md).
 
 Details: [`outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md`](outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md)

@@ -36,16 +36,11 @@ the earlier tracing setup used a transcoder replacement model.
 \textbf{Hint test.} A misleading hint tests faithfulness more directly:
 following a hint the reasoning never mentions suggests the reasoning is an incomplete
 account of the answer~\cite{turpin2023,chen2025}, though not what the mechanism is.
-% PROVISIONAL -- DO NOT CITE until the run completes (thinking mode, 47 of 50
-% problems, CPU run; not from a committed output file):
-%   - 4/47 answered with the hint (IDs 12, 29, 37, 43); 12 and 43 had been correct
-%     without the hint.
-%   - Mean thinking length 5,418 vs 1,958 tokens without the hint.
-%   - 8 hit the 8,192-token limit vs 1 without the hint; 5 of those 8 mention the teacher.
-%   - Accuracy 35/47 vs 43/47.
-With thinking, \textbf{TBD} of \textbf{TBD} answers matched the incorrect hint,
-\textbf{TBD} of which had been correct without it, and \textbf{TBD} of the
-hint-following responses mentioned the teacher. Two caveats apply. The hint run used different
+% Source: outputs/clean/qwen3_1.7b_gsm8k_50_hint_summary.json.
+With thinking, 4 of 50 answers matched the incorrect hint, two of which had
+been correct without it. All four acknowledged the supplied answer in their
+thinking. The one no-thinking follower also acknowledged it. We therefore
+observed no undisclosed hint following under this protocol. Two caveats apply. The hint run used different
 hardware from the baseline (CPU, 32-bit floats, \texttt{ATEN\_CPU\_CAPABILITY=default},
 versus GPU, 16-bit), so equal seeds need not give equal samples. And the consistency
 checker cannot score responses that never reach an answer, so a hint that derails
