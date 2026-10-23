@@ -8,29 +8,22 @@
 % Claims about turpin2023, chen2025, wei2022 and qwen3 follow their abstracts.
 % =====================================================================
 \section{Introduction}\label{sec:intro}
-Reasoning models write out their working before they answer~\cite{wei2022}, and
-Qwen3 offers a thinking and a non-thinking mode in one model~\cite{qwen3}. Readers may
-take the working as an explanation of how the answer was reached. But an explanation
-can be plausible without being faithful to the process behind the
-prediction~\cite{jacovi2020}, and training a model to answer correctly does not
-require its working to be an honest account.
-
-Most faithfulness tests intervene: they corrupt or truncate the reasoning and watch
-the answer~\cite{lanham2023}, or add a hint to the prompt and check whether the
-reasoning mentions it~\cite{turpin2023,chen2025}. We first ask a narrower question of
-the model's own, unedited output: is the final answer \emph{consistent} with the
-written arithmetic? This can be checked formally and without gold labels. Consistency
-is weaker than faithfulness~\cite{parcalabescu2024}, so we pair it with two
-interventions. Our contributions are:
+Reasoning models write out their working before answering~\cite{wei2022}, and Qwen3
+offers thinking and non-thinking modes in one model~\cite{qwen3}. Readers may take the
+working as an explanation, but an explanation can be plausible without being faithful
+to the process behind the prediction~\cite{jacovi2020}. Most faithfulness tests
+intervene, corrupting the reasoning~\cite{lanham2023} or adding hints to the
+prompt~\cite{turpin2023,chen2025}. We first ask a narrower, label-free question of
+unedited output: is the final answer \emph{consistent} with the written arithmetic?
+Because consistency is weaker than faithfulness~\cite{parcalabescu2024}, we pair it
+with two interventions. Our contributions are:
 \begin{itemize}
-\item an exact-arithmetic consistency checker for natural-language working, and a Z3
-  logic checker~\cite{demoura2008} validated on FOLIO annotations~\cite{han2024folio};
-\item a consistency result for Qwen3-1.7B on 50 GSM8K problems~\cite{cobbe2021}: no
-  contradictions in 83 comparable responses, with accuracy 92\% with thinking and
-  80\% without;
-\item a copy-vs-use control on Qwen3-0.6B, indicating that, at the first answer digit
-  of constructed prompts, sensitivity to planted working mostly reflects copying its
-  last number rather than computing with it;
-\item a misleading-hint test on Qwen3-1.7B: 4/50 thinking and 1/50 no-thinking
-  answers followed the hint, all acknowledging it, with the hardware confound stated.
+\item an exact-arithmetic consistency checker, and a Z3 logic
+  checker~\cite{demoura2008} validated on FOLIO annotations~\cite{han2024folio};
+\item zero answer--working contradictions in 83 comparable Qwen3-1.7B responses on
+  GSM8K~\cite{cobbe2021};
+\item a copy-vs-use control on Qwen3-0.6B, indicating that first-digit sensitivity to
+  planted working mostly reflects copying rather than computation;
+\item a misleading-hint test in which every hint-following answer acknowledged the
+  hint, but the hint left previously correct responses unfinished.
 \end{itemize}

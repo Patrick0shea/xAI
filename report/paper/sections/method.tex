@@ -20,90 +20,65 @@
 %   -> README.md; journal/2026-10-06.md; journal/2026-10-20.md
 % - Raw outputs are never edited; derived files are regenerated from them
 %   (raw SHA-256 recorded). -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md
-
-We generated 100 paired responses from Qwen3-1.7B on the first 50 GSM8K test
-problems, enabling and disabling thinking with the same weights. Generation
-used seed 42, batch size one, and token budgets of 8,192 (thinking) and 2,048
-(no thinking). Sampling used temperature 0.6 and top-$p$ 0.95 with thinking;
-otherwise 0.7 and 0.8, with top-$k$ 20 throughout. Prompts requested working
-and a numeric ``Final answer''. We reduced the planned 500 problems to 50 to
-prioritise interventions over further consistency measurements.
-
-Token counts include the first end-of-sequence token, excluding padding;
-exhausted budgets without that token indicate truncation. The parser separates
-thinking at its closing tag and accepts explicit final answers, unambiguous
-boxed numbers, or standalone numeric responses, never the last intermediate
-number. Numbers are normalised; unresolved and truncated answers count as
-incorrect. Fixing bold-answer parsing on 20 October recovered five correct
-no-thinking responses.
-
-Raw generations remain unchanged, with SHA-256 hashes recorded. All reported
-parsing, arithmetic checks and statistics were regenerated, yielding 83
-checker-comparable responses.
+% Cut for the page limit on 2026-10-23 (Patrick, with Claude Code); Fionn's facts kept.
+We generated 100 paired responses from Qwen3-1.7B on the first 50 GSM8K test problems,
+enabling and disabling thinking with the same weights (seed 42, batch size one; token
+budgets 8,192 and 2,048). Sampling used temperature 0.6 and top-$p$ 0.95 with thinking,
+otherwise 0.7 and 0.8, with top-$k$ 20. Prompts requested working and a numeric
+``Final answer''. Outputs reaching the budget without an end-of-sequence token count as
+truncated. The parser accepts explicit final answers, unambiguous boxed numbers or
+standalone numbers, never the last intermediate number; unresolved and truncated
+answers count as incorrect. Raw generations are unchanged and hashed, and every
+reported result was regenerated from them.
 
 \subsection{Arithmetic consistency checker}\label{sec:method-arith}
 % OWNER: Patrick (first draft 2026-10-20, revised 2026-10-22, written with Claude Code).
 % Describes code/src/arithmetic_checker.py as it works: exact Fraction arithmetic, NOT
 % SymPy. Sources: journal/2026-10-06.md; code/src/test_arithmetic_checker.py.
 % Audit source: outputs/clean/checker_audit_sheet.md; confirmed by Conor, 22 October.
-The checker reads the thinking or, without thinking, the response before its
-``Final answer'' line. It normalises LaTeX, Unicode and word operators, splits the
-text into clauses, and extracts equation chains such as
-$a = b = c$, checking each adjacent pair whose left side contains an operator. Both
-sides are evaluated exactly with Python's \texttt{fractions.Fraction}; a step is
-valid if they are equal, or equal after rounding to the decimals the model wrote. Anything it cannot parse, including clauses
-with variables, is skipped rather than marked wrong: the checker misses steps rather
-than inventing errors.
-
-A response is \emph{comparable} when it is untruncated and has both a final and an
-implied answer. The implied answer is the last ``Final answer'' or
-\verb|\boxed{}| in the thinking or, without thinking, a consistent boxed value in the
-working or the result of its last step when no later number follows. A
-\emph{contradiction} is a comparable response whose two answers differ.
-Conor, who did not write the arithmetic checker, reviewed all four invalid
-occurrences and 20 sampled valid occurrences, agreeing with all 24 numerical
-verdicts. His hand counts identified 122 calculation occurrences across ten
-responses, compared with 78 checked steps. This sample exposes omissions in
-prose and expressions with units; numerical validity does not establish correct
-problem interpretation.
+The checker reads the thinking or, without thinking, the response before its ``Final
+answer'' line. It normalises LaTeX, Unicode and word operators, splits clauses, and
+checks each adjacent pair in equation chains such as $a=b=c$ whose left side contains
+an operator. Both sides are evaluated exactly with Python's
+\texttt{fractions.Fraction}, allowing rounding to the decimals written. Unparseable
+text, including clauses with variables, is skipped rather than marked wrong. A
+response is \emph{comparable} when it is untruncated and has both a final answer and an
+implied answer: the last ``Final answer'' or \verb|\boxed{}| in the thinking or,
+without thinking, a consistent boxed value or the result of the last step. A
+\emph{contradiction} is a comparable response whose two answers differ. Conor, who did
+not write the checker, agreed with all 24 of its numerical verdicts on the four invalid
+and 20 sampled valid steps. His hand counts found 122 calculations in ten responses,
+against 78 checked steps, with omissions in prose and unit-bearing expressions.
 
 \subsection{Logic checker and FOLIO validation}\label{sec:method-logic}
 % OWNER: Conor. Sources: code/src/{logic_checker,folio_parser}.py;
 % outputs/clean/folio_validation_summary.json; journal/2026-10-16.md.
-The checker uses Z3~\cite{demoura2008} to evaluate supplied first-order formulas
-with quantified predicates, relations and equality over a nonempty domain,
-without unique-name or closed-world assumptions.
-It first checks premise consistency. For consistent premises $P$, conclusion
-$C$ is entailed if $P\land\neg C$ is unsatisfiable, contradicted if
-$P\land C$ is unsatisfiable, and otherwise unknown when both are satisfiable.
-Parse errors, inconsistent premises and solver failures are separate outcomes;
-the limit is 500\,ms per solver call. Only proved formal steps can support
-later deductions. Natural-language translation requires separate review.
-
-On FOLIO v0.0 validation annotations~\cite{han2024folio}, 191 of 199 parsed
-problems matched their labels; five additional rows failed parsing and eight
-label disagreements remain unresolved. No inconsistent premises or solver
-failures occurred. This validates the checker, not model faithfulness:
-no Qwen3 reasoning was checked.
+% Cut for the page limit on 2026-10-23 (Patrick, with Claude Code); Conor's facts kept.
+Z3~\cite{demoura2008} evaluates supplied first-order formulas (quantified predicates,
+relations, equality) over a nonempty domain, without unique-name or closed-world
+assumptions. For consistent premises $P$, conclusion $C$ is entailed if $P\land\neg C$
+is unsatisfiable, contradicted if $P\land C$ is unsatisfiable, and otherwise unknown;
+parse errors, inconsistent premises and solver failures (500\,ms limit) are separate
+outcomes. On FOLIO v0.0 validation annotations~\cite{han2024folio}, 191 of 199 parsed
+problems matched their labels; five rows failed parsing and eight disagreements remain
+unresolved. This validates the checker only: no Qwen3 reasoning was translated or
+checked.
 
 \subsection{Planted working and copy-vs-use}\label{sec:method-planted}
 
 % OWNER: Emmett. Sources: outputs/clean/copy_vs_use_summary.json,
 % outputs/clean/copy_vs_use_design.json, outputs/circuits/run_log.json.
-We tested Qwen3-0.6B only with ``Question / Working / Final answer:''
-prefixes, scoring the first answer digit. Eight hand-picked addition prompts
-compared wrong, correct and absent working. To separate copying from
-continued calculation, we fixed 30 addition-then-multiplication cases using
-arithmetic constraints and seed 42. Each had distinct first digits for copying
-the planted sum, multiplying it, and recomputing the true answer. Three
-working conditions gave 90 prefixes, evaluated with original weights without
-transcoders. We report full-vocabulary next-token probabilities and global
-top-token counts, without sampling or candidate renormalisation. These
-measure first-token behaviour, not complete answers. Separately, circuit
-tracing~\cite{ameisen2025} produced an illustrative graph for a short prefix
-using a transcoder replacement model; edges and interventions remain
-unanalysed. Loading 1.7B transcoders exceeded available RAM; these experiments
-do not characterise Qwen3-1.7B.
+% Cut for the page limit on 2026-10-23 (Patrick, with Claude Code); Emmett's facts kept.
+These tests use Qwen3-0.6B only, with ``Question / Working / Final answer:'' prefixes,
+scoring the first answer digit from full-vocabulary next-token probabilities without
+sampling. Eight hand-picked addition prompts compare wrong, correct and absent working.
+To separate copying from continued calculation, we fixed 30 addition-then-multiplication
+cases (seed 42) whose first digits differ for copying the planted sum, multiplying it,
+and recomputing the true answer, each under the three working conditions (90 prefixes,
+original weights). We also traced one prefix with circuit tracing~\cite{ameisen2025} on
+a transcoder replacement model (Fig.~\ref{fig:tracing}), but analysed no edges or
+interventions, so it is an illustration, not evidence. Loading 1.7B transcoders exceeded available RAM; none of these
+tests characterises Qwen3-1.7B.
 
 \subsection{Hint test}\label{sec:method-hint}
 % OWNER: Fionn. OUTLINE:
@@ -111,24 +86,16 @@ do not characterise Qwen3-1.7B.
 %   flag answers that follow the hint when the thinking never mentions it
 %   (turpin2023, chen2025). n = 50 per mode; full human review by Fionn.
 %   -> journal/2026-10-15.md decision 5; journal/2026-10-20.md
-
-For $n=50$ GSM8K problems per mode, we append ``A maths teacher says the answer
-is $X$'', with $X$ equal to the gold answer plus one, before the unchanged
-solving instruction. Reported run settings were CPU, 32-bit floats,
-\texttt{ATEN\_CPU\_CAPABILITY=default}, and model revision
-\texttt{70d244cc\ldots}; saved runtime metadata confirms CPU but omits the
-revision. Sampling settings, budgets and per-problem seeds match
-the original run; random draws can nevertheless differ across hardware.
-
-We count answers matching the hint and baseline-correct answers switching to
-it. Fionn read all five followers in full and confirmed each attribution
-verdict, using thinking or pre-answer working. His name, verdicts and rationales
-are stored in JSON. Mentioning the teacher or supplied suggestion
-counts as acknowledgement; repeating its number alone does not. This
-disclosure measure follows prior hint interventions~\cite{turpin2023,chen2025}
-without establishing an internal causal mechanism. Truncated and unresolved
-answers remain in the denominator and cannot count as followers. Raw outputs
-and source hashes are retained.
+% Cut for the page limit on 2026-10-23 (Patrick, with Claude Code); Fionn's facts kept.
+For the same 50 problems per mode, we append ``A maths teacher says the answer is $X$'',
+with $X$ the gold answer plus one, before the unchanged instruction. Model, sampling
+settings, budgets and seeds match the baseline, but the hint run used a CPU with
+32-bit floats and \texttt{ATEN\_CPU\_CAPABILITY=default}, so random draws can differ.
+We count answers equal to the hint, and baseline-correct answers that switch to it.
+Fionn read every follower in full: mentioning the teacher or the suggestion counts as
+acknowledgement; repeating its number alone does not. This disclosure measure follows
+prior hint interventions~\cite{turpin2023,chen2025} and does not establish an internal
+mechanism. Truncated and unresolved answers stay in the denominator.
 
 \subsection{Statistics}\label{sec:method-stats}
 % OWNER: Patrick (first draft 2026-10-20, revised 2026-10-22, written with Claude Code).

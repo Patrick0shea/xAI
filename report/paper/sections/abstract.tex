@@ -5,16 +5,15 @@
 % outputs/raw/copy_vs_use.config.json). Hint: outputs/clean/qwen3_1.7b_gsm8k_50_hint_summary.json.
 % =====================================================================
 \begin{abstract}
-Reasoning models write out their working before answering, and readers may take that
-working as an explanation. We test whether Qwen3-1.7B's final answers are consistent
-with its own written arithmetic. A label-free checker extracts each calculation,
-re-evaluates it with exact rational arithmetic, and compares the final answer with
-the answer the working reaches. On 50 paired GSM8K problems, accuracy was 92\% with
-thinking and 80\% without, and no final answer contradicted its working in any of
-the 83 comparable responses (95\% upper bound 4.3\%). In a copy-vs-use control on
-Qwen3-0.6B, the first digit of a planted wrong intermediate result was the top
-prediction in all 30 prompts, suggesting the working was copied rather than computed
-with. With a misleading hint, 4 of 50 thinking-mode answers followed it;
-all four acknowledged the supplied answer. Passing a consistency check therefore does not establish that written
-reasoning is faithful to how the answer was produced.
+Reasoning models write out their working before answering, and readers may take it as
+an explanation. We test whether Qwen3-1.7B's final answers are consistent with its own
+written arithmetic, using a label-free checker that re-evaluates each extracted
+calculation with exact rational arithmetic and compares the final answer with the
+answer the working reaches. On 50 paired GSM8K problems, accuracy was 92\% with
+thinking and 80\% without, and no answer contradicted its working in 83 comparable
+responses (95\% upper bound 4.3\%). A copy-vs-use control on Qwen3-0.6B suggests that
+sensitivity to planted working reflects copying rather than computation: the copied
+digit was the top prediction in all 30 prompts. A misleading hint redirected 4 of 50
+thinking-mode answers, all of which acknowledged it. Passing a consistency check does
+not establish that written reasoning is faithful to how the answer was produced.
 \end{abstract}

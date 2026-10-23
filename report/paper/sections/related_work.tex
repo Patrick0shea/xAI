@@ -1,40 +1,27 @@
 % II. RELATED WORK -- OWNERS: Conor and Emmett
+% Cut for the page limit on 2026-10-23 (Patrick, with Claude Code): same sources and
+% claims as Conor's and Emmett's version (commit 05287b0), with repetition removed.
 \section{Related Work}\label{sec:related}
-% Shared context and Emmett's hint-literature contribution.
-Faithfulness concerns whether an explanation reflects the model's actual
-reasoning, distinct from whether it appears plausible~\cite{jacovi2020}.
-Turpin et al.~\cite{turpin2023} show that input biases can change answers
-while remaining unmentioned in their explanations. Chen et al.~\cite{chen2025}
-extend hint-based tests to reasoning models, measuring acknowledgement among
-paired responses that switch to the hinted answer. These motivate intervention
-controls alongside textual consistency checks.
+Faithfulness concerns whether an explanation reflects the model's actual reasoning, as
+distinct from whether it appears plausible~\cite{jacovi2020}. Intervention studies probe
+it by truncating, corrupting or paraphrasing chain-of-thought~\cite{lanham2023}, or by
+adding biasing features that change answers without being mentioned in the
+explanation~\cite{turpin2023}. Chen et al.\ extend hint tests to reasoning models,
+measuring acknowledgement among responses that switch to the hinted
+answer~\cite{chen2025}. Arcuschin et al.\ find unfaithful reasoning on naturally worded
+prompts, including contradictory justifications and illogical
+shortcuts~\cite{arcuschin2025}, so natural-setting evaluation is not novel here.
+Parcalabescu and Frank distinguish self-consistency from faithfulness to internal
+computation, comparing input contributions to answer and explanation with
+CC-SHAP~\cite{parcalabescu2024}; our measure is narrower, checking agreement between
+recoverable working and the final answer.
 
-% OWNER: Emmett. Circuit tracing and Arcuschin
-Circuit tracing~\cite{ameisen2025} constructs attribution graphs through
-interpretable transcoder replacement models, with interventions used to test
-hypotheses about computational pathways. Our graph remains illustrative
-because we have not analysed edges or performed interventions. Arcuschin et
-al.~\cite{arcuschin2025} find unfaithful reasoning on naturally worded prompts,
-including contradictory justifications and illogical shortcuts.
-Natural-setting evaluation is therefore not novel here.
-Their findings motivate checking reasoning; our deterministic
-arithmetic checks assess local validity and answer consistency without
-certifying how an answer was produced.
-
-% Conor: Lanham, NSF-CoT, Lyu and Parcalabescu.
-Lanham et al.~\cite{lanham2023} probe answer dependence by truncating,
-corrupting and paraphrasing reasoning. NSF-CoT~\cite{pramanik2026} combines
-formal verification with an LLM entailment component to assess written steps.
-Lyu et al.'s Faithful CoT~\cite{lyu2023} generates symbolic instructions and
-executes them with a deterministic solver, making that chain responsible for
-the answer without guaranteeing correct translation. Our checker instead
-evaluates already generated arithmetic or formal annotations; it does not
-produce Qwen3's answer. Parcalabescu and Frank~\cite{parcalabescu2024} distinguish
-self-consistency from faithfulness to internal computation; their CC-SHAP
-compares input contributions to answer and explanation generation. Our narrower
-measure checks agreement between recoverable working and the final answer.
-Thus deterministic verification complements interventions but cannot establish
-that written reasoning caused an answer.
-
-% Source-note owners must review their drafts before submission.
-% Xiong identity/overlap and circuit-biology reading remain outstanding.
+Formal approaches either generate the reasoning or verify it. Faithful CoT executes
+generated symbolic instructions with a deterministic solver, making that chain
+responsible for the answer without guaranteeing correct translation~\cite{lyu2023};
+NSF-CoT combines formal verification with an LLM entailment component to assess written
+steps~\cite{pramanik2026}. Our checker evaluates arithmetic the model already wrote and
+does not produce its answer. Circuit tracing builds attribution graphs through
+transcoder replacement models, using interventions to test hypotheses about
+pathways~\cite{ameisen2025}. Deterministic verification therefore complements
+interventions but cannot establish that written reasoning caused an answer.

@@ -23,33 +23,16 @@
 %   (repetition loop, truncated).
 %   -> outputs/clean/qwen3_1.7b_gsm8k_50_completed_report.md "Five examples"
 % - Human audit (Conor): 24/24 verdict agreement; 122 hand-counted occurrences vs 78 checked steps. -> outputs/clean/checker_audit_sheet.md
-Thinking answered 46/50 problems correctly (92\%), compared with 40/50 (80\%)
-without thinking (Table~\ref{tab:gsm8k}). Six problems were correct only with
-thinking, none only without it (exact McNemar $p=0.03125$). These are the first
-50 test problems, not a random benchmark sample.
-
-The checker detected no final-answer contradictions among 45 thinking and 38
-no-thinking responses: 0/83 pooled, with a two-sided exact 95\% interval whose
-upper endpoint is 4.3\%. This bound concerns checker-comparable responses
-under the interval's sampling assumptions. It excludes 17 responses and does
-not establish use of written reasoning. Because responses are paired within
-problems, the pooled interval is descriptive and does not account for that
-dependence. The regenerated denominator of 83 supersedes the unreproducible
-earlier count of 74.
-
-Comparability requires an extracted implied answer and a completed response.
-Unsupported expressions and calculations missed by extraction therefore limit
-what the absence of detected contradictions can show.
-
-Four of 924 checked arithmetic steps were invalid: three with thinking, one
-without. Thinking ID~26 corrected its addition error and answered correctly.
-No-thinking ID~11 wrote $204+160+330=700$ and answered 700, although the sum
-is 694. Thus agreement with erroneous working passes a consistency test
-without establishing correctness. One thinking response exhausted its token
-budget. Conor's human audit agreed with all four invalid and 20 sampled valid
-verdicts. His ten-response count found 122 calculation occurrences against 78
-checked steps; the main step totals therefore describe extracted arithmetic,
-rather than all calculations in the responses.
+% Cut for the page limit on 2026-10-23 (Patrick, with Claude Code); Fionn's facts kept.
+Thinking answered 46/50 problems correctly (92\%) and no thinking 40/50 (80\%;
+Table~\ref{tab:gsm8k}); six problems were solved only with thinking and none only
+without (exact McNemar $p=0.031$). These are the first 50 test problems, not a random
+sample. No contradictions were detected among 45 thinking and 38 no-thinking comparable
+responses (0/83; exact 95\% upper bound 4.3\%). The bound excludes 17 responses and
+ignores the pairing of responses within problems, so it is descriptive. Four of 924
+checked steps were invalid. Thinking ID~26 corrected its error; no-thinking ID~11 wrote
+$204+160+330=700$ and answered 700 (the sum is 694), passing the consistency test while
+wrong. Step totals describe extracted arithmetic, not every calculation written.
 
 \begin{table}[t]
 \centering
@@ -83,28 +66,18 @@ Contradictions & 0 & 0 & 0 \\
 \subsection{Planted working and copy-vs-use}\label{sec:res-planted}
 
 % OWNER: Emmett. Copy-vs-use numbers: outputs/clean/copy_vs_use_summary.json.
-All planted-working and copy-vs-use experiments used Qwen3-0.6B only.
-In the eight addition examples (Table~\ref{tab:planted}), wrong working
-shifted probability towards its stated answer. However, copying and
-arithmetic use predict the same digit in this setup, so that result alone
-cannot distinguish them.
-
-The copy-vs-use control separates those predictions. With wrong working,
-the model copies the planted number in 30/30 global top-token predictions
-(mean probability $\approx0.86$), rather than carrying on from it
-($\approx0.04$) or giving the true answer ($\approx0.02$). The latter two
-candidates are never the global top token; Table~\ref{tab:copyuse} gives
-three-decimal means. Without working, the true-answer digit is top in
-20/30 cases (mean probability 0.387). With correct working, the true-answer
-digit has mean probability 0.046 and is never top. Candidate labels remain
-fixed to the wrong-working hypotheses; the summary's baseline ``copy''
-category therefore does not measure copying the correct intermediate sum.
-
-This supports copying as the behavioural description on these constructed
-prefixes; it does not establish an internal copying mechanism or complete-answer
-accuracy. Figure~\ref{fig:tracing} illustrates the separate tracing setup,
-without analysed edges or interventions. Neither these 0.6B results nor the
-illustrative graph tells us whether Qwen3-1.7B uses its reasoning.
+% Cut for the page limit on 2026-10-23 (Patrick, with Claude Code); Emmett's facts kept.
+% Correct-working "supplied sum" figures: outputs/clean/copy_vs_use_baselines.json.
+In the eight addition prompts, wrong working shifted probability towards its stated
+answer (Table~\ref{tab:planted}), but copying and arithmetic use predict the same digit
+there. The copy-vs-use control separates them. With wrong working, the copied digit is
+the global top token in 30/30 cases (mean probability 0.859), against 0.037 for carrying
+on from the planted sum and 0.016 for the true answer, neither ever top. With correct
+working the supplied sum's digit is again top in 30/30 cases (mean 0.881) and the true
+answer's never is; without working the true digit is top in 20/30 (mean 0.387). This
+supports copying as a behavioural description of these constructed prefixes, not an
+internal mechanism, and says nothing directly about Qwen3-1.7B. Fig.~\ref{fig:tracing}
+illustrates the separate tracing setup, without analysed edges or interventions.
 
 \begin{table}[t]
 \centering
@@ -137,6 +110,7 @@ Other token & -- & 0/30 \\
 \end{tabular}
 \end{table}
 
+
 \begin{figure}[t]
 \centering
 % Crop viewer chrome and empty details pane; retain all plotted nodes,
@@ -166,23 +140,15 @@ do not establish causal dependence or a copying mechanism.}
 %   accuracy, truncation and the runtime confound; no preliminary totals here.
 % Source: outputs/clean/qwen3_1.7b_gsm8k_50_hint_summary.json;
 % all 100 raw responses present; all five human review verdicts confirmed.
-Across 50 problems per mode, four thinking answers (8\%) and one no-thinking
-answer (2\%) matched the incorrect hint (Table~\ref{tab:hint}). None already
-matched it at baseline. Two thinking followers and the no-thinking follower
-had previously answered correctly. Thus all five are new switches, including
-three from correct answers.
-
-Thinking accuracy fell from 46/50 to 38/50, while no-thinking accuracy rose
-from 40/50 to 41/50. Thinking generated 2.82 times as many tokens on average
-with the hint. Eight thinking responses reached the token limit, compared
-with one at baseline; six previously correct responses did not finish. Neither
-no-thinking condition had truncations.
-
-All five followers acknowledged the supplied answer in their reasoning, as
-confirmed by human review; no undisclosed hint following was observed. These
-outcomes show prompt sensitivity, but runtime differences from the earlier
-baseline limit attribution to the hint alone. Acknowledgement also does not
-establish faithful internal computation.
+% Cut for the page limit on 2026-10-23 (Patrick, with Claude Code); Fionn's facts kept.
+Four thinking answers (8\%) and one no-thinking answer (2\%) matched the incorrect hint
+(Table~\ref{tab:hint}); none matched it at baseline, and three had previously been
+correct. Thinking accuracy fell from 46/50 to 38/50, while no thinking went from 40/50
+to 41/50. With thinking, the hint increased generated tokens 2.82-fold and truncations
+from one to eight; six previously correct responses did not finish. All five followers
+acknowledged the supplied answer, as confirmed by human review, so no undisclosed hint
+following was observed. Runtime differences from the baseline limit attribution to the
+hint alone.
 
 \begin{table}[t]
 \centering

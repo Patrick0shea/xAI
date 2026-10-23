@@ -8,40 +8,27 @@
 % journal/2026-10-21.md (hint run on CPU, fp32, ATEN_CPU_CAPABILITY=default; baseline GPU fp16).
 % =====================================================================
 \section{Discussion}\label{sec:discussion}
-\textbf{Consistent where checkable.} Wherever the checker could compare them,
-Qwen3-1.7B's final answer matched the answer its working reached: 0 of 45 thinking
-and 0 of 38 no-thinking responses (pooled 95\% upper bound 4.3\%;
-Table~\ref{tab:gsm8k}). Natural errors were rare (4 of 924 checked steps), so the
-test seldom could fire, and it is silent on the 17 responses without an implied
-answer. ID~11 answered 700 after summing
-$204+160+330$ to 700: consistent, and wrong.
+\textbf{Consistent where checkable.} Every comparable answer matched its working
+(Table~\ref{tab:gsm8k}), but natural errors were rare (4 of 924 steps), so the test
+seldom had a chance to fire, and 17 responses could not be compared. ID~11 shows the
+limit: an answer can be consistent and wrong.
 
-\textbf{Consistency is not faithfulness.} A model could reach its answer by another
-route and still write working that ends on the same number. Agreement between output
-and explanation measures self-consistency, not faithfulness to the internal
-computation~\cite{parcalabescu2024}, and a plausible explanation need not be a
-faithful one~\cite{jacovi2020}. Planted wrong working pulls Qwen3-0.6B's first answer
-digit towards it (Table~\ref{tab:planted}), but cannot separate \emph{using} the
-working from \emph{copying} its last number. In the copy-vs-use control,
-the copying digit is the global top token on all 30 wrong-working prompts
-(mean probability 0.859; Table~\ref{tab:copyuse}). Correct-working prompts also
-repeat the intermediate sum on all 30 cases, suggesting that the prefix format
-encourages repetition rather than completion of the final operation. This limits
-what the planted-working result can establish about faithfulness; it does not
-prove an internal copying mechanism. Both tests use Qwen3-0.6B, not the 1.7B
-model whose outputs we checked, and the control uses original weights whereas
-the earlier tracing setup used a transcoder replacement model.
-% Sources: outputs/clean/copy_vs_use_summary.json; copy_vs_use_baselines.json.
+\textbf{Consistency is not faithfulness.} A model could reach its answer another way
+and still write matching working. Output-level agreement measures self-consistency, not
+faithfulness to internal computation~\cite{parcalabescu2024}, and a plausible
+explanation need not be a faithful one~\cite{jacovi2020}. Our interventions probe this
+gap. Planted working moves Qwen3-0.6B's answer, but the copy-vs-use control indicates
+that the model mostly copies the last number in the working, even a correct one, rather
+than computing with it (Section~\ref{sec:res-planted}). Sensitivity to written working
+is therefore weak evidence that the working is used, and these 0.6B results need not
+transfer to 1.7B.
 
-\textbf{Hint test.} A misleading hint tests faithfulness more directly:
-following a hint the reasoning never mentions suggests the reasoning is an incomplete
-account of the answer~\cite{turpin2023,chen2025}, though not what the mechanism is.
-% Source: outputs/clean/qwen3_1.7b_gsm8k_50_hint_summary.json.
-With thinking, 4 of 50 answers matched the incorrect hint, two of which had
-been correct without it. All four acknowledged the supplied answer in their
-thinking. The one no-thinking follower also acknowledged it. We therefore
-observed no undisclosed hint following under this protocol. Two caveats apply. The hint run used different
-hardware from the baseline (CPU, 32-bit floats, \texttt{ATEN\_CPU\_CAPABILITY=default},
-versus GPU, 16-bit), so equal seeds need not give equal samples. And the consistency
-checker cannot score responses that never reach an answer, so a hint that derails
-reasoning without redirecting the answer is invisible to it.
+\textbf{Hint test.} Prior work reports that hint use often goes
+unmentioned~\cite{turpin2023,chen2025}; here every follower acknowledged the hint, so we
+observed no undisclosed influence under this protocol. The larger effect was
+disruption: the hint lengthened thinking and left six previously correct responses
+unfinished. Responses that never reach an answer cannot be scored by the consistency
+checker, so a hint can damage reasoning without producing any detectable
+inconsistency. The hint run's different hardware (CPU, 32-bit floats,
+\texttt{ATEN\_CPU\_CAPABILITY=default}, versus GPU, 16-bit) also means equal seeds need
+not give equal samples.

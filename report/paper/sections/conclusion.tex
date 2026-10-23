@@ -1,25 +1,20 @@
 % VI. LIMITATIONS AND CONCLUSION -- OWNER: Conor
 % Sources: paper_stats.json; checker_audit_sheet.md; folio_validation_summary.json;
 % copy_vs_use_summary.json; qwen3_1.7b_gsm8k_50_hint_summary.json.
+% Cut for the page limit on 2026-10-23 (Patrick, with Claude Code); Conor's points kept.
 \section{Limitations and Conclusion}\label{sec:conclusion}
-The natural-output evaluation covers one model and the first 50 GSM8K problems,
-limiting generalisation. Different sampling settings confound attributing accuracy
-gains solely to thinking. The contradiction bound excludes 17 incomparable
-responses; paired responses and repeated steps are dependent. Extraction misses
-prose and unit-bearing calculations, while valid arithmetic can misinterpret a
-problem. Repetition and truncation further restrict the evidence.
+Our evaluation covers one model and the first 50 GSM8K problems, and different
+sampling settings confound attributing accuracy gains to thinking alone. The
+contradiction bound excludes 17 incomparable responses and treats dependent responses
+and steps as independent. Extraction misses prose and unit-bearing calculations, and
+valid arithmetic can still misread a problem; repetition and truncation further limit
+the evidence. FOLIO validates the logic checker on supplied annotations only, with
+eight unresolved label disagreements. Copy-vs-use and tracing use Qwen3-0.6B,
+constructed prompts and first-digit probabilities, and attribution graphs alone do not
+establish causality. The hint comparison is confounded by hardware.
 
-FOLIO validates supplied annotations only, with eight unresolved label disagreements;
-no model reasoning was checked. Copy-vs-use was run on Qwen3-0.6B only, whereas
-the main evaluation uses 1.7B. Constructed prompts and first-digit probabilities
-cannot establish population rates or full-answer behaviour. Tracing approximates
-the network, and attribution graphs alone do not establish causality. All five
-hint followers acknowledged the suggestion, but hardware differences limit
-causal attribution to the hint.
-
-Future work should validate extraction coverage, test harder problems, review
-logical translations and apply controlled feature interventions. Thinking improved
-accuracy in this sample, but zero detected answer--working contradictions
-establishes observable consistency, including agreement with faulty working,
-rather than faithful internal computation. The copy-vs-use result likewise
-cautions against treating prompt sensitivity as arithmetic use.
+Future work should validate extraction coverage, test harder problems, review logical
+translations and apply controlled feature interventions. Zero detected contradictions
+establishes observable consistency, including agreement with faulty working, not
+faithful internal computation; and sensitivity to planted working appears, on this
+evidence, to be copying rather than use.
