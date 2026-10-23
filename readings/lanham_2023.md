@@ -49,4 +49,4 @@ The following are proposed changes to our evaluation, rather than completed expe
 
 [Jacovi and Goldberg](firstPaper.md) provide the conceptual distinction between plausibility and faithfulness. Our [NSF-CoT note](secondPaper.md) focuses on checking the support and usefulness of individual steps. Lanham et al. provide methods for probing answer dependence on reasoning. For our project, these motivate complementary checks of written reasoning and its influence on the answer.
 
-This note is a Codex-assisted literature review. No project experiments were run.
+No project experiments were run for this literature review.

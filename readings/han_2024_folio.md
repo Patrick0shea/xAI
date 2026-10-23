@@ -4,7 +4,7 @@
 **Version reviewed:** arXiv v3, 11 October 2024; first submitted in 2022.
 **Paper:** https://arxiv.org/html/2209.00840v3
 **Dataset:** https://github.com/Yale-LILY/FOLIO
-**Prepared for:** Conor's logic-checking contribution, with Codex assistance.
+**Prepared for:** Conor's logic-checking contribution.
 
 ## Key questions the paper asks
 
@@ -87,6 +87,6 @@ Use this reading to justify the logic dataset and explain the translation
 boundary in Methodology. Describe the current numbers as checker validation.
 Add model-trace results only after collecting and reviewing actual responses.
 
-This is a Codex-assisted review draft for Conor to read and revise before
+This is a review draft for Conor to read and revise before
 committing as his literature contribution. It does not claim a completed human
 reading or a completed model experiment.
