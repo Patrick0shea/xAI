@@ -45,10 +45,10 @@ text, including clauses with variables, is skipped rather than marked wrong. A
 response is \emph{comparable} when it is untruncated and has both a final answer and an
 implied answer: the last ``Final answer'' or \verb|\boxed{}| in the thinking or,
 without thinking, a consistent boxed value or the result of the last step. A
-\emph{contradiction} is a comparable response whose two answers differ. Conor, who did
-not write the checker, agreed with all 24 of its numerical verdicts on the four invalid
-and 20 sampled valid steps. His hand counts found 122 calculations in ten responses,
-against 78 checked steps, with omissions in prose and unit-bearing expressions.
+\emph{contradiction} is a comparable response whose two answers differ. An independent
+manual audit confirmed all 24 of the checker's numerical verdicts on the four invalid
+and 20 sampled valid steps; hand counts of ten responses found 122 calculations against
+78 checked steps, with omissions in prose and unit-bearing expressions.
 
 \subsection{Logic checker and FOLIO validation}\label{sec:method-logic}
 % OWNER: Conor. Sources: code/src/{logic_checker,folio_parser}.py;
@@ -92,8 +92,8 @@ with $X$ the gold answer plus one, before the unchanged instruction. Model, samp
 settings, budgets and seeds match the baseline, but the hint run used a CPU with
 32-bit floats and \texttt{ATEN\_CPU\_CAPABILITY=default}, so random draws can differ.
 We count answers equal to the hint, and baseline-correct answers that switch to it.
-Fionn read every follower in full: mentioning the teacher or the suggestion counts as
-acknowledgement; repeating its number alone does not. This disclosure measure follows
+Every follower was read in full by hand: mentioning the teacher or the suggestion counts
+as acknowledgement; repeating its number alone does not. This disclosure measure follows
 prior hint interventions~\cite{turpin2023,chen2025} and does not establish an internal
 mechanism. Truncated and unresolved answers stay in the denominator.
 
